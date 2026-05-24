@@ -8,10 +8,10 @@ describe('calculateRowClues', () => {
     expect(result).toEqual([[2, 1]]);
   });
 
-  it('returns [0] for empty row', () => {
+  it('returns empty array for empty row', () => {
     const solution = [[false, false, false]];
     const result = calculateRowClues(solution);
-    expect(result).toEqual([[0]]);
+    expect(result).toEqual([[]]);
   });
 
   it('calculates clues for all filled row', () => {
@@ -36,7 +36,7 @@ describe('calculateRowClues', () => {
     const result = calculateRowClues(solution);
     expect(result).toEqual([
       [2, 1],
-      [0],
+      [],
       [4],
       [1, 1]
     ]);
@@ -57,7 +57,7 @@ describe('calculateRowClues', () => {
   it('handles empty single cell grid', () => {
     const solution = [[false]];
     const result = calculateRowClues(solution);
-    expect(result).toEqual([[0]]);
+    expect(result).toEqual([[]]);
   });
 
   it('handles empty grid', () => {
@@ -100,7 +100,7 @@ describe('calculateColumnClues', () => {
       [false, false]
     ];
     const result = calculateColumnClues(solution);
-    expect(result).toEqual([[0], [0]]);
+    expect(result).toEqual([[], []]);
   });
 
   it('handles all filled columns', () => {
@@ -121,7 +121,7 @@ describe('calculateColumnClues', () => {
   it('handles empty single cell grid', () => {
     const solution = [[false]];
     const result = calculateColumnClues(solution);
-    expect(result).toEqual([[0]]);
+    expect(result).toEqual([[]]);
   });
 
   it('handles complex column patterns', () => {

@@ -6,7 +6,7 @@
  *
  * Examples:
  * - [true, true, false, true] → [2, 1]
- * - [false, false, false] → [0]
+ * - [false, false, false] → []
  * - [true, true, true] → [3]
  */
 
@@ -35,11 +35,7 @@ function calculateCluesForLine(cells: boolean[]): number[] {
     clues.push(currentGroup);
   }
 
-  // Empty lines return [0] per nonogram convention
-  if (clues.length === 0) {
-    return [0];
-  }
-
+  // Empty lines return [] per nonogram convention
   return clues;
 }
 
