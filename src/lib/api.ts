@@ -101,6 +101,7 @@ Example format:
       const message = await this.client.messages.create({
         model: MODEL,
         max_tokens: 2048,
+        temperature: 0.0,  // Low temperature for consistent structured output
         messages: [{
           role: 'user',
           content: systemPrompt
@@ -235,6 +236,7 @@ Return ONLY valid JSON in this format:
       const message = await this.client.messages.create({
         model: MODEL,
         max_tokens: 1024,
+        temperature: 0.0,  // Low temperature for consistent structured output
         messages: [{
           role: 'user',
           content: prompt
@@ -279,6 +281,19 @@ Return ONLY valid JSON in this format:
           typeof parsed.reasoning !== 'string'
         ) {
           throw new Error('Invalid specific hint format from API')
+        }
+
+        // Validate coordinate boundaries
+        if (parsed.row < 0 || parsed.row >= currentGrid.length) {
+          throw new Error(`Hint row coordinate out of bounds: ${parsed.row}. Valid range: 0-${currentGrid.length - 1}`)
+        }
+        if (parsed.col < 0 || parsed.col >= currentGrid[0].length) {
+          throw new Error(`Hint column coordinate out of bounds: ${parsed.col}. Valid range: 0-${currentGrid[0].length - 1}`)
+        }
+
+        // Validate action field
+        if (parsed.action !== 'fill' && parsed.action !== 'mark') {
+          throw new Error(`Invalid hint action: ${parsed.action}. Expected 'fill' or 'mark'`)
         }
 
         return {
