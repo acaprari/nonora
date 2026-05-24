@@ -46,7 +46,7 @@ export function calculateNextDifficulty(
 export function createInitialProfile(): DifficultyProfile {
   return {
     level: 1,
-    gridSize: 10,
+    gridSize: getGridSize(1),
     recentPerformance: []
   }
 }
@@ -74,6 +74,7 @@ export function updateProfile(
   return {
     ...profile,
     level: newLevel,
+    gridSize: getGridSize(newLevel),
     recentPerformance
   }
 }

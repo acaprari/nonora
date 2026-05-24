@@ -78,7 +78,7 @@ describe('createInitialProfile', () => {
   it('creates profile starting at level 1', () => {
     const profile = createInitialProfile()
     expect(profile.level).toBe(1)
-    expect(profile.gridSize).toBe(10)
+    expect(profile.gridSize).toBe(5)
     expect(profile.recentPerformance).toEqual([])
   })
 })
@@ -154,6 +154,46 @@ describe('updateProfile', () => {
     // Updated profile should have changes
     expect(updated.level).toBe(6)
     expect(updated.recentPerformance).toHaveLength(1)
+  })
+
+  it('updates gridSize when difficulty level changes', () => {
+    const profile: DifficultyProfile = {
+      level: 3,
+      gridSize: 5,
+      recentPerformance: []
+    }
+
+    // Fast, clean solve should increase difficulty from 3 to 4
+    const metrics: PerformanceMetrics = {
+      solveTime: 120,  // 2 minutes - fast
+      hintsUsed: 0,
+      errors: 0,
+      struggled: false
+    }
+
+    const updated = updateProfile(profile, metrics)
+    expect(updated.level).toBe(4)
+    expect(updated.gridSize).toBe(7)  // Should change from 5 to 7
+  })
+
+  it('updates gridSize when crossing from medium to hard', () => {
+    const profile: DifficultyProfile = {
+      level: 6,
+      gridSize: 7,
+      recentPerformance: []
+    }
+
+    // Fast, clean solve should increase difficulty from 6 to 7
+    const metrics: PerformanceMetrics = {
+      solveTime: 120,
+      hintsUsed: 1,
+      errors: 1,
+      struggled: false
+    }
+
+    const updated = updateProfile(profile, metrics)
+    expect(updated.level).toBe(7)
+    expect(updated.gridSize).toBe(10)  // Should change from 7 to 10
   })
 })
 
