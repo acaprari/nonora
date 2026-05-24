@@ -1,22 +1,18 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  --color-primary: #0d47a1;
-  --color-cell-filled: #4CAF50;
-  --color-cell-border: #e0e0e0;
-  --color-error: #f44336;
-  --color-success: #4CAF50;
+@layer base {
+  body {
+    @apply bg-primary text-white min-h-screen;
+  }
 }
 
-body {
-  background-color: var(--color-primary);
-  color: white;
-  min-height: 100vh;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+@layer utilities {
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
