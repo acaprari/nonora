@@ -50,7 +50,7 @@ describe('App Integration Tests', () => {
       const { container } = render(<App />)
       const appDiv = container.querySelector('.min-h-screen')
       expect(appDiv).toBeInTheDocument()
-      expect(appDiv).toHaveClass('bg-primary')
+      expect(appDiv).toHaveClass('bg-gradient-to-br')
     })
   })
 })

@@ -12,7 +12,8 @@ export function GameBoard({ puzzle, validationResult, onCellClick }: GameBoardPr
   const gridSize = puzzle.solution.length
 
   return (
-    <div className="flex flex-col gap-2 p-4">
+    <div className="glass-card rounded-2xl p-6 shadow-2xl max-w-4xl mx-auto">
+      <div className="flex flex-col gap-2">
       {/* Column clues */}
       <div className="flex">
         <div className="w-16" /> {/* Spacer for row clues */}
@@ -53,6 +54,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick }: GameBoardPr
           </div>
         </div>
       ))}
+      </div>
     </div>
   )
 }

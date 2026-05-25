@@ -62,7 +62,7 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({
   const errorId = 'api-key-error'
 
   return (
-    <div className="w-full max-w-md mx-auto p-4">
+    <div className="glass-card rounded-2xl p-6 shadow-2xl max-w-md mx-auto">
       <div className="mb-4">
         <label
           htmlFor={inputId}
@@ -127,12 +127,12 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({
         disabled={isValidating}
         aria-label="Validate API key"
         className={`
-          w-full px-4 py-2 rounded-lg font-medium
-          transition-colors duration-200
+          glass w-full px-4 py-3 rounded-lg font-semibold text-white
+          transition-all duration-200 shadow-lg
           ${
             isValidating
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-primary hover:bg-blue-800 text-white'
+              ? 'opacity-50 cursor-not-allowed'
+              : 'hover:bg-white/20'
           }
         `}
       >

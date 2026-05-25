@@ -46,55 +46,54 @@ export function CompletionScreen({
   const leveledUp = currentLevel > previousLevel
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 space-y-6">
+    <div className="glass-card rounded-2xl p-8 shadow-2xl max-w-2xl mx-auto space-y-6">
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-success mb-2">
-          Congratulations!
+        <h2 className="text-3xl font-bold text-white mb-2">
+          🎉 Congratulations!
         </h2>
-        <p className="text-lg text-gray-700">{feedback}</p>
+        <p className="text-lg text-white font-medium">{feedback}</p>
       </div>
 
       {leveledUp && (
-        <div className="bg-success/10 border-2 border-success rounded-lg p-4 text-center">
-          <p className="text-xl font-semibold text-success">
-            Level Up! Level {currentLevel}
+        <div className="glass rounded-xl p-3 text-center">
+          <div className="text-white font-semibold">Level {currentLevel}</div>
+          <div className="text-green-300 text-sm">Level Up! 🎊</div>
+        </div>
+      )}
+
+      <div className="glass rounded-xl p-4 grid grid-cols-3 gap-4 text-center">
+        <div>
+          <div className="text-2xl font-bold text-white">{formatTime(solveTime)}</div>
+          <div className="text-sm text-white/80">Solve Time</div>
+        </div>
+        <div>
+          <div className="text-2xl font-bold text-white">{hintsUsed}</div>
+          <div className="text-sm text-white/80">Hints Used</div>
+        </div>
+        <div>
+          <div className="text-2xl font-bold text-white">{errors}</div>
+          <div className="text-sm text-white/80">Errors</div>
+        </div>
+      </div>
+
+      {!leveledUp && (
+        <div className="text-center">
+          <p className="text-lg font-semibold text-white">
+            Level {currentLevel}
           </p>
         </div>
       )}
 
-      <div className="w-full max-w-md grid grid-cols-3 gap-4 bg-gray-50 rounded-lg p-6">
-        <div className="text-center">
-          <p className="text-sm text-gray-600 mb-1">Time</p>
-          <p className="text-2xl font-bold text-gray-900">
-            {formatTime(solveTime)}
-          </p>
-        </div>
-        <div className="text-center">
-          <p className="text-sm text-gray-600 mb-1">Hints</p>
-          <p className="text-2xl font-bold text-gray-900">{hintsUsed}</p>
-        </div>
-        <div className="text-center">
-          <p className="text-sm text-gray-600 mb-1">Errors</p>
-          <p className="text-2xl font-bold text-gray-900">{errors}</p>
-        </div>
-      </div>
-
-      <div className="text-center">
-        <p className="text-lg font-semibold text-gray-700">
-          Level {currentLevel}
-        </p>
-      </div>
-
-      <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
+      <div className="flex flex-col sm:flex-row gap-3 w-full">
         <button
           onClick={onNewPuzzle}
-          className="flex-1 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          className="glass flex-1 py-3 px-6 rounded-lg text-white font-semibold hover:bg-white/20 transition-all shadow-lg"
         >
           New Puzzle
         </button>
         <button
           onClick={onNewPrompt}
-          className="flex-1 bg-gray-200 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+          className="glass flex-1 py-3 px-6 rounded-lg text-white font-semibold hover:bg-white/20 transition-all shadow-lg"
         >
           New Prompt
         </button>

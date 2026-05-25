@@ -180,10 +180,10 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-primary p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#5a85be] via-[#6b95c9] to-[#7ca5d4] p-4">
       <header className="text-white text-center mb-8">
-        <h1 className="text-4xl font-bold">Pixlogic</h1>
-        <p className="text-lg mt-2">AI-Powered Nonogram Puzzles</p>
+        <h1 className="text-5xl font-bold mb-2 drop-shadow-lg">Pixlogic</h1>
+        <p className="text-xl drop-shadow-md">AI-Powered Nonogram Puzzles</p>
       </header>
 
       <main className="max-w-4xl mx-auto">
@@ -205,10 +205,10 @@ function App() {
 
         {/* Loading Indicator */}
         {isGenerating && (
-          <div className="bg-secondary rounded-lg p-8 text-center">
+          <div className="glass-card rounded-2xl p-8 text-center shadow-2xl">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
-            <p className="text-white text-xl">Generating your puzzle...</p>
-            <p className="text-gray-300 mt-2">This may take a few moments</p>
+            <p className="text-white text-xl font-semibold">Generating your puzzle...</p>
+            <p className="text-white/80 mt-2">This may take a few moments</p>
           </div>
         )}
 

@@ -39,11 +39,11 @@ export const PuzzlePrompt: React.FC<PuzzlePromptProps> = ({
   const isDisabled = !prompt.trim() || !hasApiKey || isGenerating
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-4 space-y-4">
+    <div className="glass-card rounded-2xl p-6 shadow-2xl max-w-2xl mx-auto space-y-4">
       {/* Header with difficulty and grid size */}
       <div className="flex justify-between items-center text-sm font-medium text-white">
-        <span>Level {difficultyLevel}/10</span>
-        <span>Grid: {gridSize}x{gridSize}</span>
+        <span className="glass px-3 py-1 rounded-full">Level {difficultyLevel}/10</span>
+        <span className="glass px-3 py-1 rounded-full">Grid: {gridSize}x{gridSize}</span>
       </div>
 
       {/* Textarea for prompt input */}
@@ -54,7 +54,7 @@ export const PuzzlePrompt: React.FC<PuzzlePromptProps> = ({
           onKeyDown={handleKeyDown}
           rows={5}
           placeholder="Describe what you'd like to draw... (e.g., a cat, a rocket ship, a smiley face, a house)"
-          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 resize-none text-base text-gray-900 bg-white"
+          className="glass-input w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50 resize-none text-base text-gray-900 placeholder-gray-500 transition-all"
           disabled={isGenerating}
         />
       </div>
@@ -64,7 +64,7 @@ export const PuzzlePrompt: React.FC<PuzzlePromptProps> = ({
         <button
           onClick={handleSubmit}
           disabled={isDisabled}
-          className="w-full bg-white text-primary font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 disabled:bg-gray-400 disabled:text-white disabled:cursor-not-allowed transition-colors duration-200"
+          className="glass w-full text-white font-semibold py-3 px-6 rounded-lg hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
         >
           {isGenerating ? 'Generating...' : 'Generate Puzzle'}
         </button>

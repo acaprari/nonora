@@ -13,6 +13,9 @@ module.exports = {
         error: '#f44336',
         success: '#4CAF50',
       },
+      backdropBlur: {
+        xs: '2px',
+      },
     },
   },
   plugins: [],

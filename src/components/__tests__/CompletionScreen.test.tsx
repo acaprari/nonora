@@ -77,7 +77,8 @@ describe('CompletionScreen', () => {
     )
     const levelUpText = screen.getByText(/level up/i)
     expect(levelUpText).toBeInTheDocument()
-    expect(levelUpText.textContent).toContain('5')
+    // Level number is now in a sibling element
+    expect(screen.getByText(/level 5/i)).toBeInTheDocument()
   })
 
   it('does not show level up message when currentLevel === previousLevel', () => {
@@ -273,7 +274,7 @@ describe('CompletionScreen', () => {
   it('has proper styling for primary button', () => {
     render(<CompletionScreen {...defaultProps} />)
     const newPuzzleButton = screen.getByRole('button', { name: /new puzzle/i })
-    expect(newPuzzleButton).toHaveClass('bg-primary')
+    expect(newPuzzleButton).toHaveClass('glass')
   })
 
   it('handles very long solve times', () => {
