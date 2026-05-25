@@ -16,6 +16,15 @@ module.exports = {
       backdropBlur: {
         xs: '2px',
       },
+      keyframes: {
+        'ai-pulse': {
+          '0%, 100%': { opacity: '0.3', transform: 'scale(0.9)' },
+          '50%': { opacity: '1', transform: 'scale(1.1)' }
+        }
+      },
+      animation: {
+        'ai-pulse': 'ai-pulse 1.5s ease-in-out infinite'
+      }
     },
   },
   plugins: [],
