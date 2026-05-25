@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useDifficulty } from '@/hooks/useDifficulty'
-import { usePuzzle } from '@/hooks/usePuzzle'
 import { useValidation } from '@/hooks/useValidation'
 import { useGamePersistence } from '@/hooks/useGamePersistence'
 import { ApiClient } from '@/lib/api'
 import { generatePuzzle } from '@/lib/puzzleGenerator'
-import type { Puzzle } from '@/types'
+import type { Puzzle, CellState } from '@/types'
 
 // Import components
 import ApiKeyInput from '@/components/ApiKeyInput'
@@ -39,8 +38,7 @@ function App() {
   const { profile, recordCompletion, currentLevel, currentGridSize } = useDifficulty()
   const { savedState, saveState, clearState } = useGamePersistence()
 
-  // Use usePuzzle hook (handles null puzzle)
-  const puzzleHooks = usePuzzle(puzzle)
+  // Validation hook
   const { validationResult, isComplete, isValid } = useValidation(puzzle)
 
   // Initialize from saved state on mount
@@ -143,11 +141,26 @@ function App() {
    * Handle cell clicks during gameplay
    */
   const handleCellClick = (row: number, col: number) => {
-    if (puzzle && puzzleHooks && puzzleHooks.puzzle) {
-      puzzleHooks.toggleCell(row, col)
-      // Update puzzle state to trigger re-render and persistence
-      setPuzzle(puzzleHooks.puzzle)
-    }
+    if (!puzzle) return
+
+    setPuzzle(prev => {
+      if (!prev) return null
+
+      const newGrid = prev.currentGrid.map(r => [...r])
+      const current = newGrid[row][col]
+
+      const nextState: CellState =
+        current === 'empty' ? 'filled' :
+        current === 'filled' ? 'marked' :
+        'empty'
+
+      newGrid[row][col] = nextState
+
+      return {
+        ...prev,
+        currentGrid: newGrid
+      }
+    })
   }
 
   /**
