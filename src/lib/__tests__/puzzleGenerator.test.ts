@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { generatePuzzle } from '../puzzleGenerator'
+import { validateMatrix, generatePuzzle } from '../puzzleGenerator'
 import type { ApiClient } from '@/lib/api'
 
 describe('generatePuzzle', () => {
@@ -51,7 +51,10 @@ describe('generatePuzzle', () => {
   })
 
   it('generates puzzle with default size when not specified', async () => {
-    const mockSolution = Array(10).fill(null).map(() => Array(10).fill(false))
+    // Create a valid matrix (diagonal pattern)
+    const mockSolution = Array(10).fill(null).map((_, i) =>
+      Array(10).fill(false).map((_, j) => i === j)
+    )
     vi.mocked(mockApiClient.generatePuzzle).mockResolvedValue(mockSolution)
 
     await generatePuzzle(mockApiClient, 'test', 5)
@@ -63,8 +66,9 @@ describe('generatePuzzle', () => {
   it('calculates clues correctly for complex puzzle', async () => {
     const mockSolution = [
       [true, true, false, true],
-      [false, false, false, false],
-      [true, true, true, false]
+      [false, false, true, true],
+      [true, true, true, false],
+      [true, false, true, true]
     ]
     vi.mocked(mockApiClient.generatePuzzle).mockResolvedValue(mockSolution)
 
@@ -72,14 +76,15 @@ describe('generatePuzzle', () => {
 
     expect(result.rowClues).toEqual([
       [2, 1],  // Row 0: two filled, gap, one filled
-      [],      // Row 1: all empty
-      [3]      // Row 2: three filled
+      [2],     // Row 1: two filled
+      [3],     // Row 2: three filled
+      [1, 2]   // Row 3: one filled, gap, two filled
     ])
     expect(result.columnClues).toEqual([
-      [1, 1],  // Col 0: filled, gap, filled
+      [1, 2],  // Col 0: filled, gap, two filled
       [1, 1],  // Col 1: filled, gap, filled
-      [1],     // Col 2: one filled
-      [1]      // Col 3: one filled
+      [3],     // Col 2: three filled
+      [2, 1]   // Col 3: two filled, gap, one filled
     ])
   })
 
@@ -87,7 +92,7 @@ describe('generatePuzzle', () => {
     const mockSolution = [
       [true, true, true],
       [true, false, true],
-      [false, false, false]
+      [true, false, true]
     ]
     vi.mocked(mockApiClient.generatePuzzle).mockResolvedValue(mockSolution)
 
@@ -163,21 +168,17 @@ describe('generatePuzzle', () => {
     expect(result.columnClues).toHaveLength(15)
   })
 
-  it('handles puzzle with no filled cells', async () => {
+  it('rejects puzzle with no filled cells due to validation', async () => {
     const mockSolution = [
       [false, false],
       [false, false]
     ]
     vi.mocked(mockApiClient.generatePuzzle).mockResolvedValue(mockSolution)
 
-    const result = await generatePuzzle(mockApiClient, 'empty', 1, 2)
-
-    expect(result.rowClues).toEqual([[], []])
-    expect(result.columnClues).toEqual([[], []])
-    expect(result.currentGrid).toEqual([
-      ['empty', 'empty'],
-      ['empty', 'empty']
-    ])
+    // Should fail validation and exhaust retries
+    await expect(
+      generatePuzzle(mockApiClient, 'empty', 1, 2)
+    ).rejects.toThrow('Failed to generate valid puzzle after 3 attempts')
   })
 
   it('handles puzzle with all filled cells', async () => {
@@ -195,5 +196,73 @@ describe('generatePuzzle', () => {
       ['empty', 'empty'],
       ['empty', 'empty']
     ])
+  })
+
+  it('retries on validation failure and succeeds', async () => {
+    // First call returns invalid matrix (all empty rows)
+    const invalidMatrix = Array(10).fill(null).map(() => Array(10).fill(false))
+    // Second call returns valid matrix
+    const validMatrix = Array(10).fill(null).map((_, i) =>
+      Array(10).fill(false).map((_, j) => i === j)
+    )
+
+    vi.mocked(mockApiClient.generatePuzzle)
+      .mockResolvedValueOnce(invalidMatrix)
+      .mockResolvedValueOnce(validMatrix)
+
+    const result = await generatePuzzle(mockApiClient, 'test', 5, 10)
+
+    // Should have called API twice
+    expect(mockApiClient.generatePuzzle).toHaveBeenCalledTimes(2)
+    // Should return valid puzzle
+    expect(result.solution).toEqual(validMatrix)
+  })
+
+  it('throws error after max retries exceeded', async () => {
+    // Always return invalid matrix
+    const invalidMatrix = Array(10).fill(null).map(() => Array(10).fill(false))
+    vi.mocked(mockApiClient.generatePuzzle).mockResolvedValue(invalidMatrix)
+
+    await expect(
+      generatePuzzle(mockApiClient, 'test', 5, 10, 3)
+    ).rejects.toThrow('Failed to generate valid puzzle after 3 attempts')
+
+    // Should have called API exactly 3 times (maxRetries)
+    expect(mockApiClient.generatePuzzle).toHaveBeenCalledTimes(3)
+  })
+})
+
+describe('validateMatrix', () => {
+  it('accepts valid 10x10 matrix', () => {
+    // Create diagonal pattern - each row and column has at least one filled cell
+    const matrix = Array(10).fill(null).map((_, i) =>
+      Array(10).fill(false).map((_, j) => i === j)
+    )
+    expect(validateMatrix(matrix, 10)).toBe(true)
+  })
+
+  it('rejects matrix with wrong dimensions', () => {
+    const matrix = Array(5).fill(null).map(() => Array(5).fill(false))
+    expect(validateMatrix(matrix, 10)).toBe(false)
+  })
+
+  it('rejects matrix with all empty rows', () => {
+    const matrix = Array(10).fill(null).map(() => Array(10).fill(false))
+    expect(validateMatrix(matrix, 10)).toBe(false)
+  })
+
+  it('rejects matrix with all empty columns', () => {
+    const matrix = Array(10).fill(null).map(() => Array(10).fill(false))
+    matrix[0][0] = true
+    matrix[0][1] = true
+    // All other columns empty
+    expect(validateMatrix(matrix, 10)).toBe(false)
+  })
+
+  it('accepts matrix with some filled cells in each row and column', () => {
+    const matrix = Array(10).fill(null).map((_, i) =>
+      Array(10).fill(false).map((_, j) => i === j)
+    )
+    expect(validateMatrix(matrix, 10)).toBe(true)
   })
 })
