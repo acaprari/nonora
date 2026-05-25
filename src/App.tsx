@@ -11,6 +11,7 @@ import ApiKeyInput from '@/components/ApiKeyInput'
 import { PuzzlePrompt } from '@/components/PuzzlePrompt'
 import { GameBoard } from '@/components/GameBoard'
 import { CompletionScreen } from '@/components/CompletionScreen'
+import { SettingsMenu } from '@/components/SettingsMenu'
 
 /**
  * Main App Component - Orchestrates the entire game flow
@@ -198,6 +199,18 @@ function App() {
   }
 
   /**
+   * Handle API key change - reset everything
+   */
+  const handleChangeApiKey = () => {
+    setApiKey(null)
+    setApiClient(null)
+    setPuzzle(null)
+    setStartTime(null)
+    setCurrentPrompt('')
+    clearState()
+  }
+
+  /**
    * Calculate current solve time
    */
   const calculateSolveTime = (): number => {
@@ -207,9 +220,23 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#5a85be] via-[#6b95c9] to-[#7ca5d4] p-4">
-      <header className="text-white text-center mb-8">
-        <h1 className="text-5xl font-bold mb-2 drop-shadow-lg">Pixlogic</h1>
-        <p className="text-xl drop-shadow-md">AI-Powered Nonogram Puzzles</p>
+      <header className="text-white mb-8">
+        <div className="flex justify-between items-center max-w-4xl mx-auto mb-4">
+          <div className="flex-1" />
+          <div className="flex-1 text-center">
+            <h1 className="text-5xl font-bold mb-2 drop-shadow-lg">Pixlogic</h1>
+            <p className="text-xl drop-shadow-md">AI-Powered Nonogram Puzzles</p>
+          </div>
+          <div className="flex-1 flex justify-end">
+            {apiKey && (
+              <SettingsMenu
+                onNewPrompt={handleNewPrompt}
+                onChangeApiKey={handleChangeApiKey}
+                hasActivePuzzle={puzzle !== null}
+              />
+            )}
+          </div>
+        </div>
       </header>
 
       <main className="max-w-4xl mx-auto">
@@ -234,6 +261,11 @@ function App() {
           <div className="glass-card rounded-2xl p-8 text-center shadow-2xl">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
             <p className="text-white text-xl font-semibold">Generating your puzzle...</p>
+            {currentPrompt && (
+              <p className="text-white/90 mt-3 font-medium">
+                Prompt: "{currentPrompt}"
+              </p>
+            )}
             <p className="text-white/80 mt-2">This may take a few moments</p>
           </div>
         )}
