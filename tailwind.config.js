@@ -24,9 +24,25 @@ module.exports = {
       },
       animation: {
         'ai-pulse': 'ai-pulse 1.5s ease-in-out infinite'
+      },
+      animationDelay: {
+        '200': '200ms',
+        '400': '400ms'
       }
     },
   },
-  plugins: [],
+  plugins: [
+    function({ addUtilities }) {
+      const newUtilities = {
+        '.animation-delay-200': {
+          'animation-delay': '200ms'
+        },
+        '.animation-delay-400': {
+          'animation-delay': '400ms'
+        }
+      }
+      addUtilities(newUtilities)
+    }
+  ],
 }
 
