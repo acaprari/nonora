@@ -13,7 +13,8 @@ import Anthropic from '@anthropic-ai/sdk'
 import type { Hint } from '@/types'
 
 // Model configuration
-const MODEL = 'claude-3-5-sonnet-20241022'
+// Using latest Claude 3.5 Sonnet - update this to newest available model
+const MODEL = 'claude-3-5-sonnet-20250219'
 
 /**
  * Response structure for puzzle generation
