@@ -4,6 +4,7 @@ export interface CompletionScreenProps {
   errors: number
   currentLevel: number
   previousLevel: number
+  gridSize: number
   onNewPuzzle: () => void
   onNewPrompt: () => void
 }
@@ -33,17 +34,62 @@ function getPerformanceFeedback(
   }
 }
 
+function getPerformanceColor(
+  solveTime: number,
+  hintsUsed: number,
+  errors: number
+): string {
+  // Green: Excellent performance
+  if (solveTime < 180 && hintsUsed <= 1 && errors <= 2) {
+    return 'text-green-300'
+  }
+  // Red: Struggled
+  else if (solveTime > 600 || hintsUsed > 3 || errors > 8) {
+    return 'text-red-300'
+  }
+  // Yellow: Okay
+  return 'text-yellow-300'
+}
+
+function getDifficultyChangeMessage(
+  currentLevel: number,
+  previousLevel: number,
+  gridSize: number
+): { icon: string; message: string; detail: string } {
+  if (currentLevel > previousLevel) {
+    return {
+      icon: '↑',
+      message: 'Next puzzle: Harder',
+      detail: `Great solve! Moving to Level ${currentLevel} (${gridSize}x${gridSize} grid).`
+    }
+  } else if (currentLevel < previousLevel) {
+    return {
+      icon: '↓',
+      message: 'Next puzzle: Easier',
+      detail: `Let's dial it back to Level ${currentLevel} (${gridSize}x${gridSize} grid) to keep it fun.`
+    }
+  } else {
+    return {
+      icon: '→',
+      message: 'Next puzzle: Same difficulty',
+      detail: `You're doing well! Staying at Level ${currentLevel} (${gridSize}x${gridSize} grid).`
+    }
+  }
+}
+
 export function CompletionScreen({
   solveTime,
   hintsUsed,
   errors,
   currentLevel,
   previousLevel,
+  gridSize,
   onNewPuzzle,
   onNewPrompt,
 }: CompletionScreenProps) {
   const feedback = getPerformanceFeedback(solveTime, hintsUsed, errors)
-  const leveledUp = currentLevel > previousLevel
+  const performanceColor = getPerformanceColor(solveTime, hintsUsed, errors)
+  const difficultyChange = getDifficultyChangeMessage(currentLevel, previousLevel, gridSize)
 
   return (
     <div className="glass-card rounded-2xl p-8 shadow-2xl max-w-2xl mx-auto space-y-6">
@@ -51,15 +97,15 @@ export function CompletionScreen({
         <h2 className="text-3xl font-bold text-white mb-2">
           🎉 Congratulations!
         </h2>
-        <p className="text-lg text-white font-medium">{feedback}</p>
+        <p className={`text-lg font-medium ${performanceColor}`}>{feedback}</p>
       </div>
 
-      {leveledUp && (
-        <div className="glass rounded-xl p-3 text-center">
-          <div className="text-white font-semibold">Level {currentLevel}</div>
-          <div className="text-green-300 text-sm">Level Up! 🎊</div>
+      <div className="glass rounded-xl p-4 text-center">
+        <div className="text-xl font-bold text-white mb-2">
+          {difficultyChange.message} {difficultyChange.icon}
         </div>
-      )}
+        <div className="text-sm text-white/80">{difficultyChange.detail}</div>
+      </div>
 
       <div className="glass rounded-xl p-4 grid grid-cols-3 gap-4 text-center">
         <div>
@@ -75,14 +121,6 @@ export function CompletionScreen({
           <div className="text-sm text-white/80">Errors</div>
         </div>
       </div>
-
-      {!leveledUp && (
-        <div className="text-center">
-          <p className="text-lg font-semibold text-white">
-            Level {currentLevel}
-          </p>
-        </div>
-      )}
 
       <div className="flex flex-col sm:flex-row gap-3 w-full">
         <button

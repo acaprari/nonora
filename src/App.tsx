@@ -244,6 +244,7 @@ function App() {
             errors={puzzle.errors}
             currentLevel={currentLevel}
             previousLevel={previousLevel}
+            gridSize={currentGridSize}
             onNewPuzzle={handleNewPuzzle}
             onNewPrompt={handleNewPrompt}
           />

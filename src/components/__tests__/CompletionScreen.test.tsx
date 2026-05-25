@@ -9,6 +9,7 @@ describe('CompletionScreen', () => {
     errors: 3,
     currentLevel: 5,
     previousLevel: 5,
+    gridSize: 7,
     onNewPuzzle: vi.fn(),
     onNewPrompt: vi.fn(),
   }

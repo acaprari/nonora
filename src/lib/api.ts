@@ -84,6 +84,8 @@ Requirements:
 - Return a JSON object with a "matrix" field containing a 2D boolean array
 - true = filled cell, false = empty cell
 - Create a recognizable shape that works as pixel art
+- **IMPORTANT: Avoid perfectly symmetric designs** - add natural variation, asymmetric poses, or dynamic positioning
+- Vary the composition: don't always center the subject, try different angles or poses
 - Ensure the puzzle has clear, unambiguous clues
 - Difficulty level: ${difficulty}/10 (1=very simple shapes, 10=expert complexity)
 - The puzzle should be solvable using logic alone (no guessing required)
