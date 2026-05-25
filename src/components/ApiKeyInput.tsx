@@ -66,10 +66,21 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({
       <div className="mb-4">
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium text-gray-700 mb-2"
+          className="block text-sm font-medium text-white mb-2"
         >
           Anthropic API Key
         </label>
+        <p className="text-xs text-white/80 mb-3">
+          Get your API key from{' '}
+          <a
+            href="https://console.anthropic.com/settings/keys"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-white"
+          >
+            console.anthropic.com
+          </a>
+        </p>
         <div className="relative">
           <input
             id={inputId}
@@ -83,6 +94,7 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({
             placeholder="sk-ant-..."
             className={`
               w-full px-4 py-2 pr-12 border rounded-lg
+              text-gray-900 bg-white
               focus:outline-none focus:ring-2 focus:ring-primary
               disabled:bg-gray-100 disabled:cursor-not-allowed
               ${error ? 'border-error focus:ring-error' : 'border-gray-300'}
