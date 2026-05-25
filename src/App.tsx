@@ -39,8 +39,8 @@ function App() {
   const { profile, recordCompletion, currentLevel, currentGridSize } = useDifficulty()
   const { savedState, saveState, clearState } = useGamePersistence()
 
-  // Only use usePuzzle when puzzle exists
-  const puzzleHooks = usePuzzle(puzzle!)
+  // Use usePuzzle hook (handles null puzzle)
+  const puzzleHooks = usePuzzle(puzzle)
   const { validationResult, isComplete, isValid } = useValidation(puzzle)
 
   // Initialize from saved state on mount
@@ -143,10 +143,10 @@ function App() {
    * Handle cell clicks during gameplay
    */
   const handleCellClick = (row: number, col: number) => {
-    if (puzzle && puzzleHooks) {
+    if (puzzle && puzzleHooks && puzzleHooks.puzzle) {
       puzzleHooks.toggleCell(row, col)
       // Update puzzle state to trigger re-render and persistence
-      setPuzzle({ ...puzzleHooks.puzzle })
+      setPuzzle(puzzleHooks.puzzle)
     }
   }
 

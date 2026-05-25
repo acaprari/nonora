@@ -31,7 +31,7 @@ describe('usePuzzle', () => {
       result.current.toggleCell(0, 0)
     })
 
-    expect(result.current.puzzle.currentGrid[0][0]).toBe('filled')
+    expect(result.current.puzzle!.currentGrid[0][0]).toBe('filled')
   })
 
   it('toggles cell from filled to marked', () => {
@@ -43,7 +43,7 @@ describe('usePuzzle', () => {
       result.current.toggleCell(0, 0)
     })
 
-    expect(result.current.puzzle.currentGrid[0][0]).toBe('marked')
+    expect(result.current.puzzle!.currentGrid[0][0]).toBe('marked')
   })
 
   it('toggles cell from marked to empty', () => {
@@ -56,7 +56,7 @@ describe('usePuzzle', () => {
       result.current.toggleCell(0, 0)
     })
 
-    expect(result.current.puzzle.currentGrid[0][0]).toBe('empty')
+    expect(result.current.puzzle!.currentGrid[0][0]).toBe('empty')
   })
 
   it('increments hints count', () => {
@@ -67,7 +67,7 @@ describe('usePuzzle', () => {
       result.current.incrementHints()
     })
 
-    expect(result.current.puzzle.hintsUsed).toBe(1)
+    expect(result.current.puzzle!.hintsUsed).toBe(1)
   })
 
   it('increments errors count', () => {
@@ -78,6 +78,6 @@ describe('usePuzzle', () => {
       result.current.incrementErrors()
     })
 
-    expect(result.current.puzzle.errors).toBe(1)
+    expect(result.current.puzzle!.errors).toBe(1)
   })
 })
