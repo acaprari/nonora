@@ -31,13 +31,19 @@ const createMockValidation = (size: number): ValidationResult => {
   }
 }
 
+// Default props for GameBoard tests
+const defaultGameBoardProps = {
+  apiClient: null,
+  onHintUsed: vi.fn()
+}
+
 describe('GameBoard', () => {
   describe('Cell Rendering', () => {
     it('renders correct number of cells for 2x2 grid', () => {
       const puzzle = createMockPuzzle(2)
       const validation = createMockValidation(2)
 
-      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />)
+      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       expect(cells).toHaveLength(4) // 2x2 = 4 cells
@@ -47,7 +53,7 @@ describe('GameBoard', () => {
       const puzzle = createMockPuzzle(5)
       const validation = createMockValidation(5)
 
-      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />)
+      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       expect(cells).toHaveLength(25) // 5x5 = 25 cells
@@ -57,7 +63,7 @@ describe('GameBoard', () => {
       const puzzle = createMockPuzzle(10)
       const validation = createMockValidation(10)
 
-      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />)
+      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       expect(cells).toHaveLength(100) // 10x10 = 100 cells
@@ -71,7 +77,7 @@ describe('GameBoard', () => {
       const validation = createMockValidation(2)
 
       const { container } = render(
-        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />
+        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />
       )
 
       expect(container.textContent).toContain('1')
@@ -84,7 +90,7 @@ describe('GameBoard', () => {
       const validation = createMockValidation(2)
 
       const { container } = render(
-        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />
+        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />
       )
 
       expect(container.textContent).toContain('3')
@@ -97,7 +103,7 @@ describe('GameBoard', () => {
       const validation = createMockValidation(2)
 
       const { container } = render(
-        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />
+        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />
       )
 
       expect(container.textContent).toContain('1')
@@ -111,7 +117,7 @@ describe('GameBoard', () => {
       const validation = createMockValidation(2)
 
       const { container } = render(
-        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />
+        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />
       )
 
       expect(container.textContent).toContain('1')
@@ -127,7 +133,7 @@ describe('GameBoard', () => {
       const validation = createMockValidation(2)
       const handleClick = vi.fn()
 
-      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={handleClick} />)
+      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={handleClick} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       fireEvent.click(cells[0])
@@ -140,7 +146,7 @@ describe('GameBoard', () => {
       const validation = createMockValidation(2)
       const handleClick = vi.fn()
 
-      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={handleClick} />)
+      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={handleClick} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       fireEvent.click(cells[3]) // Last cell in 2x2 grid
@@ -153,7 +159,7 @@ describe('GameBoard', () => {
       const validation = createMockValidation(3)
       const handleClick = vi.fn()
 
-      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={handleClick} />)
+      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={handleClick} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       fireEvent.click(cells[4]) // Center cell in 3x3 grid (index 4 = row 1, col 1)
@@ -168,7 +174,7 @@ describe('GameBoard', () => {
       const validation = createMockValidation(2)
       validation.rows[0] = 'valid'
 
-      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />)
+      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       expect(cells[0]).toHaveClass('border-success')
@@ -180,7 +186,7 @@ describe('GameBoard', () => {
       const validation = createMockValidation(2)
       validation.rows[1] = 'error'
 
-      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />)
+      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       expect(cells[2]).toHaveClass('border-error')
@@ -194,7 +200,7 @@ describe('GameBoard', () => {
       validation.rows[0] = 'valid'
 
       const { container } = render(
-        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />
+        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />
       )
 
       // Check for success text color class
@@ -209,7 +215,7 @@ describe('GameBoard', () => {
       validation.columns[0] = 'error'
 
       const { container } = render(
-        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />
+        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />
       )
 
       // Check for error text color class
@@ -224,7 +230,7 @@ describe('GameBoard', () => {
       const validation = createMockValidation(2)
 
       const { container } = render(
-        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />
+        <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />
       )
 
       expect(container.querySelector('.flex.flex-col')).toBeInTheDocument()
@@ -238,7 +244,7 @@ describe('GameBoard', () => {
       ]
       const validation = createMockValidation(2)
 
-      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />)
+      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       expect(cells[0]).toHaveClass('bg-cell-filled')
@@ -253,7 +259,7 @@ describe('GameBoard', () => {
       const puzzle = createMockPuzzle(3)
       const validation = createMockValidation(3)
 
-      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />)
+      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       expect(cells).toHaveLength(9)
@@ -263,7 +269,7 @@ describe('GameBoard', () => {
       const puzzle = createMockPuzzle(7)
       const validation = createMockValidation(7)
 
-      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />)
+      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       expect(cells).toHaveLength(49)
@@ -273,7 +279,7 @@ describe('GameBoard', () => {
       const puzzle = createMockPuzzle(15)
       const validation = createMockValidation(15)
 
-      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} />)
+      render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       expect(cells).toHaveLength(225)

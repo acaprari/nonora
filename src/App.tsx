@@ -164,6 +164,19 @@ function App() {
   }
 
   /**
+   * Handle hint usage - increment counter
+   */
+  const handleHintUsed = () => {
+    setPuzzle(prev => {
+      if (!prev) return null
+      return {
+        ...prev,
+        hintsUsed: prev.hintsUsed + 1
+      }
+    })
+  }
+
+  /**
    * Generate new puzzle with same prompt
    */
   const handleNewPuzzle = () => {
@@ -232,6 +245,8 @@ function App() {
               puzzle={puzzle}
               validationResult={validationResult}
               onCellClick={handleCellClick}
+              apiClient={apiClient}
+              onHintUsed={handleHintUsed}
             />
           </div>
         )}
