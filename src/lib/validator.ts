@@ -92,18 +92,15 @@ export function validateGrid(
   // Validate each column
   const cols = columns.map((col, i) => validateRow(col, columnClues[i]));
 
-  // Check if grid is complete (no empty cells)
-  const isComplete = !grid.flat().includes('empty');
-
-  // Check if all rows and columns are valid
-  const isValid =
+  // Check if all rows and columns are valid (puzzle is solved)
+  const allValid =
     rows.every(state => state === 'valid') &&
     cols.every(state => state === 'valid');
 
   return {
     rows,
     columns: cols,
-    isComplete,
-    isValid: isComplete && isValid
+    isComplete: allValid,  // Complete when solved, not when all cells filled
+    isValid: allValid
   };
 }

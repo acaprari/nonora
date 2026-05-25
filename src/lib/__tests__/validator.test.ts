@@ -71,11 +71,14 @@ describe('validateGrid', () => {
       ['empty', 'empty', 'empty'],
       ['empty', 'empty', 'empty']
     ];
-    const rowClues = [[1], [], []];
+    const rowClues = [[2], [], []];  // Expects 2 filled, only has 1
     const colClues = [[1], [], []];
 
     const result = validateGrid(grid, rowClues, colClues);
+    // Incomplete because row 0 needs 2 filled cells but only has 1
     expect(result.isComplete).toBe(false);
+    expect(result.isValid).toBe(false);
+    expect(result.rows[0]).toBe('in-progress');
   });
 
   it('detects complete valid grid', () => {
@@ -105,7 +108,7 @@ describe('validateGrid', () => {
     expect(result.rows[1]).toBe('valid'); // empty row, no clues
   });
 
-  it('detects complete but invalid grid', () => {
+  it('detects filled but invalid grid', () => {
     const grid: CellState[][] = [
       ['filled', 'filled', 'filled'],
       ['marked', 'marked', 'marked'],
@@ -115,7 +118,8 @@ describe('validateGrid', () => {
     const colClues = [[1, 1], [1], [1]];
 
     const result = validateGrid(grid, rowClues, colClues);
-    expect(result.isComplete).toBe(true);
+    // All cells filled but doesn't match clues = not complete, not valid
+    expect(result.isComplete).toBe(false);
     expect(result.isValid).toBe(false);
     expect(result.rows[0]).toBe('error');
   });
