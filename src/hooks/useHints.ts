@@ -25,6 +25,7 @@ export function useHints(
   currentGrid: string[][],
   rowClues: number[][],
   columnClues: number[][],
+  solution: boolean[][],
   onHintUsed: () => void
 ): UseHintsReturn {
   const [currentHint, setCurrentHint] = useState<Hint | null>(null)
@@ -59,7 +60,7 @@ export function useHints(
 
     try {
       setError(null)
-      const hint = await apiClient.getHint(hintType, currentGrid, rowClues, columnClues)
+      const hint = await apiClient.getHint(hintType, currentGrid, rowClues, columnClues, solution)
       setCurrentHint(hint)
       setLastHintTime(now)
 
@@ -84,7 +85,7 @@ export function useHints(
     } finally {
       setIsLoading(false)
     }
-  }, [apiClient, currentGrid, rowClues, columnClues, lastHintTime, onHintUsed])
+  }, [apiClient, currentGrid, rowClues, columnClues, solution, lastHintTime, onHintUsed])
 
   const dismissHint = useCallback(() => {
     setCurrentHint(null)

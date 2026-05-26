@@ -183,7 +183,8 @@ Example format:
     type: 'guidance' | 'specific',
     currentGrid: string[][],
     rowClues: number[][],
-    columnClues: number[][]
+    columnClues: number[][],
+    solution: boolean[][]
   ): Promise<Hint> {
     // Input validation
     if (!currentGrid || !Array.isArray(currentGrid) || currentGrid.length === 0) {
@@ -204,6 +205,20 @@ Example format:
         row.map(cell => cell === 'filled' ? '■' : cell === 'marked' ? '×' : '·').join(' ')
       ).join('\n')
 
+      // Create validation grid showing which filled cells are correct vs incorrect
+      const validationGrid = currentGrid.map((row, r) =>
+        row.map((cell, c) => {
+          if (cell === 'filled') {
+            // Check if this filled cell matches the solution
+            return solution[r][c] ? '✓' : '✗'
+          } else if (cell === 'marked') {
+            // Check if marking is correct (should be empty in solution)
+            return !solution[r][c] ? '✓' : '✗'
+          }
+          return '·'
+        }).join(' ')
+      ).join('\n')
+
       let prompt: string
 
       if (type === 'guidance') {
@@ -211,8 +226,18 @@ Example format:
 
 Row clues: ${JSON.stringify(rowClues)}
 Column clues: ${JSON.stringify(columnClues)}
-Current grid:
+
+Current grid (■ = filled, × = marked, · = empty):
 ${gridRepresentation}
+
+Validation (✓ = correct, ✗ = incorrect, · = empty):
+${validationGrid}
+
+IMPORTANT: The player's filled/marked cells may be INCORRECT. Use the validation grid above to see which cells are right (✓) or wrong (✗).
+Base your hint on the correct solution logic, not on assuming their filled cells are correct.
+
+If you see incorrect cells (✗), guide them to reconsider those rows/columns.
+If all filled cells are correct (✓), guide them on which row/column to work on next.
 
 Provide strategic guidance about which row or column to focus on next.
 Don't give exact cell coordinates - help them think through the logic.
@@ -222,15 +247,25 @@ Keep it brief (1-2 sentences).`
 
 Row clues: ${JSON.stringify(rowClues)}
 Column clues: ${JSON.stringify(columnClues)}
-Current grid:
+
+Current grid (■ = filled, × = marked, · = empty):
 ${gridRepresentation}
 
-Analyze the grid and provide the next logical cell to fill or mark.
+Validation (✓ = correct, ✗ = incorrect, · = empty):
+${validationGrid}
 
-IMPORTANT: In your "reasoning" field, use 1-based numbering (rows and columns start at 1, not 0).
-Example: "Row 1, Column 3" instead of "Row 0, Column 2".
+IMPORTANT:
+1. The player's filled/marked cells may be INCORRECT. Use the validation grid to see which cells are right (✓) or wrong (✗).
+2. If you see any incorrect cells (✗), suggest fixing one of those first.
+3. If all current cells are correct (✓), suggest the next logical cell based on the clues.
+4. Base your hint on the correct solution logic, NOT on assuming all filled cells are correct.
 
-However, the "row" and "col" fields in the JSON must still be 0-based for internal use.
+In your "reasoning" field:
+- Use 1-based numbering (rows and columns start at 1, not 0)
+- Example: "Row 1, Column 3" instead of "Row 0, Column 2"
+- Explain why this cell should be filled or marked based on the clues
+
+The "row" and "col" fields in JSON must be 0-based for internal use.
 
 Return ONLY valid JSON in this format:
 {

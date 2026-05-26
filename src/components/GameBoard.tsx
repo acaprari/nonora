@@ -31,6 +31,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
     puzzle.currentGrid,
     puzzle.rowClues,
     puzzle.columnClues,
+    puzzle.solution,
     onHintUsed
   )
 
