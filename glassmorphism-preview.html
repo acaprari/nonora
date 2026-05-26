@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixlogic - Glassmorphism Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom Tailwind config */
+    @layer utilities {
+      .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+      }
+
+      .glass-input {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-[#5a85be] via-[#6b95c9] to-[#7ca5d4] p-4">
+
+  <div class="max-w-6xl mx-auto space-y-8">
+
+    <!-- Header -->
+    <header class="text-white text-center mb-8">
+      <h1 class="text-5xl font-bold mb-2 drop-shadow-lg">Pixlogic</h1>
+      <p class="text-xl drop-shadow-md">AI-Powered Nonogram Puzzles</p>
+      <p class="text-sm mt-4 opacity-80">✨ Glassmorphism Preview ✨</p>
+    </header>
+
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <!-- API Key Input - Glassmorphism Version -->
+      <div class="glass-card rounded-2xl p-6 shadow-2xl">
+        <h2 class="text-white text-xl font-bold mb-4">API Key Input</h2>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-white mb-2">
+              Anthropic API Key
+            </label>
+            <p class="text-xs text-white/90 mb-3">
+              Get your API key from
+              <a href="#" class="underline hover:text-white">console.anthropic.com</a>
+            </p>
+            <input
+              type="password"
+              placeholder="sk-ant-..."
+              class="glass-input w-full px-4 py-2 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
+            />
+          </div>
+
+          <button class="glass w-full py-3 px-6 rounded-lg text-white font-semibold hover:bg-white/20 transition-all shadow-lg">
+            Validate Key
+          </button>
+        </div>
+      </div>
+
+      <!-- Puzzle Prompt - Glassmorphism Version -->
+      <div class="glass-card rounded-2xl p-6 shadow-2xl">
+        <h2 class="text-white text-xl font-bold mb-4">Puzzle Prompt</h2>
+
+        <div class="space-y-4">
+          <div class="flex justify-between items-center text-sm font-medium text-white">
+            <span class="glass px-3 py-1 rounded-full">Level 5/10</span>
+            <span class="glass px-3 py-1 rounded-full">Grid: 10x10</span>
+          </div>
+
+          <textarea
+            rows="5"
+            placeholder="Describe what you'd like to draw... (e.g., a cat, a rocket ship, a smiley face)"
+            class="glass-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
+          ></textarea>
+
+          <button class="glass w-full py-3 px-6 rounded-lg text-white font-semibold hover:bg-white/20 transition-all shadow-lg">
+            Generate Puzzle
+          </button>
+
+          <p class="text-xs text-white/90 text-center">
+            Tip: Press Ctrl+Enter (Cmd+Enter on Mac) to generate
+          </p>
+        </div>
+      </div>
+
+      <!-- Game Board Preview - Glassmorphism Version -->
+      <div class="glass-card rounded-2xl p-6 shadow-2xl md:col-span-2">
+        <h2 class="text-white text-xl font-bold mb-4">Game Board (5x5 Example)</h2>
+
+        <div class="glass rounded-xl p-4">
+          <!-- Simple 5x5 grid -->
+          <div class="flex gap-2 mb-2">
+            <div class="w-16"></div>
+            <div class="flex-1 flex gap-1">
+              <div class="flex-1 text-center text-white text-sm font-semibold">2</div>
+              <div class="flex-1 text-center text-white text-sm font-semibold">1 1</div>
+              <div class="flex-1 text-center text-white text-sm font-semibold">3</div>
+              <div class="flex-1 text-center text-white text-sm font-semibold">1 1</div>
+              <div class="flex-1 text-center text-white text-sm font-semibold">2</div>
+            </div>
+          </div>
+
+          <div class="flex gap-2 mb-1">
+            <div class="w-16 flex items-center justify-center text-white text-sm font-semibold">2</div>
+            <div class="flex-1 grid grid-cols-5 gap-1">
+              <div class="aspect-square glass-input rounded border-2 border-white/20"></div>
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+              <div class="aspect-square glass-input rounded border-2 border-white/20"></div>
+              <div class="aspect-square glass-input rounded border-2 border-white/20"></div>
+            </div>
+          </div>
+
+          <div class="flex gap-2 mb-1">
+            <div class="w-16 flex items-center justify-center text-white text-sm font-semibold">1 1</div>
+            <div class="flex-1 grid grid-cols-5 gap-1">
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+              <div class="aspect-square glass-input rounded border-2 border-white/20"></div>
+              <div class="aspect-square glass-input rounded border-2 border-white/20"></div>
+              <div class="aspect-square glass-input rounded border-2 border-white/20"></div>
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+            </div>
+          </div>
+
+          <div class="flex gap-2 mb-1">
+            <div class="w-16 flex items-center justify-center text-white text-sm font-semibold">3</div>
+            <div class="flex-1 grid grid-cols-5 gap-1">
+              <div class="aspect-square glass-input rounded border-2 border-white/20"></div>
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+              <div class="aspect-square glass-input rounded border-2 border-white/20"></div>
+            </div>
+          </div>
+
+          <div class="flex gap-2 mb-1">
+            <div class="w-16 flex items-center justify-center text-white text-sm font-semibold">5</div>
+            <div class="flex-1 grid grid-cols-5 gap-1">
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <div class="w-16 flex items-center justify-center text-white text-sm font-semibold">2</div>
+            <div class="flex-1 grid grid-cols-5 gap-1">
+              <div class="aspect-square glass-input rounded border-2 border-white/20"></div>
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+              <div class="aspect-square bg-green-500/80 rounded border-2 border-white/20"></div>
+              <div class="aspect-square glass-input rounded border-2 border-white/20"></div>
+              <div class="aspect-square glass-input rounded border-2 border-white/20"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion Screen - Glassmorphism Version -->
+      <div class="glass-card rounded-2xl p-6 shadow-2xl md:col-span-2">
+        <h2 class="text-white text-xl font-bold mb-4">Completion Screen</h2>
+
+        <div class="space-y-6">
+          <h3 class="text-3xl font-bold text-white text-center">🎉 Congratulations!</h3>
+
+          <div class="glass rounded-xl p-4 grid grid-cols-3 gap-4 text-center">
+            <div>
+              <div class="text-2xl font-bold text-white">3:24</div>
+              <div class="text-sm text-white/80">Solve Time</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold text-white">2</div>
+              <div class="text-sm text-white/80">Hints Used</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold text-white">3</div>
+              <div class="text-sm text-white/80">Errors</div>
+            </div>
+          </div>
+
+          <div class="glass rounded-xl p-3 text-center">
+            <div class="text-white font-semibold">Level 6</div>
+            <div class="text-green-300 text-sm">Level Up! 🎊</div>
+          </div>
+
+          <p class="text-white text-center font-medium">Good job! You're getting better!</p>
+
+          <div class="flex gap-3">
+            <button class="glass flex-1 py-3 px-6 rounded-lg text-white font-semibold hover:bg-white/20 transition-all">
+              New Puzzle
+            </button>
+            <button class="glass flex-1 py-3 px-6 rounded-lg text-white font-semibold hover:bg-white/20 transition-all">
+              New Prompt
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Comparison Note -->
+    <div class="glass-card rounded-2xl p-6 shadow-2xl text-white">
+      <h3 class="text-lg font-bold mb-3">✨ Glassmorphism Features</h3>
+      <ul class="space-y-2 text-sm">
+        <li>✓ <strong>Frosted glass effect</strong> - Backdrop blur creates depth</li>
+        <li>✓ <strong>Semi-transparent cards</strong> - Subtle see-through effect</li>
+        <li>✓ <strong>Soft shadows</strong> - Cards appear to float</li>
+        <li>✓ <strong>Gradient background</strong> - Multi-tone blue gradient</li>
+        <li>✓ <strong>Modern aesthetic</strong> - Trendy iOS/Windows 11 style</li>
+        <li>✓ <strong>Better visual hierarchy</strong> - Cards stand out from background</li>
+      </ul>
+      <p class="mt-4 text-xs opacity-80">
+        Open this file in your browser to see the live preview:
+        <code class="bg-black/20 px-2 py-1 rounded">glassmorphism-preview.html</code>
+      </p>
+    </div>
+
+  </div>
+
+</body>
+</html>

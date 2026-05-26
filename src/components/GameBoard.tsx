@@ -52,14 +52,16 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
             onClick={requestHint}
             disabled={isOnCooldown || isLoading}
             className={`glass py-2 px-4 rounded-lg font-semibold transition-all ${
-              isOnCooldown || isLoading
+              isOnCooldown
                 ? 'opacity-50 cursor-not-allowed text-white/50'
+                : isLoading
+                ? 'cursor-not-allowed'
                 : 'text-white hover:bg-white/20'
             }`}
             data-testid="hint-button"
           >
             {isLoading ? (
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2 text-white">
                 💡 <AiLoadingIndicator size="small" />
               </span>
             ) : isOnCooldown ? (

@@ -1,4 +1,5 @@
 import type { Hint } from '@/types'
+import { renderMarkdown } from '@/lib/markdown'
 
 export interface HintDisplayProps {
   hint: Hint | null
@@ -24,6 +25,7 @@ export function HintDisplay({ hint, onDismiss, error }: HintDisplayProps) {
     >
       <div
         className="glass-card rounded-2xl p-6 shadow-2xl max-w-md w-full"
+        style={{ background: 'rgba(255, 255, 255, 0.3)' }}
         onClick={e => e.stopPropagation()}
         data-testid="hint-modal"
       >
@@ -61,9 +63,11 @@ export function HintDisplay({ hint, onDismiss, error }: HintDisplayProps) {
             </div>
 
             <div className="space-y-3">
-              <p className="text-white/90 text-lg" data-testid="hint-message">
-                {hint.message}
-              </p>
+              <div
+                className="text-white/90 text-lg prose prose-invert max-w-none"
+                data-testid="hint-message"
+                dangerouslySetInnerHTML={{ __html: renderMarkdown(hint.message) }}
+              />
 
               {hint.cell && (
                 <div className="glass rounded-lg p-3 text-center">

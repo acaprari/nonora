@@ -227,12 +227,17 @@ ${gridRepresentation}
 
 Analyze the grid and provide the next logical cell to fill or mark.
 
+IMPORTANT: In your "reasoning" field, use 1-based numbering (rows and columns start at 1, not 0).
+Example: "Row 1, Column 3" instead of "Row 0, Column 2".
+
+However, the "row" and "col" fields in the JSON must still be 0-based for internal use.
+
 Return ONLY valid JSON in this format:
 {
   "row": <number 0-${currentGrid.length - 1}>,
   "col": <number 0-${currentGrid[0].length - 1}>,
   "action": "fill" | "mark",
-  "reasoning": "<brief explanation>"
+  "reasoning": "<brief explanation using 1-based row/column numbers>"
 }`
       }
 
