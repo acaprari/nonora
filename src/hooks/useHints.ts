@@ -6,6 +6,7 @@ interface UseHintsReturn {
   currentHint: Hint | null
   isOnCooldown: boolean
   cooldownRemaining: number
+  isLoading: boolean
   requestHint: () => Promise<void>
   dismissHint: () => void
   error: string | null
@@ -30,6 +31,7 @@ export function useHints(
   const [lastHintTime, setLastHintTime] = useState<number>(0)
   const [cooldownRemaining, setCooldownRemaining] = useState<number>(0)
   const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const COOLDOWN_MS = 30000 // 30 seconds
   const ESCALATION_THRESHOLD_MS = 120000 // 2 minutes
@@ -52,6 +54,8 @@ export function useHints(
     // Determine hint type based on escalation logic
     const hintType: 'guidance' | 'specific' =
       timeSinceLastHint < ESCALATION_THRESHOLD_MS ? 'specific' : 'guidance'
+
+    setIsLoading(true)
 
     try {
       setError(null)
@@ -77,6 +81,8 @@ export function useHints(
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to get hint')
       console.error('Hint request error:', err)
+    } finally {
+      setIsLoading(false)
     }
   }, [apiClient, currentGrid, rowClues, columnClues, lastHintTime, onHintUsed])
 
@@ -89,6 +95,7 @@ export function useHints(
     currentHint,
     isOnCooldown,
     cooldownRemaining,
+    isLoading,
     requestHint,
     dismissHint,
     error

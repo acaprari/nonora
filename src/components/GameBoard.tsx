@@ -4,6 +4,7 @@ import { Cell } from './Cell'
 import { Clues } from './Clues'
 import { HintDisplay } from './HintDisplay'
 import { useHints } from '@/hooks/useHints'
+import { AiLoadingIndicator } from './AiLoadingIndicator'
 
 export interface GameBoardProps {
   puzzle: Puzzle
@@ -21,6 +22,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
     currentHint,
     isOnCooldown,
     cooldownRemaining,
+    isLoading,
     requestHint,
     dismissHint,
     error: hintError
@@ -48,15 +50,23 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
           </div>
           <button
             onClick={requestHint}
-            disabled={isOnCooldown}
+            disabled={isOnCooldown || isLoading}
             className={`glass py-2 px-4 rounded-lg font-semibold transition-all ${
-              isOnCooldown
+              isOnCooldown || isLoading
                 ? 'opacity-50 cursor-not-allowed text-white/50'
                 : 'text-white hover:bg-white/20'
             }`}
             data-testid="hint-button"
           >
-            {isOnCooldown ? `💡 ${formatCooldown(cooldownRemaining)}` : '💡 Get Hint'}
+            {isLoading ? (
+              <span className="flex items-center gap-2">
+                💡 <AiLoadingIndicator size="small" />
+              </span>
+            ) : isOnCooldown ? (
+              `💡 ${formatCooldown(cooldownRemaining)}`
+            ) : (
+              '💡 Get Hint'
+            )}
           </button>
         </div>
 

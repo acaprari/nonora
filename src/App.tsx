@@ -12,6 +12,7 @@ import { PuzzlePrompt } from '@/components/PuzzlePrompt'
 import { GameBoard } from '@/components/GameBoard'
 import { CompletionScreen } from '@/components/CompletionScreen'
 import { SettingsMenu } from '@/components/SettingsMenu'
+import { AiLoadingIndicator } from '@/components/AiLoadingIndicator'
 
 /**
  * Main App Component - Orchestrates the entire game flow
@@ -259,7 +260,7 @@ function App() {
         {/* Loading Indicator */}
         {isGenerating && (
           <div className="glass-card rounded-2xl p-8 text-center shadow-2xl">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
+            <AiLoadingIndicator size="large" className="mb-4" />
             <p className="text-white text-xl font-semibold">Generating your puzzle...</p>
             {currentPrompt && (
               <p className="text-white/90 mt-3 font-medium">
