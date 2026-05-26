@@ -42,9 +42,9 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
 
   return (
     <>
-      <div className="glass-card rounded-2xl p-6 shadow-2xl max-w-4xl mx-auto">
+      <div className="glass-card rounded-2xl p-3 shadow-2xl max-w-4xl mx-auto">
         {/* Header with hint button */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-2">
           <div className="text-white/80 text-sm">
             Level {puzzle.prompt ? puzzle.prompt.substring(0, 20) : 'Puzzle'}
             {puzzle.prompt && puzzle.prompt.length > 20 && '...'}
@@ -73,7 +73,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
           </button>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
       {/* Column clues */}
       <div className="flex">
         <div className="w-16" /> {/* Spacer for row clues */}
@@ -92,7 +92,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
 
       {/* Grid rows with row clues */}
       {puzzle.currentGrid.map((row, rowIdx) => (
-        <div key={rowIdx} className="flex gap-2">
+        <div key={rowIdx} className="flex gap-1">
           <div className="w-16">
             <Clues
               clues={puzzle.rowClues[rowIdx]}

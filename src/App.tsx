@@ -220,13 +220,13 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#5a85be] via-[#6b95c9] to-[#7ca5d4] p-4">
-      <header className="text-white mb-8">
-        <div className="flex justify-between items-center max-w-4xl mx-auto mb-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#5a85be] via-[#6b95c9] to-[#7ca5d4] py-2 px-4">
+      <header className="text-white mb-3">
+        <div className="flex justify-between items-center max-w-4xl mx-auto mb-2">
           <div className="flex-1" />
           <div className="flex-1 text-center">
-            <h1 className="text-5xl font-bold mb-2 drop-shadow-lg">Pixlogic</h1>
-            <p className="text-xl drop-shadow-md">AI-Powered Nonogram Puzzles</p>
+            <h1 className="text-4xl font-bold mb-1 drop-shadow-lg">Pixlogic</h1>
+            <p className="text-lg drop-shadow-md">AI-Powered Nonogram Puzzles</p>
           </div>
           <div className="flex-1 flex justify-end">
             {apiKey && (

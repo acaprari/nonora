@@ -17,11 +17,11 @@ export function Clues({ clues, orientation, validationState = 'in-progress' }: C
   const flexDirection = orientation === 'column' ? 'flex-col' : 'flex-row'
 
   return (
-    <div className={`flex ${flexDirection} gap-1 items-center justify-center p-1`}>
+    <div className={`flex ${flexDirection} gap-0.5 items-center justify-center p-0.5`}>
       {displayClues.map((clue, idx) => (
         <span
           key={idx}
-          className={`${stateColor} font-semibold text-sm`}
+          className={`${stateColor} font-semibold text-xs`}
         >
           {clue}
         </span>
