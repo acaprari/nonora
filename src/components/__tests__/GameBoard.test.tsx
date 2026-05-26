@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { GameBoard } from '../GameBoard'
 import { Puzzle, ValidationResult } from '../../types'
@@ -283,6 +283,42 @@ describe('GameBoard', () => {
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
       expect(cells).toHaveLength(225)
+    })
+  })
+
+  describe('Hint Button Loading State', () => {
+    it('shows loading indicator in hint button while requesting hint', async () => {
+      const mockApiClient = {
+        getHint: vi.fn(() => new Promise(resolve => setTimeout(resolve, 1000)))
+      }
+
+      const puzzle = createMockPuzzle(5)
+      const validation = createMockValidation(5)
+
+      render(
+        <GameBoard
+          puzzle={puzzle}
+          validationResult={validation}
+          onCellClick={() => {}}
+          apiClient={mockApiClient as any}
+          onHintUsed={vi.fn()}
+        />
+      )
+
+      const hintButton = screen.getByTestId('hint-button')
+
+      // Before click: shows "Get Hint"
+      expect(hintButton.textContent).toContain('Get Hint')
+
+      // Click button
+      fireEvent.click(hintButton)
+
+      // During loading: button is disabled and shows indicator
+      await waitFor(() => {
+        expect(hintButton).toBeDisabled()
+        // AiLoadingIndicator renders stars
+        expect(hintButton.textContent).toContain('✨')
+      })
     })
   })
 })
