@@ -80,7 +80,7 @@ This was done BACKWARDS (implementation first, docs after). **Don't repeat this 
 - **Immutable state updates** throughout
 
 ### 4. Testing Requirements
-- Unit tests: `npm test` (must show 223+ tests passing)
+- Unit tests: `npm test` (must show 231+ tests passing)
 - E2E tests: `npm run test:e2e`
 - Build verification: `npm run build` (must succeed)
 - TypeScript check: `npx tsc --noEmit` (must have no errors)
@@ -146,7 +146,7 @@ src/
 4. Run full test suite
 
 ## API Integration
-- Uses Anthropic Claude API (Sonnet 4)
+- Uses Anthropic Claude API (Sonnet 4.6)
 - API key stored in localStorage (user-provided)
 - All API calls go through `src/lib/api.ts` → `ApiClient` class
 - Never commit API keys or secrets
@@ -157,7 +157,7 @@ src/
 - Base path configured in `vite.config.ts` as `/pixlogic/`
 
 ## Before Committing
-- [ ] All 223+ unit tests passing (`npm test`)
+- [ ] All 231+ unit tests passing (`npm test`)
 - [ ] Production build succeeds (`npm run build`)
 - [ ] No TypeScript errors (`npx tsc --noEmit`)
 - [ ] No console.log statements in src/

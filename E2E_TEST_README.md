@@ -144,22 +144,7 @@ The Playwright configuration is in `/playwright.config.ts`:
 - **State Persistence**: 10 tests
 - **Puzzle Prompt Validation**: 13 tests
 
-#### Test Results (Current):
-- **Passing**: 8 tests (16%)
-- **Failing**: 41 tests (84%)
-
-### Passing Tests:
-1. ✓ Show/hide API key toggle
-2. ✓ Accept API key with Enter key
-3. ✓ Load app with correct header
-4. ✓ Show API key input on first visit
-5. ✓ Handle keyboard interactions
-6. ✓ Display responsive layout
-7. ✓ Handle missing localStorage gracefully
-8. ✓ Handle corrupted localStorage data
-
-### Common Failure Pattern:
-Most failing tests timeout waiting for the "Validate Key" button to be found. This appears to be a timing issue with the test setup where the button is not immediately available after page reload when localStorage is cleared.
+**Note**: E2E tests use mocked API responses to avoid real API calls and ensure test reliability. The mock setup ensures consistent, fast test execution without requiring actual Anthropic API keys.
 
 ## Key Features Tested
 

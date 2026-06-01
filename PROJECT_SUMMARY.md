@@ -14,7 +14,7 @@ Pixlogic is an AI-powered nonogram puzzle game built with React, TypeScript, and
   - Production Code: 1,761 lines
   - Test Code: 2,843 lines
   - Test Coverage Ratio: 1.61:1 (test to production)
-- **Test Count**: 223 unit tests (all passing)
+- **Test Count**: 231 unit tests (all passing)
 - **Build Size**: 404 KB total (compressed)
   - Main JS Bundle: 354 KB (104.89 KB gzipped)
   - CSS Bundle: 10.61 KB (3.08 KB gzipped)
@@ -35,8 +35,8 @@ Pixlogic is an AI-powered nonogram puzzle game built with React, TypeScript, and
 ## Feature Set
 
 ### Core Gameplay
-- **AI-Powered Puzzle Generation**: Claude Sonnet 4 generates unique puzzles from text prompts
-- **Multiple Grid Sizes**: 5x5, 7x7, 10x10, and 15x15 grids
+- **AI-Powered Puzzle Generation**: Claude Sonnet 4.6 generates unique puzzles from text prompts
+- **Linear Grid Progression**: Grids grow with each level (5×5 at level 1 through 14×14 at level 10)
 - **Three Interaction Modes**:
   - Fill mode (left-click or tap)
   - Mark mode (right-click or long-press)
@@ -46,7 +46,7 @@ Pixlogic is an AI-powered nonogram puzzle game built with React, TypeScript, and
 
 ### Difficulty System
 - **Adaptive Difficulty Engine**: Dynamically adjusts based on performance
-- **8 Difficulty Levels**: Novice → Expert
+- **10 Difficulty Levels**: Progressive levels from 1 to 10
 - **Performance Tracking**: Monitors solve time, hints used, and errors
 - **Smart Progression**: Level-up/down based on 3-puzzle rolling average
 
@@ -101,14 +101,14 @@ Pixlogic is an AI-powered nonogram puzzle game built with React, TypeScript, and
 - **Tailwind CSS**: Utility-first styling
 
 ### Testing
-- **Vitest**: Unit test runner (223 tests)
+- **Vitest**: Unit test runner (231 tests)
 - **React Testing Library**: Component testing
 - **Playwright**: E2E testing (5 test suites)
 - **@testing-library/user-event**: User interaction simulation
 
 ### API & Services
 - **Anthropic SDK**: Claude API integration
-- **Claude Sonnet 4**: Puzzle generation model
+- **Claude Sonnet 4.6**: Puzzle generation model
 
 ### Build & Deployment
 - **GitHub Pages**: Automated deployment
@@ -138,7 +138,7 @@ Pixlogic is an AI-powered nonogram puzzle game built with React, TypeScript, and
 
 ### Test-Driven Development (TDD)
 **Why:** Ensures correctness and prevents regressions.
-- 223 unit tests covering all logic
+- 231 unit tests covering all logic
 - 1.61:1 test-to-production code ratio
 - High confidence in refactoring
 
@@ -247,7 +247,7 @@ Defined in `tailwind.config.js`:
 
 ## Testing Coverage
 
-### Unit Tests (223 tests)
+### Unit Tests (231 tests)
 All core logic is thoroughly tested:
 
 | Module | Test File | Tests | Coverage |
@@ -319,7 +319,7 @@ npx tsc --noEmit     # TypeScript check
 ```
 
 ### Before Committing
-- [ ] All 223 tests passing (`npm test`)
+- [ ] All 231 tests passing (`npm test`)
 - [ ] Production build succeeds (`npm run build`)
 - [ ] No TypeScript errors (`npx tsc --noEmit`)
 - [ ] Read design spec for compliance
@@ -363,7 +363,7 @@ npx tsc --noEmit     # TypeScript check
 
 ## Production Readiness Checklist
 
-- [x] All 223 unit tests passing
+- [x] All 231 unit tests passing
 - [x] Production build succeeds with no errors
 - [x] No TypeScript compilation errors
 - [x] Dev server starts successfully

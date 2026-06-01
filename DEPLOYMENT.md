@@ -70,7 +70,7 @@ on:
 Key features:
 - Runs on every push to `main`
 - Can be triggered manually via workflow_dispatch
-- Uses Node.js 18
+- Uses Node.js 24
 - Caches npm dependencies for faster builds
 - Automatically handles GitHub Pages deployment
 

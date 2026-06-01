@@ -45,7 +45,7 @@ See 2026-06-01 commits for example of what NOT to do (security improvements were
 ### Test-Driven Development (TDD)
 - Write tests FIRST, then implementation
 - Test location: `src/**/__tests__/*.test.tsx`
-- All tests must pass: `npm test` (223+ tests)
+- All tests must pass: `npm test` (231+ tests)
 - Never commit without running tests
 
 ### Architecture Rules

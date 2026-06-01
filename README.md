@@ -14,9 +14,9 @@ Nonograms (also known as Picross or Griddlers) are logic puzzles where you fill 
 
 - **AI-Generated Puzzles**: Create unique puzzles from any text prompt using Anthropic's Claude API
 - **Adaptive Difficulty**: Progressive difficulty system from Level 1-10
-- **Dynamic Grid Sizes**: Start with 5x5 grids, progress to 7x7, then 10x10
+- **Linear Grid Progression**: Grids grow with each level (5×5 at level 1, 6×6 at level 2, up to 14×14 at level 10)
 - **Real-Time Validation**: Instant feedback with green (correct) and red (error) indicators
-- **Hint System**: Get help when you're stuck (coming soon)
+- **Smart Hint System**: Three-tier progressive hint system to help when you're stuck
 - **Game State Persistence**: Your progress is automatically saved locally
 - **Performance Tracking**: Track completion time, hints used, and errors made
 - **Mobile-Friendly**: Fully responsive design works on desktop and mobile
@@ -27,9 +27,9 @@ Nonograms (also known as Picross or Griddlers) are logic puzzles where you fill 
 - **Frontend Framework**: React 18 with TypeScript
 - **Build Tool**: Vite
 - **Styling**: Tailwind CSS
-- **AI Integration**: Anthropic Claude API (Sonnet 4)
+- **AI Integration**: Anthropic Claude API (Sonnet 4.6)
 - **Testing**:
-  - Unit/Component: Vitest + React Testing Library (223 tests)
+  - Unit/Component: Vitest + React Testing Library (231 tests)
   - End-to-End: Playwright (49 tests)
 - **Deployment**: GitHub Pages
 
@@ -166,7 +166,7 @@ npm run test:ui         # Interactive test UI
 npm run test:coverage   # Coverage report
 ```
 
-- 223 unit and component tests
+- 231 unit and component tests
 - Testing Library best practices
 - Comprehensive coverage of game logic
 
@@ -256,7 +256,7 @@ For production deployment with GitHub Actions, you can set secrets:
 
 This game uses the Anthropic Claude API to generate puzzles. Each puzzle generation makes one API call:
 
-- **Model**: Claude Sonnet 4 (claude-sonnet-4-20250514)
+- **Model**: Claude Sonnet 4.6 (claude-sonnet-4-6)
 - **Approximate cost**: ~$0.01-0.02 per puzzle
 - **Rate limits**: Depends on your Anthropic account tier
 
@@ -287,7 +287,6 @@ Contributions are welcome! Here's how to get started:
 
 Potential future features:
 
-- [ ] Enhanced hint system with strategy suggestions
 - [ ] Puzzle difficulty ratings and filtering
 - [ ] Save and share custom puzzles
 - [ ] Leaderboards and achievements
@@ -295,6 +294,7 @@ Potential future features:
 - [ ] Color nonograms (multi-color puzzles)
 - [ ] Puzzle editor for manual creation
 - [ ] Social features (share results, compete)
+- [ ] Undo/redo functionality
 
 ## License
 
