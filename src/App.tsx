@@ -32,6 +32,7 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [startTime, setStartTime] = useState<number | null>(null)
+  const [completionTime, setCompletionTime] = useState<number | null>(null)
   const [previousLevel, setPreviousLevel] = useState<number>(1)
   const [showCelebration, setShowCelebration] = useState(false)
   const [hasRecordedCompletion, setHasRecordedCompletion] = useState(false)
@@ -88,8 +89,11 @@ function App() {
   // Handle puzzle completion
   useEffect(() => {
     if (puzzle && isComplete && isValid && !hasRecordedCompletion) {
-      // Calculate solve time
+      // Calculate solve time at exact moment of completion
       const solveTime = startTime ? Math.floor((Date.now() - startTime) / 1000) : 0
+
+      // Store completion time for display (prevents inflation from celebration viewing time)
+      setCompletionTime(solveTime)
 
       // Store previous level for level-up detection
       setPreviousLevel(currentLevel)
@@ -196,6 +200,7 @@ function App() {
     if (currentPrompt) {
       setPuzzle(null)
       setStartTime(null)
+      setCompletionTime(null)
       setShowCelebration(false)
       setHasRecordedCompletion(false)
       handleGeneratePuzzle(currentPrompt)
@@ -208,6 +213,7 @@ function App() {
   const handleNewPrompt = () => {
     setPuzzle(null)
     setStartTime(null)
+    setCompletionTime(null)
     setCurrentPrompt('')
     setShowCelebration(false)
     setHasRecordedCompletion(false)
@@ -222,18 +228,11 @@ function App() {
     setApiClient(null)
     setPuzzle(null)
     setStartTime(null)
+    setCompletionTime(null)
     setCurrentPrompt('')
     setShowCelebration(false)
     setHasRecordedCompletion(false)
     clearState()
-  }
-
-  /**
-   * Calculate current solve time
-   */
-  const calculateSolveTime = (): number => {
-    if (!startTime) return 0
-    return Math.floor((Date.now() - startTime) / 1000)
   }
 
   /**
@@ -331,7 +330,7 @@ function App() {
         {/* Phase 4: Completion Stats */}
         {puzzle && isComplete && isValid && !showCelebration && (
           <CompletionScreen
-            solveTime={calculateSolveTime()}
+            solveTime={completionTime || 0}
             hintsUsed={puzzle.hintsUsed}
             errors={puzzle.errors}
             currentLevel={currentLevel}
