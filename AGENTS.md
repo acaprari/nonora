@@ -4,20 +4,21 @@
 AI-powered nonogram puzzle game built with React + TypeScript + Vite + Tailwind CSS.
 
 ## Before Making Changes
-1. **Read the design specification**: `docs/superpowers/plans/2026-05-24-pixlogic-implementation.md`
-2. This document is the source of truth for all features and architecture
-3. All changes must align with the specification
+1. **Read the specifications**: Start with `docs/README.md` for navigation
+2. Key specs: `product-specification.md`, `architecture.md`, `api-integration.md`, `testing-strategy.md`
+3. All changes must align with these specifications
 
 ## Spec-Oriented Development
 **CRITICAL**: Architectural changes must be documented BEFORE implementation.
 
 ### Workflow
 1. Identify change needed
-2. Document proposed approach in specs (`docs/superpowers/specs/` or `docs/`)
-3. Present spec to user for review
-4. Wait for approval
-5. Implement according to spec
-6. Verify implementation matches spec
+2. Check existing specs in `docs/` (start with `docs/README.md`)
+3. Document proposed approach in appropriate spec file
+4. Present spec to user for review
+5. Wait for approval
+6. Implement according to spec
+7. Verify implementation matches spec
 
 ### When to Update Specs
 - API changes
@@ -27,9 +28,11 @@ AI-powered nonogram puzzle game built with React + TypeScript + Vite + Tailwind 
 - Data flow changes
 
 ### Documentation Structure
-- `docs/superpowers/specs/` - Design specs
-- `docs/api-architecture.md` - API details
-- `docs/` - Technical docs
+- `docs/README.md` - Navigation and quick lookup
+- `docs/product-specification.md` - Features and UX
+- `docs/architecture.md` - Technical design
+- `docs/api-integration.md` - AI integration
+- `docs/testing-strategy.md` - Testing approach
 
 ### Anti-Pattern
 ❌ Implement first, document later
@@ -90,6 +93,6 @@ Colors (Tailwind CSS):
 - Or manual: `npm run deploy`
 
 ## Documentation
-- Design Spec: `docs/superpowers/plans/2026-05-24-pixlogic-implementation.md`
-- README: `README.md`
-- Deployment: `DEPLOYMENT.md`
+- **Specifications**: Start with `docs/README.md` for navigation
+- **README**: `README.md` - Project overview
+- **Deployment**: `DEPLOYMENT.md`

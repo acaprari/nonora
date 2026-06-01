@@ -4,18 +4,22 @@
 Pixlogic is an AI-powered nonogram puzzle game built with React, TypeScript, and Anthropic's Claude API.
 
 ## Design Specification Location
-**CRITICAL**: Before making ANY changes, read the complete design specification:
-- Location: `docs/superpowers/plans/2026-05-24-pixlogic-implementation.md`
-- This document defines all features, architecture, and implementation details
-- All changes MUST align with this specification
+**CRITICAL**: Before making ANY changes, read the specifications:
+- **Start here**: `docs/README.md` - Navigation guide and quick lookup
+- **Product**: `docs/product-specification.md` - Features and requirements
+- **Architecture**: `docs/architecture.md` - Technical design and patterns
+- **API**: `docs/api-integration.md` - AI integration details
+- **Testing**: `docs/testing-strategy.md` - Test approach and verification
+
+All changes MUST align with these specifications.
 
 ## Spec-Oriented Development
 **CRITICAL RULE**: This project follows spec-oriented development. All architectural changes must be documented BEFORE implementation.
 
 ### Workflow for Architectural Changes
 1. **Identify change needed** (bug fix, new feature, security improvement)
-2. **Check existing specs** in `docs/superpowers/specs/` and `docs/`
-3. **Document the proposed approach** in appropriate spec/architecture doc
+2. **Check existing specs** in `docs/` (start with `docs/README.md` for navigation)
+3. **Document the proposed approach** in appropriate spec file
 4. **Present specification to user for review**
 5. **Wait for approval** before implementing
 6. **Implement according to approved spec**
@@ -31,9 +35,11 @@ Pixlogic is an AI-powered nonogram puzzle game built with React, TypeScript, and
 - Any change that affects system architecture
 
 ### Documentation Structure
-- `docs/superpowers/specs/` - Design specifications (requirements, high-level architecture)
-- `docs/api-architecture.md` - API implementation details
-- `docs/` - Other technical documentation
+- `docs/README.md` - Navigation guide and quick lookup
+- `docs/product-specification.md` - Features, requirements, UX
+- `docs/architecture.md` - Technical patterns and design
+- `docs/api-integration.md` - AI integration details
+- `docs/testing-strategy.md` - Testing approach
 
 ### Anti-Patterns to Avoid
 ❌ **DON'T:** Implement fixes reactively then document afterward
@@ -160,10 +166,10 @@ src/
 - [ ] Design spec compliance verified
 
 ## Getting Help
-- Design Spec: `docs/superpowers/plans/2026-05-24-pixlogic-implementation.md`
-- README: `README.md`
-- Deployment Guide: `DEPLOYMENT.md`
-- E2E Tests: `E2E_TEST_README.md`
+- **Specifications**: Start with `docs/README.md` for navigation
+- **README**: `README.md` - Project overview
+- **Deployment Guide**: `DEPLOYMENT.md`
+- **E2E Tests**: `E2E_TEST_README.md`
 
 ---
 
