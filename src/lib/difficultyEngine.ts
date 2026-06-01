@@ -82,18 +82,12 @@ export function updateProfile(
 /**
  * Get grid size for a given difficulty level
  *
+ * Linear progression: each level has its own grid size
+ * Level 1: 5×5, Level 2: 6×6, ..., Level 10: 14×14
+ *
  * @param level - Difficulty level (1-10)
- * @returns Grid size (5, 7, or 10)
+ * @returns Grid size (5 to 14)
  */
 export function getGridSize(level: number): number {
-  // Levels 1-3: 5x5 grid
-  if (level <= 3) {
-    return 5
-  }
-  // Levels 4-6: 7x7 grid
-  if (level <= 6) {
-    return 7
-  }
-  // Levels 7-10: 10x10 grid
-  return 10
+  return level + 4
 }

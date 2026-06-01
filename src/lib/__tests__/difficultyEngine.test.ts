@@ -173,13 +173,13 @@ describe('updateProfile', () => {
 
     const updated = updateProfile(profile, metrics)
     expect(updated.level).toBe(4)
-    expect(updated.gridSize).toBe(7)  // Should change from 5 to 7
+    expect(updated.gridSize).toBe(8)  // Should change from 7 (level 3) to 8 (level 4)
   })
 
-  it('updates gridSize when crossing from medium to hard', () => {
+  it('updates gridSize when increasing difficulty level', () => {
     const profile: DifficultyProfile = {
       level: 6,
-      gridSize: 7,
+      gridSize: 10,
       recentPerformance: []
     }
 
@@ -193,32 +193,32 @@ describe('updateProfile', () => {
 
     const updated = updateProfile(profile, metrics)
     expect(updated.level).toBe(7)
-    expect(updated.gridSize).toBe(10)  // Should change from 7 to 10
+    expect(updated.gridSize).toBe(11)  // Should change from 10 (level 6) to 11 (level 7)
   })
 })
 
 describe('getGridSize', () => {
-  it('returns 5 for levels 1-3', () => {
-    expect(getGridSize(1)).toBe(5)
-    expect(getGridSize(2)).toBe(5)
-    expect(getGridSize(3)).toBe(5)
+  it('returns correct grid size for each level (linear progression)', () => {
+    expect(getGridSize(1)).toBe(5)   // 1 + 4 = 5
+    expect(getGridSize(2)).toBe(6)   // 2 + 4 = 6
+    expect(getGridSize(3)).toBe(7)   // 3 + 4 = 7
+    expect(getGridSize(4)).toBe(8)   // 4 + 4 = 8
+    expect(getGridSize(5)).toBe(9)   // 5 + 4 = 9
+    expect(getGridSize(6)).toBe(10)  // 6 + 4 = 10
+    expect(getGridSize(7)).toBe(11)  // 7 + 4 = 11
+    expect(getGridSize(8)).toBe(12)  // 8 + 4 = 12
+    expect(getGridSize(9)).toBe(13)  // 9 + 4 = 13
+    expect(getGridSize(10)).toBe(14) // 10 + 4 = 14
   })
 
-  it('returns 7 for levels 4-6', () => {
-    expect(getGridSize(4)).toBe(7)
-    expect(getGridSize(5)).toBe(7)
-    expect(getGridSize(6)).toBe(7)
+  it('uses formula gridSize = level + 4', () => {
+    // Verify formula works for boundary levels
+    expect(getGridSize(1)).toBe(1 + 4)
+    expect(getGridSize(10)).toBe(10 + 4)
   })
 
-  it('returns 10 for levels 7-10', () => {
-    expect(getGridSize(7)).toBe(10)
-    expect(getGridSize(8)).toBe(10)
-    expect(getGridSize(9)).toBe(10)
-    expect(getGridSize(10)).toBe(10)
-  })
-
-  it('handles edge cases gracefully', () => {
-    expect(getGridSize(0)).toBe(5)  // Below minimum, default to smallest
-    expect(getGridSize(11)).toBe(10) // Above maximum, default to largest
+  it('handles edge cases', () => {
+    expect(getGridSize(0)).toBe(4)   // 0 + 4 = 4
+    expect(getGridSize(11)).toBe(15) // 11 + 4 = 15
   })
 })
