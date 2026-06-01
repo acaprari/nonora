@@ -1,3 +1,5 @@
+import { Icon } from './Icon'
+
 /**
  * CelebrationOverlay - Shows completed puzzle with Continue button
  *
@@ -22,7 +24,9 @@ export function CelebrationOverlay({ onContinue }: CelebrationOverlayProps) {
       <div className="text-center relative" style={{ zIndex: 101 }}>
         {/* Success Message */}
         <div className="mb-6 animate-bounce-in">
-          <div className="text-6xl mb-4">🎉</div>
+          <div className="flex justify-center mb-4">
+            <Icon name="celebration" size={64} className="text-white" />
+          </div>
           <h2 className="text-4xl font-bold text-white drop-shadow-lg mb-2">
             Puzzle Complete!
           </h2>

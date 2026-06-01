@@ -5,6 +5,7 @@ import { Clues } from './Clues'
 import { HintDisplay } from './HintDisplay'
 import { useHints } from '@/hooks/useHints'
 import { AiLoadingIndicator } from './AiLoadingIndicator'
+import { Icon } from './Icon'
 
 export interface GameBoardProps {
   puzzle: Puzzle
@@ -75,12 +76,19 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
           >
             {isLoading ? (
               <span className="flex items-center gap-2 text-white">
-                💡 <AiLoadingIndicator size="small" />
+                <Icon name="lightbulb" size={20} />
+                <AiLoadingIndicator size="small" />
               </span>
             ) : isOnCooldown ? (
-              `💡 ${formatCooldown(cooldownRemaining)}`
+              <span className="flex items-center gap-2">
+                <Icon name="lightbulb" size={20} />
+                {formatCooldown(cooldownRemaining)}
+              </span>
             ) : (
-              '💡 Get Hint'
+              <span className="flex items-center gap-2">
+                <Icon name="lightbulb" size={20} />
+                Get Hint
+              </span>
             )}
           </button>
         </div>

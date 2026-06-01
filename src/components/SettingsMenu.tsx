@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Icon } from './Icon'
 
 export interface SettingsMenuProps {
   onNewPrompt: () => void
@@ -45,7 +46,7 @@ export function SettingsMenu({ onNewPrompt, onChangeApiKey, hasActivePuzzle }: S
         aria-label="Settings"
         data-testid="settings-button"
       >
-        ⚙️
+        <Icon name="settings" size={20} />
       </button>
 
       {/* Dropdown Menu */}
@@ -68,7 +69,7 @@ export function SettingsMenu({ onNewPrompt, onChangeApiKey, hasActivePuzzle }: S
                 className="w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors flex items-center gap-3"
                 data-testid="new-prompt-option"
               >
-                <span className="text-xl">🔄</span>
+                <Icon name="refresh" size={20} />
                 <span>New Prompt</span>
               </button>
 
@@ -77,7 +78,7 @@ export function SettingsMenu({ onNewPrompt, onChangeApiKey, hasActivePuzzle }: S
                 className="w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors flex items-center gap-3"
                 data-testid="change-api-key-option"
               >
-                <span className="text-xl">🔑</span>
+                <Icon name="key" size={20} />
                 <span>Change API Key</span>
               </button>
 

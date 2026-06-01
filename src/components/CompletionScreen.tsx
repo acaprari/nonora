@@ -1,3 +1,5 @@
+import { Icon } from './Icon'
+
 export interface CompletionScreenProps {
   solveTime: number // in seconds
   hintsUsed: number
@@ -94,8 +96,9 @@ export function CompletionScreen({
   return (
     <div className="glass-card rounded-2xl p-8 shadow-2xl max-w-2xl mx-auto space-y-6">
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-white mb-2">
-          🎉 Congratulations!
+        <h2 className="text-3xl font-bold text-white mb-2 flex items-center justify-center gap-3">
+          <Icon name="celebration" size={32} />
+          Congratulations!
         </h2>
         <p className={`text-lg font-medium ${performanceColor}`}>{feedback}</p>
       </div>

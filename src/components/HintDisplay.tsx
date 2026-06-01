@@ -1,5 +1,6 @@
 import type { Hint } from '@/types'
 import { renderMarkdown } from '@/lib/markdown'
+import { Icon } from './Icon'
 
 export interface HintDisplayProps {
   hint: Hint | null
@@ -37,10 +38,10 @@ export function HintDisplay({ hint, onDismiss, error }: HintDisplayProps) {
               </h3>
               <button
                 onClick={onDismiss}
-                className="text-white hover:text-gray-200 font-bold text-2xl"
+                className="text-white hover:text-gray-200 transition-colors"
                 aria-label="Dismiss error"
               >
-                ×
+                <Icon name="close" size={24} />
               </button>
             </div>
             <p className="text-white mb-4">{error}</p>
@@ -50,15 +51,16 @@ export function HintDisplay({ hint, onDismiss, error }: HintDisplayProps) {
         {hint && (
           <>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-gray-900">
-                {hint.type === 'guidance' ? '💡 Hint' : '🎯 Specific Hint'}
+              <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Icon name={hint.type === 'guidance' ? 'lightbulb' : 'target'} size={24} />
+                {hint.type === 'guidance' ? 'Hint' : 'Specific Hint'}
               </h3>
               <button
                 onClick={onDismiss}
-                className="text-gray-700 hover:text-gray-900 font-bold text-2xl"
+                className="text-gray-700 hover:text-gray-900 transition-colors"
                 aria-label="Dismiss hint"
               >
-                ×
+                <Icon name="close" size={24} />
               </button>
             </div>
 
