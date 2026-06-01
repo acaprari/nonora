@@ -76,10 +76,10 @@ describe('CompletionScreen', () => {
         currentLevel={5}
       />
     )
-    const levelUpText = screen.getByText(/level up/i)
-    expect(levelUpText).toBeInTheDocument()
-    // Level number is now in a sibling element
-    expect(screen.getByText(/level 5/i)).toBeInTheDocument()
+    const harderMessage = screen.getByText(/next puzzle: harder/i)
+    expect(harderMessage).toBeInTheDocument()
+    // Should show the new level number in the detail message
+    expect(screen.getByText(/moving to level 5/i)).toBeInTheDocument()
   })
 
   it('does not show level up message when currentLevel === previousLevel', () => {

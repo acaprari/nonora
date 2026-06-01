@@ -76,7 +76,7 @@ describe('Cell', () => {
     const cell = screen.getByRole('button')
     expect(cell).toHaveClass('w-full')
     expect(cell).toHaveClass('aspect-square')
-    expect(cell).toHaveClass('border-2')
+    expect(cell).toHaveClass('border')
     expect(cell).toHaveClass('rounded')
     expect(cell).toHaveClass('cursor-pointer')
     expect(cell).toHaveClass('transition-colors')

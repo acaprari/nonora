@@ -72,10 +72,10 @@ describe('useDifficulty', () => {
       result.current.recordCompletion(120, 1, 2)
     })
 
-    // Level 4: gridSize 7
+    // Level 4: gridSize 8 (linear progression: 4 + 4 = 8)
     expect(result.current.profile.level).toBe(4)
-    expect(result.current.profile.gridSize).toBe(7)
-    expect(result.current.currentGridSize).toBe(7)
+    expect(result.current.profile.gridSize).toBe(8)
+    expect(result.current.currentGridSize).toBe(8)
   })
 
   it('tracks recent performance history (max 5 records)', () => {
