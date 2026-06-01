@@ -462,6 +462,166 @@ interface ValidationResult {
 
 ---
 
+## Build Configuration
+
+### Vite Configuration
+
+**File**: `vite.config.ts`
+
+**Key Settings**:
+
+```typescript
+export default defineConfig({
+  plugins: [react()],
+  base: '/pixlogic/',           // Base path for GitHub Pages deployment
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),   // Import alias: @/components
+    },
+  },
+  test: {
+    globals: true,               // Enable global test APIs (describe, it, expect)
+    environment: 'jsdom',        // Browser-like environment for component tests
+    setupFiles: './src/test/setup.ts',
+    exclude: ['**/node_modules/**', '**/e2e/**'],
+  },
+})
+```
+
+**Path Alias Usage**:
+```typescript
+// Instead of: import { Puzzle } from '../../../types'
+import { Puzzle } from '@/types'
+
+// Instead of: import { validateGrid } from '../../lib/validator'
+import { validateGrid } from '@/lib/validator'
+```
+
+**Why `/pixlogic/` base path**:
+- GitHub Pages serves projects at `username.github.io/repo-name/`
+- Without this, asset paths would break in production
+- Local dev uses root `/`, production uses `/pixlogic/`
+
+### Tailwind Configuration
+
+**File**: `tailwind.config.js`
+
+**Custom Theme Extensions**:
+
+```javascript
+module.exports = {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      // Custom color palette
+      colors: {
+        primary: '#5a85be',          // Desaturated blue (app background)
+        'cell-filled': '#4CAF50',    // Green for filled cells
+        'cell-border': '#e0e0e0',    // Light gray for cell borders
+        error: '#f44336',            // Red for validation errors
+        success: '#4CAF50',          // Green for success states
+      },
+
+      // Custom animations for AI loading indicator
+      keyframes: {
+        'ai-pulse': {
+          '0%, 100%': { opacity: '0.3', transform: 'scale(0.9)' },
+          '50%': { opacity: '1', transform: 'scale(1.1)' }
+        }
+      },
+      animation: {
+        'ai-pulse': 'ai-pulse 1.5s ease-in-out infinite'
+      }
+    },
+  },
+
+  // Custom utility classes for animation delays
+  plugins: [
+    function({ addUtilities }) {
+      const newUtilities = {
+        '.animation-delay-200': { 'animation-delay': '200ms' },
+        '.animation-delay-400': { 'animation-delay': '400ms' }
+      }
+      addUtilities(newUtilities)
+    }
+  ],
+}
+```
+
+**Glass Morphism Utilities**:
+
+Defined in `src/index.css`:
+
+```css
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+}
+```
+
+**Usage Examples**:
+
+```tsx
+// Glass morphism button
+<button className="glass rounded-lg px-4 py-2">
+  Get Hint
+</button>
+
+// Glass morphism card
+<div className="glass-card rounded-2xl p-6 shadow-2xl">
+  {/* Content */}
+</div>
+
+// AI loading with staggered animation
+<div className="flex gap-3">
+  <span className="animate-ai-pulse">✨</span>
+  <span className="animate-ai-pulse animation-delay-200">✨</span>
+  <span className="animate-ai-pulse animation-delay-400">✨</span>
+</div>
+```
+
+### TypeScript Configuration
+
+**File**: `tsconfig.json`
+
+**Strict Mode**: Enabled for maximum type safety
+
+**Path Mapping**: `@/*` maps to `src/*` (matches Vite alias)
+
+### Deployment
+
+**Platform**: GitHub Pages
+
+**Deployment Flow**:
+1. Push to `main` branch
+2. GitHub Actions runs build: `npm run build`
+3. Build output (dist/) deployed to `gh-pages` branch
+4. Available at: `https://username.github.io/pixlogic/`
+
+**Manual Deployment**: `npm run deploy` (uses `gh-pages` package)
+
+**Build Commands**:
+- `npm run build` - Production build (dist/)
+- `npm run preview` - Preview production build locally
+- `npm run deploy` - Build + deploy to GitHub Pages
+
+---
+
 ## Data Flow
 
 **Puzzle Generation Flow**:

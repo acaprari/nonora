@@ -124,6 +124,12 @@ Three states per cell (cycle through by tapping):
 - First hint OR >2 minutes since last hint → Guidance
 - Second hint within 2 minutes → Specific
 
+**Markdown Support**:
+- Hints may contain markdown formatting (bold, lists, code blocks) to improve readability
+- All markdown is sanitized using DOMPurify to prevent XSS attacks before rendering
+- Allowed formatting: bold, italic, lists, paragraphs, code blocks
+- No arbitrary HTML or JavaScript execution allowed
+
 ### 3. Real-Time Validation
 
 **Description**: Continuous checking of player's grid against target clues with instant visual feedback.
@@ -210,6 +216,39 @@ After completion, show message:
 - If puzzle exists → Resume where left off
 - If no puzzle → Show prompt screen
 
+### 7. Settings Menu
+
+**Description**: Configuration menu accessible during gameplay to modify app settings.
+
+**Access**:
+- ⚙️ Gear icon button in top-right corner of screen
+- Always visible during gameplay
+- Click/tap to open dropdown menu
+
+**Menu Options**:
+1. **"New Prompt"** - Abandon current puzzle and return to prompt entry screen
+   - Shows confirmation dialog: "Are you sure? Current puzzle will be lost."
+   - Confirm → Clear current puzzle, navigate to prompt screen
+   - Cancel → Close dialog, stay on current screen
+
+2. **"Change API Key"** - Return to API key setup screen
+   - Shows confirmation dialog: "This will restart the app. Continue?"
+   - Confirm → Clear session, navigate to API key input
+   - Cancel → Close dialog, stay on current screen
+
+**UX Behavior**:
+- **Glass morphism styling** - Consistent with other UI components (translucent background, blur effect)
+- **Click outside to close** - Backdrop dismisses dropdown when clicking outside menu
+- **Keyboard accessible** - Escape key closes dropdown
+- **Mobile-friendly** - Touch-optimized targets (44px minimum)
+
+**Visual Design**:
+- Dropdown appears below gear icon
+- Rounded corners (8px border-radius)
+- Shadow for depth
+- Options appear as list items with hover/tap states
+- Confirmation dialogs use modal overlay pattern
+
 ---
 
 ## Difficulty Levels
@@ -277,9 +316,15 @@ After completion, show message:
    - If error → Red highlight on row/column
    - If valid → Green checkmark
 3. **Request hint** (optional) → See Hint Request Flow
-4. **Completion** → Grid fully filled + all clues match
-5. **Stats screen** → Shows time, hints, errors, next difficulty
-6. **Next puzzle** → Return to prompt screen
+4. **Completion Detection** → Grid fully filled + all clues match
+5. **Puzzle Reveal** → Celebration moment showing completed puzzle
+   - Grid remains visible with all cells in final state
+   - Celebration animation (confetti, success indicator)
+   - "Continue" button appears overlaid on grid
+   - User must tap button to proceed to stats
+   - No auto-advance - user controls when to move on
+6. **Stats screen** → Shows time, hints, errors, next difficulty
+7. **Next puzzle** → Return to prompt screen
 
 ### Hint Request Flow
 
@@ -392,8 +437,17 @@ After completion, show message:
 **Animations**:
 - Cell tap: Pulse animation (scale 1.05, 200ms)
 - Clue highlight: Fade in 150ms, fade out 300ms
-- Completion: Confetti or celebration animation, 400ms fade-in
 - **Reduced motion**: All animations < 10ms if `prefers-reduced-motion`
+
+**Completion Celebration**:
+- **Trigger**: When puzzle becomes complete (all rows and columns valid)
+- **Visual**: Completed grid remains visible with all cells in final state
+- **Animation**: Confetti or success particles (plays once, 2-3s duration)
+- **Button**: "Continue" button appears overlaid on grid (glass morphism style)
+- **User Action Required**: User must tap button to proceed to stats screen
+- **No auto-advance**: User can enjoy completed puzzle as long as they want
+- **Purpose**: Let user appreciate their completed pixel art at their own pace
+- **Mobile**: Large touch target for Continue button (minimum 44px height)
 
 ---
 

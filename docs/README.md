@@ -29,11 +29,12 @@ If you delete all source code but keep:
 - TypeScript usage and type design
 - **Read this second** to understand technical approach
 
-🤖 **[API Integration](api-integration.md)** - AI-powered features
+🤖 **[API Architecture](api-architecture.md)** - AI-powered features
 - Anthropic Claude API integration
 - Puzzle generation system
 - Hint system (guidance and specific)
 - Security considerations and prompt injection prevention
+- Markdown sanitization (safe hint rendering)
 - **Read this for AI-specific implementation**
 
 ✅ **[Testing Strategy](testing-strategy.md)** - How to ensure quality
@@ -51,10 +52,11 @@ If you delete all source code but keep:
 
 ### Product & Features
 - Game rules and nonogram mechanics? → `product-specification.md` § Game Mechanics
-- Available features? → `product-specification.md` § Features
+- Available features? → `product-specification.md` § Features (7 features: AI generation, hints, validation, difficulty, timer, persistence, settings menu)
 - User flows (how users interact)? → `product-specification.md` § User Flows
 - Design system (colors, typography)? → `product-specification.md` § Design System
 - Difficulty system? → `product-specification.md` § Difficulty Levels
+- Settings menu? → `product-specification.md` § Features § Settings Menu
 
 ### Architecture & Code Organization
 - Overall architecture patterns? → `architecture.md` § Architectural Patterns
@@ -63,13 +65,16 @@ If you delete all source code but keep:
 - File organization? → `architecture.md` § File Structure
 - Pure functions vs hooks vs components? → `architecture.md` § Code Organization Philosophy
 - TypeScript patterns? → `architecture.md` § Type System
+- Build configuration (Vite, Tailwind, deployment)? → `architecture.md` § Build Configuration
+- Glass morphism styling? → `architecture.md` § Build Configuration § Tailwind Configuration
 
 ### AI Features
-- How puzzles are generated? → `api-integration.md` § Puzzle Generation
-- How hints work? → `api-integration.md` § Hint System
-- Prompt structures? → `api-integration.md` § API Call Structure
-- Security measures? → `api-integration.md` § Security Architecture
-- Error handling? → `api-integration.md` § Error Handling
+- How puzzles are generated? → `api-architecture.md` § Puzzle Generation
+- How hints work? → `api-architecture.md` § Guidance Hint / Specific Hint
+- Prompt structures? → `api-architecture.md` § API Call Structure
+- Security measures? → `api-architecture.md` § Security Architecture
+- Markdown sanitization? → `api-architecture.md` § Markdown Sanitization
+- Error handling? → `api-architecture.md` § Error Handling
 
 ### Testing & Quality
 - Testing philosophy (TDD)? → `testing-strategy.md` § Test-Driven Development
@@ -154,9 +159,9 @@ Specs should reference each other when relevant:
 
 | File | Status | Lines | Last Updated |
 |------|--------|-------|--------------|
-| `product-specification.md` | ✅ Complete | 567 | 2026-06-01 |
-| `architecture.md` | ✅ Complete | 643 | 2026-06-01 |
-| `api-integration.md` | ✅ Complete | 414 | 2026-06-01 |
+| `product-specification.md` | ✅ Complete | ~610 | 2026-06-01 |
+| `architecture.md` | ✅ Complete | ~810 | 2026-06-01 |
+| `api-architecture.md` | ✅ Complete | ~470 | 2026-06-01 |
 | `testing-strategy.md` | ✅ Complete | 560 | 2026-06-01 |
 
 **Migration complete:**

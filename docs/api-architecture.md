@@ -347,6 +347,57 @@ All API calls handle these error cases:
 - ✅ API key stored locally only
 - ✅ No telemetry or analytics
 
+### Markdown Sanitization
+
+**Purpose**: AI-generated hints may contain markdown formatting to improve readability. We must sanitize this HTML to prevent XSS attacks.
+
+**Implementation**:
+- Use `marked` library to parse markdown to HTML
+- Use `DOMPurify` to sanitize HTML, removing dangerous elements and attributes
+- Allowed tags: `p`, `br`, `strong`, `em`, `b`, `i`, `u`, `ul`, `ol`, `li`, `code`, `pre`, `blockquote`
+- No attributes allowed (prevents `onclick`, `onerror`, `href`, etc.)
+
+**Example** (`src/lib/markdown.ts`):
+```typescript
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
+
+export function renderMarkdown(markdown: string): string {
+  // Parse markdown to HTML
+  const rawHtml = marked.parse(markdown, {
+    async: false,
+    breaks: true,      // Convert line breaks to <br>
+    gfm: true          // GitHub Flavored Markdown
+  }) as string
+
+  // Sanitize HTML
+  const cleanHtml = DOMPurify.sanitize(rawHtml, {
+    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'b', 'i', 'u', 'ul', 'ol', 'li', 'code', 'pre', 'blockquote'],
+    ALLOWED_ATTR: []   // No attributes = no XSS vectors
+  })
+
+  return cleanHtml
+}
+```
+
+**Usage**:
+```tsx
+// In HintDisplay component
+<div dangerouslySetInnerHTML={{ __html: renderMarkdown(hint.message) }} />
+```
+
+**Security Rationale**:
+- Even though Claude responses are generally safe, we must defend against:
+  - Prompt injection attacks where malicious prompts trick Claude into generating JavaScript
+  - Future model changes that might alter response format
+  - Defense-in-depth: sanitize all untrusted content before rendering
+- `dangerouslySetInnerHTML` is safe only with proper sanitization
+- No attributes = no event handlers, no script execution vectors
+
+**Dependencies**:
+- `marked@^11.0.0` - Industry-standard markdown parser
+- `dompurify@^3.0.0` - Industry-standard HTML sanitizer
+
 ---
 
 ## Implementation Location

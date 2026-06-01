@@ -13,6 +13,7 @@ import { GameBoard } from '@/components/GameBoard'
 import { CompletionScreen } from '@/components/CompletionScreen'
 import { SettingsMenu } from '@/components/SettingsMenu'
 import { AiLoadingIndicator } from '@/components/AiLoadingIndicator'
+import { CelebrationOverlay } from '@/components/CelebrationOverlay'
 
 /**
  * Main App Component - Orchestrates the entire game flow
@@ -32,6 +33,8 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [startTime, setStartTime] = useState<number | null>(null)
   const [previousLevel, setPreviousLevel] = useState<number>(1)
+  const [showCelebration, setShowCelebration] = useState(false)
+  const [hasRecordedCompletion, setHasRecordedCompletion] = useState(false)
 
   // Puzzle state
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null)
@@ -79,20 +82,23 @@ function App() {
 
   // Handle puzzle completion
   useEffect(() => {
-    if (puzzle && isComplete && isValid) {
+    if (puzzle && isComplete && isValid && !hasRecordedCompletion) {
       // Calculate solve time
       const solveTime = startTime ? Math.floor((Date.now() - startTime) / 1000) : 0
 
       // Store previous level for level-up detection
       setPreviousLevel(currentLevel)
 
-      // Record completion in difficulty engine
+      // Record completion in difficulty engine (only once)
       recordCompletion(solveTime, puzzle.hintsUsed, puzzle.errors)
 
-      // Clear saved state since puzzle is complete
-      clearState()
+      // Mark as recorded so this doesn't run again
+      setHasRecordedCompletion(true)
+
+      // Show celebration overlay
+      setShowCelebration(true)
     }
-  }, [puzzle, isComplete, isValid, startTime, currentLevel, recordCompletion, clearState])
+  }, [puzzle, isComplete, isValid, hasRecordedCompletion, startTime, currentLevel, recordCompletion])
 
   /**
    * Handle API key submission
@@ -185,6 +191,8 @@ function App() {
     if (currentPrompt) {
       setPuzzle(null)
       setStartTime(null)
+      setShowCelebration(false)
+      setHasRecordedCompletion(false)
       handleGeneratePuzzle(currentPrompt)
     }
   }
@@ -196,6 +204,8 @@ function App() {
     setPuzzle(null)
     setStartTime(null)
     setCurrentPrompt('')
+    setShowCelebration(false)
+    setHasRecordedCompletion(false)
     clearState()
   }
 
@@ -208,6 +218,8 @@ function App() {
     setPuzzle(null)
     setStartTime(null)
     setCurrentPrompt('')
+    setShowCelebration(false)
+    setHasRecordedCompletion(false)
     clearState()
   }
 
@@ -217,6 +229,15 @@ function App() {
   const calculateSolveTime = (): number => {
     if (!startTime) return 0
     return Math.floor((Date.now() - startTime) / 1000)
+  }
+
+  /**
+   * Handle Continue button click from celebration overlay
+   */
+  const handleContinueToStats = () => {
+    setShowCelebration(false)
+    // Don't clear state yet - CompletionScreen still needs puzzle data
+    // State will be cleared when starting new puzzle or returning to prompt
   }
 
   return (
@@ -284,8 +305,22 @@ function App() {
           </div>
         )}
 
-        {/* Phase 4: Completion */}
-        {puzzle && isComplete && isValid && (
+        {/* Phase 3.5: Celebration - Show completed grid with overlay */}
+        {puzzle && isComplete && isValid && showCelebration && (
+          <div data-testid="game-board-celebration">
+            <GameBoard
+              puzzle={puzzle}
+              validationResult={validationResult}
+              onCellClick={() => {}} // Disable cell clicks during celebration
+              apiClient={apiClient}
+              onHintUsed={() => {}} // Disable hints during celebration
+            />
+            <CelebrationOverlay onContinue={handleContinueToStats} />
+          </div>
+        )}
+
+        {/* Phase 4: Completion Stats */}
+        {puzzle && isComplete && isValid && !showCelebration && (
           <CompletionScreen
             solveTime={calculateSolveTime()}
             hintsUsed={puzzle.hintsUsed}
