@@ -159,12 +159,14 @@ Specs should reference each other when relevant:
 | `api-integration.md` | ✅ Complete | 414 | 2026-06-01 |
 | `testing-strategy.md` | ✅ Complete | 560 | 2026-06-01 |
 
-**Next steps:**
+**Migration complete:**
 1. ✅ Create documentation structure (Phase 1) - Complete
 2. ✅ Extract product specification from existing specs (Phase 2) - Complete
 3. ✅ Extract architecture patterns (Phase 3) - Complete
 4. ✅ Create testing strategy documentation (Phase 4) - Complete
-5. ⏳ Archive old superpowers/ directory (Phase 5)
+5. ✅ Archive old superpowers/ directory (Phase 5) - Complete
+
+**Archived files**: Old specifications and task summaries moved to `archive/` for historical reference.
 
 ---
 
