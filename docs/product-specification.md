@@ -186,10 +186,11 @@ After completion, show message:
 
 **Display During Gameplay**:
 - Current level shown in game header (top-left)
-- Badge format: "Level X" with grid size (e.g., "Level 5  10×10")
+- Badge format: "Level X" with grid size (e.g., "Level 5  9×9")
 - Glass morphism styling (semi-transparent background, white text)
 - Always visible during active gameplay and celebration phases
 - Helps users track progression and understand current challenge level
+- Grid size shown provides immediate visual feedback of puzzle complexity
 
 ### 5. Timer
 
@@ -266,25 +267,53 @@ After completion, show message:
 
 **Scale**: 1-10 (starts at 1, adjusts based on performance)
 
-**Level Characteristics**:
+**Grid Size Progression**: Each level has its own grid size for gradual difficulty increase
+- Level 1: 5×5 (25 cells)
+- Level 2: 6×6 (36 cells)
+- Level 3: 7×7 (49 cells)
+- Level 4: 8×8 (64 cells)
+- Level 5: 9×9 (81 cells)
+- Level 6: 10×10 (100 cells)
+- Level 7: 11×11 (121 cells)
+- Level 8: 12×12 (144 cells)
+- Level 9: 13×13 (169 cells)
+- Level 10: 14×14 (196 cells)
+
+**Formula**: `gridSize = level + 4`
+
+**Level Characteristics** (communicated to AI):
 - **1-3 (Beginner)**: Very simple shapes, high contrast, obvious patterns (heart, smiley face)
 - **4-6 (Intermediate)**: Moderate detail, some ambiguity requiring logic (cat silhouette, house)
 - **7-10 (Advanced)**: Complex shapes with fine details, advanced techniques needed (detailed portrait, intricate object)
 
-**Implementation**: Communicated to AI via prompt parameter to influence puzzle generation complexity.
+**Rationale for Linear Progression**:
+- Each level feels distinct with its own grid size
+- Smoother learning curve with smaller incremental steps
+- More variety in puzzle dimensions
+- Clearer sense of advancement as grid visibly grows
 
 ---
 
 ## Grid Sizes
 
-**Current**: 10×10 (fixed)
+**System**: Progressive sizing tied to difficulty level (5×5 to 14×14)
 
-**Rationale**:
-- Mobile-optimized (fits on screen without scrolling)
-- Solvable in 3-10 minutes (good session length)
-- Enough complexity for interesting puzzles
+**Implementation**: Grid size determined by formula `gridSize = level + 4`
+- Starts small (5×5 at level 1) for new players
+- Grows incrementally with each level
+- Reaches maximum complexity at 14×14 (level 10)
 
-**Future Consideration**: 15×15 and 20×20 sizes (out of scope for initial release)
+**Technical Constraints**:
+- Minimum: 5×5 (API supports 5-20)
+- Maximum: 14×14 (chosen for mobile usability)
+- All sizes render dynamically via CSS Grid
+- Cell sizes scale based on viewport to maintain usability
+
+**Mobile Considerations**:
+- Lower levels (5×5 to 8×8) - Large, easy-to-tap cells
+- Mid levels (9×9 to 11×11) - Comfortable on most screens
+- High levels (12×12 to 14×14) - Smaller cells, may require zoom on small devices
+- Responsive design ensures puzzles remain playable across device sizes
 
 ---
 
@@ -299,7 +328,7 @@ After completion, show message:
    - Key saved to localStorage
 3. **Prompt Entry** → Shows puzzle prompt screen
    - User enters text prompt
-   - Selects grid size (currently only 10×10)
+   - Grid size automatically determined by current difficulty level
    - Clicks "Generate Puzzle"
 4. **Puzzle Generation** → AI generates puzzle
    - Loading indicator shown
@@ -611,7 +640,8 @@ These features are explicitly NOT included in the initial release:
 - ❌ Tutorial mode
 
 **Technical Features**:
-- ❌ Multiple grid sizes (15×15, 20×20)
+- ❌ Manual grid size selection (size is tied to difficulty level)
+- ❌ Grid sizes beyond 14×14 (15×15, 20×20 not supported)
 - ❌ Color nonograms (multi-color cells)
 - ❌ Undo/redo functionality
 - ❌ Solution solver/checker
