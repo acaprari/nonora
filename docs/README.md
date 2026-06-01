@@ -154,14 +154,14 @@ Specs should reference each other when relevant:
 
 | File | Status | Lines | Last Updated |
 |------|--------|-------|--------------|
-| `product-specification.md` | 🚧 Skeleton | - | Not yet created |
-| `architecture.md` | 🚧 Skeleton | - | Not yet created |
+| `product-specification.md` | ✅ Complete | 567 | 2026-06-01 |
+| `architecture.md` | 🚧 Skeleton | 339 | 2026-06-01 |
 | `api-integration.md` | ✅ Complete | 414 | 2026-06-01 |
-| `testing-strategy.md` | 🚧 Skeleton | - | Not yet created |
+| `testing-strategy.md` | 🚧 Skeleton | 293 | 2026-06-01 |
 
 **Next steps:**
-1. ✅ Create documentation structure (Phase 1) - Current
-2. ⏳ Extract product specification from existing specs (Phase 2)
+1. ✅ Create documentation structure (Phase 1) - Complete
+2. ✅ Extract product specification from existing specs (Phase 2) - Complete
 3. ⏳ Extract architecture patterns (Phase 3)
 4. ⏳ Create testing strategy documentation (Phase 4)
 5. ⏳ Archive old superpowers/ directory (Phase 5)
