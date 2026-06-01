@@ -1,51 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Background -->
-  <rect width="64" height="64" fill="#5a85be" rx="8"/>
+  <!-- 2×2 nonogram grid with diagonal filled cells -->
 
-  <!-- Nonogram grid (5x5 simple puzzle showing a heart) -->
-  <g stroke="#ffffff" stroke-width="1" fill="none">
-    <!-- Grid lines -->
-    <line x1="16" y1="16" x2="16" y2="48"/>
-    <line x1="22.4" y1="16" x2="22.4" y2="48"/>
-    <line x1="28.8" y1="16" x2="28.8" y2="48"/>
-    <line x1="35.2" y1="16" x2="35.2" y2="48"/>
-    <line x1="41.6" y1="16" x2="41.6" y2="48"/>
-    <line x1="48" y1="16" x2="48" y2="48"/>
+  <!-- Top-left cell: FILLED (green) -->
+  <rect x="2" y="2" width="30" height="30" fill="#4CAF50" stroke="#e0e0e0" stroke-width="1"/>
 
-    <line x1="16" y1="16" x2="48" y2="16"/>
-    <line x1="16" y1="22.4" x2="48" y2="22.4"/>
-    <line x1="16" y1="28.8" x2="48" y2="28.8"/>
-    <line x1="16" y1="35.2" x2="48" y2="35.2"/>
-    <line x1="16" y1="41.6" x2="48" y2="41.6"/>
-    <line x1="16" y1="48" x2="48" y2="48"/>
-  </g>
+  <!-- Top-right cell: EMPTY (white) -->
+  <rect x="32" y="2" width="30" height="30" fill="#ffffff" stroke="#e0e0e0" stroke-width="1"/>
 
-  <!-- Filled cells forming a heart shape -->
-  <g fill="#4CAF50">
-    <!-- Row 1: cells 1,3 filled -->
-    <rect x="16.5" y="16.5" width="5.4" height="5.4"/>
-    <rect x="29.3" y="16.5" width="5.4" height="5.4"/>
+  <!-- Bottom-left cell: EMPTY (white) -->
+  <rect x="2" y="32" width="30" height="30" fill="#ffffff" stroke="#e0e0e0" stroke-width="1"/>
 
-    <!-- Row 2: cells 0,1,2,3 filled -->
-    <rect x="16.5" y="22.9" width="5.4" height="5.4"/>
-    <rect x="23.9" y="22.9" width="5.4" height="5.4"/>
-    <rect x="29.3" y="22.9" width="5.4" height="5.4"/>
-    <rect x="35.7" y="22.9" width="5.4" height="5.4"/>
+  <!-- Bottom-right cell: FILLED (green) -->
+  <rect x="32" y="32" width="30" height="30" fill="#4CAF50" stroke="#e0e0e0" stroke-width="1"/>
 
-    <!-- Row 3: cells 0,1,2,3 filled -->
-    <rect x="16.5" y="29.3" width="5.4" height="5.4"/>
-    <rect x="23.9" y="29.3" width="5.4" height="5.4"/>
-    <rect x="29.3" y="29.3" width="5.4" height="5.4"/>
-    <rect x="35.7" y="29.3" width="5.4" height="5.4"/>
-
-    <!-- Row 4: cells 1,2 filled -->
-    <rect x="23.9" y="35.7" width="5.4" height="5.4"/>
-    <rect x="29.3" y="35.7" width="5.4" height="5.4"/>
-
-    <!-- Row 5: cell 2 filled -->
-    <rect x="29.3" y="42.1" width="5.4" height="5.4"/>
-  </g>
-
-  <!-- Grid border (thicker) -->
-  <rect x="16" y="16" width="32" height="32" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <!-- External border (thicker) -->
+  <rect x="1" y="1" width="62" height="62" fill="none" stroke="#e0e0e0" stroke-width="2"/>
 </svg>
