@@ -110,6 +110,8 @@ Requirements:
 - Ensure the puzzle has clear, unambiguous clues
 - Difficulty level: ${difficulty}/10 (1=very simple shapes, 10=expert complexity)
 - The puzzle should be solvable using logic alone (no guessing required)
+- **CRITICAL: Every row must have at least one true cell** - no entirely empty rows
+- **CRITICAL: Every column must have at least one true cell** - no entirely empty columns
 
 Return ONLY valid JSON, no other text.
 
