@@ -184,6 +184,13 @@ After completion, show message:
 - Levels 4-6: "Moderate detail (cat, house)"
 - Levels 7-10: "Complex shapes (detailed portrait, intricate object)"
 
+**Display During Gameplay**:
+- Current level shown in game header (top-left)
+- Badge format: "Level X" with grid size (e.g., "Level 5  10×10")
+- Glass morphism styling (semi-transparent background, white text)
+- Always visible during active gameplay and celebration phases
+- Helps users track progression and understand current challenge level
+
 ### 5. Timer
 
 **Description**: Tracks time spent on puzzle, displayed in MM:SS format.
@@ -213,8 +220,12 @@ After completion, show message:
 
 **Load Behavior**:
 - On app start, check localStorage
-- If puzzle exists → Resume where left off
-- If no puzzle → Show prompt screen
+- If saved state exists → Restore all saved data:
+  - API key (no need to re-enter)
+  - Difficulty profile (level, grid size, recent performance)
+  - Current puzzle (if exists) → Resume where left off with same grid state
+- If no saved state → Show API key setup
+- If saved state but no active puzzle → Show prompt screen at saved difficulty level
 
 ### 7. Settings Menu
 
