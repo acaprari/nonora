@@ -12,9 +12,11 @@ export interface GameBoardProps {
   onCellClick: (row: number, col: number) => void
   apiClient: ApiClient | null
   onHintUsed: () => void
+  currentLevel: number
+  currentGridSize: number
 }
 
-export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, onHintUsed }: GameBoardProps) {
+export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, onHintUsed, currentLevel, currentGridSize }: GameBoardProps) {
   const gridSize = puzzle.solution.length
 
   // Hints hook
@@ -43,11 +45,21 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
   return (
     <>
       <div className="glass-card rounded-2xl p-3 shadow-2xl max-w-4xl mx-auto">
-        {/* Header with hint button */}
+        {/* Header with difficulty info and hint button */}
         <div className="flex justify-between items-center mb-2">
-          <div className="text-white/80 text-sm">
-            Level {puzzle.prompt ? puzzle.prompt.substring(0, 20) : 'Puzzle'}
-            {puzzle.prompt && puzzle.prompt.length > 20 && '...'}
+          <div className="flex items-center gap-2">
+            <div className="glass px-3 py-1 rounded-lg">
+              <span className="text-white font-semibold text-sm">
+                Level {currentLevel}
+              </span>
+              <span className="text-white/60 text-xs ml-2">
+                {currentGridSize}×{currentGridSize}
+              </span>
+            </div>
+            <div className="text-white/80 text-sm">
+              {puzzle.prompt ? puzzle.prompt.substring(0, 25) : 'Puzzle'}
+              {puzzle.prompt && puzzle.prompt.length > 25 && '...'}
+            </div>
           </div>
           <button
             onClick={requestHint}

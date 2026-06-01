@@ -34,7 +34,9 @@ const createMockValidation = (size: number): ValidationResult => {
 // Default props for GameBoard tests
 const defaultGameBoardProps = {
   apiClient: null,
-  onHintUsed: vi.fn()
+  onHintUsed: vi.fn(),
+  currentLevel: 1,
+  currentGridSize: 10
 }
 
 describe('GameBoard', () => {
@@ -302,6 +304,8 @@ describe('GameBoard', () => {
           onCellClick={() => {}}
           apiClient={mockApiClient as any}
           onHintUsed={vi.fn()}
+          currentLevel={1}
+          currentGridSize={10}
         />
       )
 

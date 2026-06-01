@@ -306,6 +306,8 @@ function App() {
               onCellClick={handleCellClick}
               apiClient={apiClient}
               onHintUsed={handleHintUsed}
+              currentLevel={currentLevel}
+              currentGridSize={currentGridSize}
             />
           </div>
         )}
@@ -319,6 +321,8 @@ function App() {
               onCellClick={() => {}} // Disable cell clicks during celebration
               apiClient={apiClient}
               onHintUsed={() => {}} // Disable hints during celebration
+              currentLevel={currentLevel}
+              currentGridSize={currentGridSize}
             />
             <CelebrationOverlay onContinue={handleContinueToStats} />
           </div>
