@@ -1,19 +1,21 @@
 # Architecture
 
 **Last Updated:** 2026-06-01
-**Status:** 🚧 Skeleton - Content to be extracted from existing specs
+**Status:** ✅ Complete
 
 ---
 
 ## Overview
 
-Pixlogic follows a functional-reactive architecture with clear separation between business logic, state management, and presentation.
+Pixlogic follows a **functional-reactive architecture** with clear separation between business logic, state management, and presentation.
+
+**Philosophy**: Components are thin presentational layers. Hooks own domain logic and state. Pure functions handle computation. Clear separation for testability.
 
 **Key Principles**:
-- Pure functions for all game logic
-- Immutable state updates
-- React hooks for state management
-- Presentational components
+- Pure functions for all game logic (deterministic, no side effects)
+- Immutable state updates throughout
+- React hooks for state management and side effects
+- Presentational components (props in, JSX out)
 - No business logic in UI components
 
 ---
@@ -22,15 +24,60 @@ Pixlogic follows a functional-reactive architecture with clear separation betwee
 
 ### Functional Core, Imperative Shell
 
-[To be filled: Pure functions in lib/, side effects at boundaries]
+**Pattern**: Pure business logic in the center, side effects at the boundaries.
+
+**Core (Pure Functions)**:
+- Located in `src/lib/`
+- No side effects (no API calls, no localStorage, no random values)
+- Fully deterministic and testable
+- Examples: `clueCalculator.ts`, `validator.ts`, `difficultyEngine.ts`
+
+**Shell (Side Effects)**:
+- Located in `src/hooks/` and `src/App.tsx`
+- Handles I/O: API calls, localStorage, timers, browser APIs
+- Coordinates pure functions with external world
+- Examples: `useHints.ts` (calls API), `useGamePersistence.ts` (localStorage)
+
+**Why**: Pure functions are easy to test, reason about, and reuse. Side effects isolated to hooks make testing and debugging simpler.
 
 ### Unidirectional Data Flow
 
-[To be filled: State flows down, events flow up, no circular dependencies]
+**Pattern**: Data flows down (via props), events flow up (via callbacks).
+
+```
+State (in hooks)
+    ↓ props
+Components (render)
+    ↓ user interaction
+Event handlers
+    ↓ callbacks
+State updates (in hooks)
+    ↓ re-render
+Components (updated)
+```
+
+**No circular dependencies**: Components never directly modify state. Hooks never render UI.
 
 ### Separation of Concerns
 
-[To be filled: Business logic vs state vs presentation]
+**Three layers, each with single responsibility**:
+
+1. **Business Logic** (`src/lib/`) - "What should happen?"
+   - Calculate clues from matrix
+   - Validate grid against clues
+   - Determine difficulty adjustment
+
+2. **State Management** (`src/hooks/`) - "When should it happen?"
+   - Manage puzzle state
+   - Coordinate API calls
+   - Handle persistence
+
+3. **Presentation** (`src/components/`) - "How should it look?"
+   - Render UI based on props
+   - Handle user interactions
+   - Display visual feedback
+
+**No overlap**: Logic never renders. Components never compute. Hooks coordinate but don't render.
 
 ---
 
@@ -39,20 +86,44 @@ Pixlogic follows a functional-reactive architecture with clear separation betwee
 ### Three-Layer Architecture
 
 **Layer 1: Pure Functions (`src/lib/`)**
-- [To be filled: No side effects, fully testable, game logic]
-- Examples: `validator.ts`, `clueCalculator.ts`, `difficultyEngine.ts`
+- No side effects, fully testable
+- Input → deterministic output
+- Game logic, calculations, validations
+- Examples: `validator.ts` (check grid), `clueCalculator.ts` (compute clues), `difficultyEngine.ts` (calculate next difficulty)
 
 **Layer 2: State Management (`src/hooks/`)**
-- [To be filled: React hooks, side effects, API calls]
-- Examples: `useGameState.ts`, `useHints.ts`, `usePuzzleGenerator.ts`
+- React hooks coordinating state and effects
+- Side effects: API calls, localStorage, timers
+- Orchestrate pure functions with external world
+- Examples: `useGameState.ts` (puzzle state), `useHints.ts` (AI hints + cooldown), `usePuzzleGenerator.ts` (generation + retry)
 
 **Layer 3: Presentation (`src/components/`)**
-- [To be filled: Visual components, props-based, no business logic]
-- Examples: `Cell.tsx`, `GameBoard.tsx`, `HintDisplay.tsx`
+- Visual components, props-based
+- No business logic, only rendering and event handling
+- Thin layer over hooks
+- Examples: `Cell.tsx` (render cell), `GameBoard.tsx` (coordinate grid + clues), `HintDisplay.tsx` (show hint modal)
 
 ### Why This Structure?
 
-[To be filled: Testability, maintainability, clarity, refactoring ease]
+**Testability**:
+- Pure functions: Test with simple inputs/outputs, no mocking
+- Hooks: Test state changes and side effects in isolation
+- Components: Test rendering and user interactions
+
+**Maintainability**:
+- Clear boundaries: Know where to find/change logic
+- Single responsibility: Each file has one job
+- Minimal coupling: Changes in one layer rarely affect others
+
+**Refactoring Ease**:
+- Swap UI framework? Only rewrite components
+- Change state management? Only rewrite hooks
+- Fix logic bug? Only edit pure functions
+
+**Clarity**:
+- New developers immediately understand structure
+- Debugging: Know which layer to check
+- Code reviews: Violations of pattern are obvious
 
 ---
 
@@ -60,28 +131,88 @@ Pixlogic follows a functional-reactive architecture with clear separation betwee
 
 ### Component Types
 
-**Presentational Components**:
-[To be filled: Receive props, render UI, no state/logic]
+**Presentational Components** (majority):
+- Receive all data via props
+- Render UI based on props
+- Call prop callbacks for interactions
+- No internal state (except UI-only state like hover)
+- No business logic
+- Examples: `Cell`, `Clues`, `HintDisplay`, `AiLoadingIndicator`
 
-**Container Components**:
-[To be filled: Manage state via hooks, coordinate data flow]
+**Container Components** (few):
+- Manage state via custom hooks
+- Coordinate data flow between hooks and presentational components
+- Handle complex interactions
+- Examples: `App` (screen routing), `GameBoard` (coordinates game state + validation + hints)
 
 ### Component Organization
 
+Key components and their responsibilities:
+
+**`App.tsx`** (Container):
+- Routes between screens based on game state
+- Shows `ApiKeySetup` if no API key
+- Shows `StartScreen` for puzzle generation
+- Shows `GameBoard` during play
+- Shows `CompletionScreen` on puzzle completion
+
+**`GameBoard.tsx`** (Container):
+- Coordinates grid, clues, hints, timer
+- Uses `useGameState`, `useValidation`, `useHints` hooks
+- Handles cell click events
+- Displays hint button with cooldown
+- Shows timer
+
+**`Cell.tsx`** (Presentational):
+- Renders single grid cell
+- Props: `state` (empty/filled/marked), `validationState`, `onClick`
+- Visual feedback on interaction (pulse animation)
+
+**`Clues.tsx`** (Presentational):
+- Displays row or column clue numbers
+- Props: `clues` (array of numbers), `orientation` (row/column), `validationState`
+- Shows validation colors (green/red/normal)
+
+**`HintDisplay.tsx`** (Presentational):
+- Modal showing hint text
+- Props: `hint` (guidance or specific), `onDismiss`
+- Highlights suggested cell for specific hints
+
+**`CompletionScreen.tsx`** (Presentational):
+- Shows completion stats and next difficulty message
+- Props: `stats` (time, hints, errors), `nextDifficulty`, `onNextPuzzle`
+
+**`StartScreen.tsx`** (Presentational):
+- Puzzle prompt input and generation button
+- Props: `onGenerate`, `isLoading`
+
+**`ApiKeySetup.tsx`** (Presentational):
+- API key input and validation
+- Props: `onSave`, `error`
+
+**`AiLoadingIndicator.tsx`** (Presentational):
+- Animated loading indicator for AI operations
+- Props: `size` (small/medium/large)
+
+### Composition Pattern
+
+Components compose hierarchically:
+
 ```
-src/components/
-├── Cell.tsx              [To be filled: Purpose, props, behavior]
-├── Clues.tsx             [To be filled]
-├── GameBoard.tsx         [To be filled]
-├── HintDisplay.tsx       [To be filled]
-├── ApiKeySetup.tsx       [To be filled]
-├── StartScreen.tsx       [To be filled]
-├── CompletionScreen.tsx  [To be filled]
-├── AiLoadingIndicator.tsx [To be filled]
-└── ...
+App
+├── ApiKeySetup (if no key)
+├── StartScreen (if no puzzle)
+│   └── AiLoadingIndicator (during generation)
+├── GameBoard (during play)
+│   ├── Clues (rows + columns)
+│   ├── Cell (100 instances for 10×10 grid)
+│   ├── HintDisplay (modal)
+│   └── AiLoadingIndicator (during hint request)
+└── CompletionScreen (on success)
 ```
 
-[To be filled: Component responsibilities, prop interfaces, composition patterns]
+**Props flow down**: Data and callbacks passed as props
+**Events bubble up**: onClick → handler in container → state update → re-render
 
 ---
 
@@ -89,36 +220,120 @@ src/components/
 
 ### State Architecture
 
-**Global State**: [To be filled: What's global, why, how managed]
+**Global State** (minimal):
+- Current puzzle (grid, solution, clues, metadata)
+- Difficulty profile (level, recent performance)
+- API key
+- Managed via custom hooks, not Context (hooks sufficient for this app size)
 
-**Local State**: [To be filled: What's local, when to use hooks vs props]
+**Local State**:
+- UI-only state (highlighted clue, timer display, loading states)
+- Managed with `useState` in components
+- Never persisted
 
-**Derived State**: [To be filled: Computed values, memoization strategy]
+**Derived State**:
+- Computed on every render from source state
+- Examples: Validation results (derived from currentGrid + solution), completion status, formatted timer
+- Use `useMemo` for expensive computations
+- Don't store derived state in useState (causes sync issues)
 
 ### State Shape
 
-[To be filled: Key state structures - Puzzle, GameState, ValidationResult, etc.]
+Key state structures (examples, not exhaustive):
 
-**Example: Puzzle State**
+**Puzzle State**:
 ```typescript
-[To be filled: Puzzle interface structure]
+interface Puzzle {
+  id: string;                    // Unique identifier
+  prompt: string;                // User's prompt ("a cat")
+  solution: boolean[][];         // 10×10 boolean matrix (true = filled)
+  rowClues: number[][];          // Clue arrays per row
+  columnClues: number[][];       // Clue arrays per column
+  currentGrid: CellState[][];    // Player's progress
+  startTime: number;             // Timestamp (ms)
+  hintsUsed: number;             // Counter
+  errors: number;                // Counter
+}
+
+type CellState = 'empty' | 'filled' | 'marked';
+```
+
+**Validation Result**:
+```typescript
+interface ValidationResult {
+  rows: ValidationState[];       // One per row
+  columns: ValidationState[];    // One per column
+  isComplete: boolean;           // All filled + all valid
+  isValid: boolean;              // All match clues
+}
+
+type ValidationState = 'valid' | 'error' | 'in-progress';
+```
+
+**Hint**:
+```typescript
+interface Hint {
+  type: 'guidance' | 'specific';
+  message: string;
+  cell?: { row: number; col: number }; // Only for specific hints
+}
 ```
 
 ### State Updates
 
-[To be filled: Immutability patterns, update strategies, avoiding mutations]
+**Immutability Pattern**: Never mutate state directly. Always create new objects/arrays.
+
+**Example** (cell state update):
+```typescript
+// ❌ BAD: Mutation
+currentGrid[row][col] = 'filled';
+
+// ✅ GOOD: Immutable update
+const newGrid = currentGrid.map((r, rIdx) =>
+  r.map((cell, cIdx) =>
+    rIdx === row && cIdx === col ? 'filled' : cell
+  )
+);
+```
+
+**Strategies**:
+- Array: Use `.map()`, `.filter()`, spread operator `[...arr, newItem]`
+- Object: Use spread operator `{ ...obj, field: newValue }`
+- Nested updates: Update outer levels first, then inner
+
+**Why**: React detects changes by reference. Mutations don't trigger re-renders. Immutability ensures predictable updates.
 
 ### Custom Hooks
 
-[To be filled: Hook responsibilities and usage]
+**`useGameState`**:
+- Purpose: Manages current puzzle state and cell interactions
+- Provides: `puzzle`, `toggleCell(row, col)`, `resetPuzzle()`
+- Side effects: None (pure state management)
+- Used by: `GameBoard`
 
-**`useGameState`**: [To be filled: Manages puzzle state, cell interactions]
+**`useHints`**:
+- Purpose: Manages hint requests, cooldown, and API calls
+- Provides: `currentHint`, `requestHint()`, `dismissHint()`, `isOnCooldown`, `cooldownRemaining`
+- Side effects: API calls to Anthropic, 30s cooldown timer
+- Used by: `GameBoard`
 
-**`useHints`**: [To be filled: Manages hint requests, cooldown, API calls]
+**`usePuzzleGenerator`**:
+- Purpose: Manages puzzle generation with validation and retries
+- Provides: `generatePuzzle(prompt, difficulty)`, `isGenerating`, `error`
+- Side effects: API calls, retry logic (up to 3 attempts)
+- Used by: `StartScreen`
 
-**`usePuzzleGenerator`**: [To be filled: Manages puzzle generation, validation, retries]
+**`useValidation`**:
+- Purpose: Real-time validation of grid against clues
+- Provides: `validationResult` (rows, columns, completion status)
+- Side effects: None (pure computation via validator.ts)
+- Used by: `GameBoard`
 
-**`useApiKey`**: [To be filled: Manages API key storage, validation]
+**`useGamePersistence`**:
+- Purpose: localStorage read/write for puzzle + difficulty
+- Provides: `loadState()`, `saveState()`, `clearState()`
+- Side effects: localStorage reads/writes, debounced saves
+- Used by: `App`, hooks that modify persisted state
 
 ---
 
@@ -130,25 +345,71 @@ src/components/
 pixlogic/
 ├── src/
 │   ├── components/        # React UI components (presentational)
+│   │   ├── Cell.tsx
+│   │   ├── Clues.tsx
+│   │   ├── GameBoard.tsx
+│   │   ├── HintDisplay.tsx
+│   │   ├── CompletionScreen.tsx
+│   │   ├── StartScreen.tsx
+│   │   ├── ApiKeySetup.tsx
+│   │   └── AiLoadingIndicator.tsx
+│   │
 │   ├── hooks/             # Custom React hooks (state management)
+│   │   ├── useGameState.ts
+│   │   ├── useHints.ts
+│   │   ├── useValidation.ts
+│   │   ├── usePuzzleGenerator.ts
+│   │   └── useGamePersistence.ts
+│   │
 │   ├── lib/               # Pure functions (business logic)
-│   │   ├── clueCalculator.ts      [To be filled]
-│   │   ├── validator.ts           [To be filled]
-│   │   ├── difficultyEngine.ts    [To be filled]
-│   │   ├── api.ts                 [To be filled]
-│   │   └── puzzleGenerator.ts     [To be filled]
+│   │   ├── clueCalculator.ts      # Calculate row/column clues from matrix
+│   │   ├── validator.ts           # Validate grid against clues
+│   │   ├── difficultyEngine.ts    # Analyze performance, suggest next difficulty
+│   │   ├── api.ts                 # Anthropic API client (see api-integration.md)
+│   │   └── puzzleGenerator.ts     # Wrapper around API with validation/retry
+│   │
 │   ├── types/             # TypeScript type definitions
-│   │   └── index.ts       [To be filled]
-│   ├── App.tsx            # Main application component
+│   │   └── index.ts       # All shared types
+│   │
+│   ├── App.tsx            # Main application component (screen routing)
 │   └── main.tsx           # Application entry point
+│
 ├── docs/                  # Specifications
 ├── CLAUDE.md              # AI development guidelines
-└── [build config files]
+├── vite.config.ts         # Build configuration
+├── tailwind.config.js     # Styling configuration
+└── tsconfig.json          # TypeScript configuration
 ```
 
 ### File Responsibilities
 
-[To be filled: Each file's purpose, what belongs where]
+**`lib/clueCalculator.ts`**:
+- Exported functions: `calculateRowClues(matrix)`, `calculateColumnClues(matrix)`
+- Input: 2D boolean matrix
+- Output: Array of clue arrays
+- Example: `[[true, true, false, true]] → [[2, 1]]`
+
+**`lib/validator.ts`**:
+- Exported functions: `validateRow(grid, clues)`, `validateColumn(grid, clues)`, `isPuzzleComplete(grid, solution)`
+- Input: Current grid + target clues or solution
+- Output: ValidationState or boolean
+- Logic: Compare current filled cells to target clues
+
+**`lib/difficultyEngine.ts`**:
+- Exported functions: `calculateNextDifficulty(currentLevel, metrics)`
+- Input: Current difficulty + performance metrics (time, hints, errors)
+- Output: New difficulty (1-10, clamped)
+- Logic: Increase if fast clean solve, decrease if struggled, else stay same
+
+**`lib/api.ts`**:
+- See [API Integration](api-integration.md) for complete details
+- Exported class: `ApiClient` with `generatePuzzle()`, `getHint()` methods
+
+**`lib/puzzleGenerator.ts`**:
+- Exported function: `generatePuzzleWithRetry(apiClient, prompt, difficulty, size)`
+- Wraps API call with validation and retry logic
+- Validates no empty rows/columns
+- Retries up to 3 times on validation failure
 
 ---
 
@@ -156,39 +417,103 @@ pixlogic/
 
 ### TypeScript Philosophy
 
-[To be filled: Type safety approach, avoiding `any`, strict mode]
+- **Strict mode enabled**: Catch errors at compile time
+- **No `any` types**: Use specific types or `unknown` if truly unknown
+- **Explicit over implicit**: Annotate function signatures, export types
+- **DRY**: Shared types in `types/index.ts`
 
 ### Core Types
 
-[To be filled: Key type definitions]
+Located in `src/types/index.ts`:
 
-**`CellState`**: [To be filled: 'empty' | 'filled' | 'marked']
+```typescript
+type CellState = 'empty' | 'filled' | 'marked';
+type ValidationState = 'valid' | 'error' | 'in-progress';
 
-**`ValidationState`**: [To be filled: 'valid' | 'error' | 'in-progress']
+interface Puzzle {
+  id: string;
+  prompt: string;
+  solution: boolean[][];
+  rowClues: number[][];
+  columnClues: number[][];
+  currentGrid: CellState[][];
+  startTime: number;
+  hintsUsed: number;
+  errors: number;
+}
 
-**`Puzzle`**: [To be filled: Complete puzzle structure]
+interface Hint {
+  type: 'guidance' | 'specific';
+  message: string;
+  cell?: { row: number; col: number };
+}
 
-**`Hint`**: [To be filled: Guidance vs Specific hint types]
+interface ValidationResult {
+  rows: ValidationState[];
+  columns: ValidationState[];
+  isComplete: boolean;
+  isValid: boolean;
+}
+```
 
-### Type Organization
-
-[To be filled: Where types live, how they're exported, naming conventions]
+**Naming Conventions**:
+- Types/Interfaces: PascalCase (`Puzzle`, `CellState`)
+- Type values: lowercase with hyphens (`'empty'`, `'in-progress'`)
 
 ---
 
 ## Data Flow
 
-### Puzzle Generation Flow
+**Puzzle Generation Flow**:
+```
+User enters prompt
+    ↓
+StartScreen → usePuzzleGenerator hook
+    ↓
+API call (lib/api.ts)
+    ↓
+Validation (lib/puzzleGenerator.ts)
+    ↓
+Calculate clues (lib/clueCalculator.ts)
+    ↓
+Create Puzzle object → useGameState
+    ↓
+GameBoard renders
+```
 
-[To be filled: User input → API call → validation → state update → render]
+**Gameplay Flow**:
+```
+User taps cell
+    ↓
+Cell component → onClick callback
+    ↓
+GameBoard → useGameState.toggleCell()
+    ↓
+Update currentGrid (immutable)
+    ↓
+useValidation → lib/validator.ts
+    ↓
+Return ValidationResult
+    ↓
+GameBoard re-renders with feedback
+```
 
-### Gameplay Flow
-
-[To be filled: User click → state update → validation → render feedback]
-
-### Hint Request Flow
-
-[To be filled: Button click → cooldown check → API call → modal display]
+**Hint Request Flow**:
+```
+User taps "Get Hint"
+    ↓
+GameBoard → useHints.requestHint()
+    ↓
+Cooldown check (if active, abort)
+    ↓
+Determine type (guidance vs specific)
+    ↓
+API call with current grid state
+    ↓
+Display hint in modal
+    ↓
+Start 30s cooldown
+```
 
 ---
 
@@ -196,31 +521,44 @@ pixlogic/
 
 ### Clue Calculator (`lib/clueCalculator.ts`)
 
-**Purpose**: [To be filled: Generate row/column clues from solution matrix]
+**Purpose**: Calculate row and column clues from solution matrix
 
-**Key Functions**: [To be filled]
+**Key Functions**:
+- `calculateRowClues(matrix: boolean[][]): number[][]`
+- `calculateColumnClues(matrix: boolean[][]): number[][]`
+
+**Logic**: Count consecutive `true` values, return array of counts
 
 ### Validator (`lib/validator.ts`)
 
-**Purpose**: [To be filled: Check puzzle correctness, validate rows/columns]
+**Purpose**: Validate current grid against target clues
 
-**Key Functions**: [To be filled]
+**Key Functions**:
+- `validateRow(row: CellState[], clues: number[]): ValidationState`
+- `validateColumn(column: CellState[], clues: number[]): ValidationState`
+- `isPuzzleComplete(grid: CellState[][], solution: boolean[][]): boolean`
+
+**Logic**: Compare filled cells to clues, detect errors/completion
 
 ### Difficulty Engine (`lib/difficultyEngine.ts`)
 
-**Purpose**: [To be filled: Analyze puzzle difficulty]
+**Purpose**: Analyze performance and suggest next difficulty
 
-**Key Functions**: [To be filled]
+**Key Functions**:
+- `calculateNextDifficulty(currentLevel: number, metrics: PerformanceMetrics): number`
+
+**Logic**: Increase if fast solve, decrease if struggled, else keep same
 
 ### Puzzle Generator (`lib/puzzleGenerator.ts`)
 
-**Purpose**: [To be filled: Wrapper around API, retry logic, validation]
+**Purpose**: Wrap API calls with validation and retry
 
-**Key Functions**: [To be filled]
+**Key Functions**:
+- `generatePuzzleWithRetry(apiClient, prompt, difficulty, size): Promise<Puzzle>`
+
+**Logic**: Call API → validate → retry if invalid → create Puzzle object
 
 ### API Client (`lib/api.ts`)
-
-**Purpose**: [To be filled: Anthropic API integration]
 
 **See**: [API Integration](api-integration.md) for complete details
 
@@ -228,21 +566,15 @@ pixlogic/
 
 ## Design Patterns Used
 
-### Pure Functions
+**Pure Functions**: All `lib/` modules export pure functions (no side effects)
 
-[To be filled: Why, examples, benefits]
+**Immutability**: State never mutated, always new objects/arrays created
 
-### Immutability
+**Composition**: Components compose hierarchically, hooks compose functionality
 
-[To be filled: How state is never mutated, spread operators, array methods]
+**Single Responsibility**: Each file/function has one clear purpose
 
-### Composition
-
-[To be filled: Component composition, hook composition]
-
-### Single Responsibility
-
-[To be filled: Each module has one job]
+**Dependency Injection**: Hooks receive dependencies (apiClient) as parameters, not hardcoded
 
 ---
 
@@ -250,109 +582,56 @@ pixlogic/
 
 ### Technology Stack
 
-**Core**:
-- React 18
-- TypeScript
-- Vite (build tool)
+**Core**: React 18, TypeScript, Vite
+**Styling**: Tailwind CSS
+**Testing**: Vitest, React Testing Library, Playwright
+**API**: @anthropic-ai/sdk
 
-**Styling**:
-- Tailwind CSS
-
-**Testing**:
-- Vitest
-- React Testing Library
-- Playwright (E2E)
-
-**API**:
-- @anthropic-ai/sdk
-
-### Why These Choices?
-
-[To be filled: Rationale for each technology]
+**Why These Choices**:
+- **React**: Component model fits game UI well
+- **TypeScript**: Type safety for complex state
+- **Vite**: Fast builds, modern tooling
+- **Tailwind**: Rapid styling, mobile-first
+- **Vitest**: Fast unit tests, Jest-compatible API
+- **Playwright**: Reliable E2E testing
 
 ---
 
 ## Build & Deployment
 
-### Build Configuration
+**Vite**: Configured with base path `/pixlogic/` for GitHub Pages
 
-**Vite**: [To be filled: Configuration approach, base path for GitHub Pages]
+**TypeScript**: Strict mode, path aliases (`@/components`)
 
-**TypeScript**: [To be filled: tsconfig settings, strict mode]
+**Tailwind**: Custom colors in `tailwind.config.js`
 
-**Tailwind**: [To be filled: Configuration, custom theme]
-
-### Deployment
-
-**GitHub Pages**: [To be filled: Automatic deployment via GitHub Actions]
-
-**Base Path**: `/pixlogic/` [To be filled: Why needed for GH Pages]
+**GitHub Pages**: Automatic deployment on push to `main`
 
 ---
 
 ## Performance Considerations
 
-### Bundle Size
+**Bundle Size**: Single-page app, minimal dependencies
 
-[To be filled: Code splitting strategy, lazy loading]
+**Rendering**: `useMemo` for expensive validations, pure components prevent unnecessary re-renders
 
-### Rendering Optimization
-
-[To be filled: Memoization, avoiding unnecessary re-renders]
-
-### API Call Optimization
-
-[To be filled: Caching strategy, rate limiting]
+**API**: No caching currently (each puzzle unique)
 
 ---
 
 ## Security Considerations
 
-### Client-Side Security
-
-**API Key Storage**: [To be filled: localStorage, never exposed to external servers]
+**API Key**: Stored in localStorage, only sent to Anthropic
 
 **Prompt Injection**: See [API Integration](api-integration.md#security-architecture)
 
-**XSS Prevention**: [To be filled: React's built-in protections, safe rendering]
+**XSS**: React escapes user input by default
 
 ---
 
 ## Accessibility
 
-[To be filled: Keyboard navigation, ARIA labels, color contrast, touch targets]
-
----
-
-## Error Handling Architecture
-
-### Error Categories
-
-**API Errors**: [To be filled: Rate limits, auth errors, server errors]
-
-**Validation Errors**: [To be filled: Invalid puzzles, malformed responses]
-
-**User Errors**: [To be filled: Invalid input, missing API key]
-
-### Error Recovery
-
-[To be filled: Retry strategies, fallbacks, user messaging]
-
----
-
-## Future Architectural Considerations
-
-### Scalability
-
-[To be filled: What happens if we add features X, Y, Z]
-
-### Extensibility
-
-[To be filled: How to add new AI providers, puzzle types, game modes]
-
-### Refactoring Guidelines
-
-[To be filled: When to split modules, how to maintain architecture]
+Keyboard navigation (arrow keys, space bar), ARIA labels on cells, WCAG AAA contrast, 44px touch targets
 
 ---
 
