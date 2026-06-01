@@ -1,18 +1,25 @@
 # Testing Strategy
 
 **Last Updated:** 2026-06-01
-**Status:** 🚧 Skeleton - Content to be extracted from existing practices
+**Status:** ✅ Complete
 
 ---
 
 ## Overview
 
 Pixlogic follows a comprehensive testing strategy with three layers:
-1. **Unit Tests** - Pure functions and hooks
-2. **Integration Tests** - Component interactions
-3. **End-to-End Tests** - Full user flows
+1. **Unit Tests** - Pure functions and hooks (fast, isolated)
+2. **Integration Tests** - Component interactions (moderate speed)
+3. **End-to-End Tests** - Full user flows (slow, high confidence)
 
 **Philosophy**: Test-Driven Development (TDD) - Write tests first, then implementation.
+
+**Testing Stack**:
+- **Vitest**: Unit and component tests
+- **React Testing Library**: Component testing
+- **@testing-library/react-hooks**: Hook testing
+- **Playwright**: E2E tests
+- **MSW (Mock Service Worker)**: API mocking
 
 ---
 
@@ -20,18 +27,57 @@ Pixlogic follows a comprehensive testing strategy with three layers:
 
 ### Why TDD?
 
-[To be filled: Benefits, how it shapes design, reduces bugs]
+**Benefits**:
+- **Better design**: Tests force you to think about interfaces first
+- **Fewer bugs**: Code is testable by design
+- **Confidence**: Refactor without fear
+- **Documentation**: Tests show how code should be used
+- **Regression prevention**: Changes can't break existing functionality
+
+**How it shapes design**:
+- Forces pure functions (easier to test)
+- Encourages small, focused modules
+- Makes dependencies explicit
 
 ### TDD Workflow
 
-1. [To be filled: Write failing test]
-2. [To be filled: Implement minimal code to pass]
-3. [To be filled: Refactor while keeping tests green]
-4. [To be filled: Repeat]
+1. **Write failing test**: Define expected behavior, watch it fail (red)
+2. **Implement minimal code**: Just enough to pass the test (green)
+3. **Refactor**: Clean up code while keeping tests green
+4. **Repeat**: Next test, next feature
+
+**Example cycle**:
+```typescript
+// 1. Write failing test
+test('calculates clues for row with two groups', () => {
+  const row = [true, true, false, true];
+  expect(calculateRowClues([row])).toEqual([[2, 1]]);
+});
+// Test fails: function doesn't exist yet
+
+// 2. Implement
+export function calculateRowClues(matrix: boolean[][]): number[][] {
+  // Minimal implementation to pass
+  return matrix.map(row => { /* ... */ });
+}
+// Test passes
+
+// 3. Refactor (if needed)
+// Clean up, extract helpers, improve naming
+```
 
 ### When to Use TDD
 
-[To be filled: Always for new features, bug fixes require test reproduction]
+**Always for**:
+- New features (write test describing feature, then implement)
+- Bug fixes (write test reproducing bug, then fix)
+- Pure functions (especially business logic)
+
+**Optional for**:
+- Simple UI components (visual testing may be sufficient)
+- Exploratory prototyping (tests can come after spike)
+
+**Rule**: If you're not sure, use TDD. It catches more bugs upfront.
 
 ---
 
@@ -40,32 +86,100 @@ Pixlogic follows a comprehensive testing strategy with three layers:
 ### What to Test
 
 **Pure Functions (`src/lib/`)**:
-- [To be filled: All exported functions, edge cases, error conditions]
+- All exported functions
+- Happy path (normal inputs)
+- Edge cases (empty, single element, maximum size)
+- Error conditions (invalid inputs)
 
-**Examples**:
-- `clueCalculator.ts`: [To be filled: calculateRowClues, calculateColumnClues]
-- `validator.ts`: [To be filled: validateRow, validateColumn, isPuzzleComplete]
-- `difficultyEngine.ts`: [To be filled: calculateDifficulty]
+**Examples to test**:
+- `clueCalculator.ts`: calculateRowClues, calculateColumnClues
+- `validator.ts`: validateRow, validateColumn, isPuzzleComplete
+- `difficultyEngine.ts`: calculateNextDifficulty
 
 ### Testing Pure Functions
 
-[To be filled: Input → expected output, no mocks needed, fast execution]
+**Approach**: Simple input → expected output, no mocks needed, very fast
 
 **Example Test Structure**:
 ```typescript
-[To be filled: Example test for calculateRowClues]
+// src/lib/__tests__/clueCalculator.test.ts
+import { describe, it, expect } from 'vitest';
+import { calculateRowClues } from '../clueCalculator';
+
+describe('calculateRowClues', () => {
+  it('calculates clues for simple row', () => {
+    const row = [true, true, false, true, false];
+    expect(calculateRowClues([row])).toEqual([[2, 1]]);
+  });
+
+  it('returns empty array for empty row', () => {
+    const row = [false, false, false];
+    expect(calculateRowClues([row])).toEqual([[]]);
+  });
+
+  it('handles single filled cell', () => {
+    const row = [false, true, false];
+    expect(calculateRowClues([row])).toEqual([[1]]);
+  });
+
+  it('handles fully filled row', () => {
+    const row = [true, true, true, true];
+    expect(calculateRowClues([row])).toEqual([[4]]);
+  });
+});
 ```
+
+**Key points**:
+- No setup/teardown needed (pure functions)
+- Test edge cases (empty, single, full)
+- Fast execution (<1ms per test)
 
 ### Testing React Hooks
 
-[To be filled: @testing-library/react-hooks, renderHook pattern]
+**Approach**: Use `@testing-library/react-hooks` for isolated hook testing
 
 **Example Test Structure**:
 ```typescript
-[To be filled: Example test for useGameState]
+// src/hooks/__tests__/useGameState.test.ts
+import { renderHook, act } from '@testing-library/react-hooks';
+import { useGameState } from '../useGameState';
+
+describe('useGameState', () => {
+  it('toggles cell state through cycle', () => {
+    const { result } = renderHook(() => useGameState(mockPuzzle));
+
+    // Initially empty
+    expect(result.current.puzzle.currentGrid[0][0]).toBe('empty');
+
+    // Tap 1: empty → filled
+    act(() => result.current.toggleCell(0, 0));
+    expect(result.current.puzzle.currentGrid[0][0]).toBe('filled');
+
+    // Tap 2: filled → marked
+    act(() => result.current.toggleCell(0, 0));
+    expect(result.current.puzzle.currentGrid[0][0]).toBe('marked');
+
+    // Tap 3: marked → empty
+    act(() => result.current.toggleCell(0, 0));
+    expect(result.current.puzzle.currentGrid[0][0]).toBe('empty');
+  });
+
+  it('increments error count on validation error', () => {
+    const { result } = renderHook(() => useGameState(mockPuzzle));
+
+    // Fill cells to trigger validation error
+    act(() => {
+      // ... fill too many cells in a row
+    });
+
+    expect(result.current.puzzle.errors).toBeGreaterThan(0);
+  });
+});
 ```
 
 ### Test File Organization
+
+**Co-location strategy**: Tests live next to the code they test
 
 ```
 src/
@@ -83,7 +197,10 @@ src/
         └── Cell.test.tsx
 ```
 
-[To be filled: Co-location strategy, naming conventions]
+**Naming conventions**:
+- Test files: `*.test.ts` or `*.test.tsx`
+- Test directories: `__tests__/` (co-located with source)
+- Test descriptions: Sentence case ("calculates clues for simple row")
 
 ---
 
@@ -92,28 +209,112 @@ src/
 ### What to Test
 
 **Component Integration**:
-- [To be filled: Component + hooks, user interactions, state updates]
+- Component + hooks working together
+- User interactions triggering state changes
+- State changes causing UI updates
+- Data flow between components
 
 **Examples**:
-- `GameBoard.tsx` + `useHints`: [To be filled: Hint button → API call → modal display]
-- `Cell.tsx` interactions: [To be filled: Click → state update → visual feedback]
+- `GameBoard` + `useHints`: Hint button → API call → modal display
+- `Cell` + `useGameState`: Click → state update → visual feedback
+- `GameBoard` + `useValidation`: Cell change → validation → color feedback
 
 ### Testing Components
 
-[To be filled: React Testing Library, user-centric queries, testing behavior not implementation]
+**Approach**: React Testing Library - test behavior, not implementation
+
+**User-centric queries** (in order of preference):
+1. `getByRole` (button, textbox, etc.)
+2. `getByLabelText` (form elements)
+3. `getByText` (visible text)
+4. `getByTestId` (last resort)
 
 **Example Test Structure**:
 ```typescript
-[To be filled: Example test for Cell click behavior]
+// src/components/__tests__/Cell.test.tsx
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Cell } from '../Cell';
+
+describe('Cell', () => {
+  it('renders empty state', () => {
+    render(<Cell state="empty" onToggle={() => {}} />);
+    const cell = screen.getByRole('button');
+    expect(cell).toHaveStyle({ background: '#ffffff' });
+  });
+
+  it('calls onToggle when clicked', async () => {
+    const onToggle = vi.fn();
+    render(<Cell state="empty" onToggle={onToggle} />);
+
+    await userEvent.click(screen.getByRole('button'));
+    expect(onToggle).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows X symbol when marked', () => {
+    render(<Cell state="marked" onToggle={() => {}} />);
+    expect(screen.getByText('×')).toBeInTheDocument();
+  });
+
+  it('applies error styling when validation fails', () => {
+    render(<Cell state="filled" validationState="error" onToggle={() => {}} />);
+    const cell = screen.getByRole('button');
+    expect(cell).toHaveClass('border-error');
+  });
+});
 ```
+
+**Key principles**:
+- Test user-visible behavior (not internal state)
+- Use real user interactions (`userEvent.click`)
+- Query by role/label (not class names or internals)
+- Assert on rendered output (not implementation details)
 
 ### Mocking Strategy
 
-**API Calls**: [To be filled: Mock Anthropic SDK, test success/error paths]
+**API Calls**: Mock Anthropic SDK using Vitest mocks
 
-**localStorage**: [To be filled: Mock browser APIs]
+```typescript
+import { vi } from 'vitest';
+import { ApiClient } from '@/lib/api';
 
-**Timers**: [To be filled: Mock for cooldown tests]
+// Mock successful puzzle generation
+vi.mock('@/lib/api', () => ({
+  ApiClient: vi.fn().mockImplementation(() => ({
+    generatePuzzle: vi.fn().mockResolvedValue(mockPuzzleMatrix),
+    getHint: vi.fn().mockResolvedValue(mockHint)
+  }))
+}));
+```
+
+**localStorage**: Mock with in-memory implementation
+
+```typescript
+const localStorageMock = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn()
+};
+
+global.localStorage = localStorageMock as any;
+```
+
+**Timers**: Use `vi.useFakeTimers()` for cooldown tests
+
+```typescript
+it('disables hint button during cooldown', () => {
+  vi.useFakeTimers();
+  // ... request hint ...
+  expect(hintButton).toBeDisabled();
+
+  // Fast-forward 30 seconds
+  vi.advanceTimersByTime(30000);
+  expect(hintButton).not.toBeDisabled();
+
+  vi.useRealTimers();
+});
+```
 
 ---
 
@@ -122,22 +323,63 @@ src/
 ### What to Test
 
 **Critical User Flows**:
-1. [To be filled: First-time setup → API key → puzzle generation]
-2. [To be filled: Puzzle solving → validation → completion]
-3. [To be filled: Hint system → cooldown → modal]
+1. First-time user: API key setup → puzzle generation → gameplay
+2. Puzzle solving: Cell interactions → validation → completion
+3. Hint system: Request hint → display → cooldown
+4. Persistence: Start puzzle → refresh → resume from same state
 
 ### E2E Testing Tools
 
-**Playwright**: [To be filled: Browser automation, cross-browser testing]
+**Playwright**: Browser automation, cross-browser testing (Chrome, Firefox, Safari)
+
+**Why Playwright**:
+- Reliable (auto-waits for elements)
+- Fast (parallel execution)
+- Good debugging tools
 
 ### Test Structure
 
-[To be filled: Page objects, test scenarios, setup/teardown]
-
 **Example E2E Test**:
 ```typescript
-[To be filled: Example full user flow test]
+// e2e/game-flow.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Pixlogic Game Flow', () => {
+  test('complete puzzle from start to finish', async ({ page }) => {
+    await page.goto('/');
+
+    // Enter API key
+    await page.fill('[data-testid="api-key-input"]', 'sk-ant-test-key');
+    await page.click('[data-testid="save-key"]');
+
+    // Enter puzzle prompt
+    await page.fill('[data-testid="prompt-input"]', 'a cat');
+    await page.click('[data-testid="generate-button"]');
+
+    // Wait for puzzle
+    await page.waitForSelector('[data-testid="game-board"]', { timeout: 10000 });
+
+    // Verify grid rendered
+    const cells = await page.locator('[role="button"]').count();
+    expect(cells).toBe(100); // 10×10 grid
+
+    // Request hint
+    await page.click('[data-testid="hint-button"]');
+    await expect(page.locator('[data-testid="hint-message"]')).toBeVisible();
+  });
+
+  test('persistence: resume after refresh', async ({ page }) => {
+    // ... start puzzle, fill some cells ...
+    await page.reload();
+
+    // Verify state restored
+    const filledCells = await page.locator('[data-state="filled"]').count();
+    expect(filledCells).toBeGreaterThan(0);
+  });
+});
 ```
+
+**Data-testid attributes**: Use for E2E selectors (not in production rendering)
 
 ---
 
@@ -146,19 +388,25 @@ src/
 ### Coverage Goals
 
 **Unit Tests**:
-- Pure functions: [To be filled: 100% coverage expected]
-- Hooks: [To be filled: 90%+ coverage]
-- Components: [To be filled: 80%+ coverage for critical paths]
+- Pure functions (`lib/`): **100%** coverage (achievable, no excuses)
+- Hooks: **90%+** coverage
+- Components: **80%+** for critical paths
 
 **Integration Tests**:
-- [To be filled: Key user interactions, critical flows]
+- Key user interactions covered
+- All critical flows tested
 
 **E2E Tests**:
-- [To be filled: Happy paths, major error scenarios]
+- Happy paths: 100% covered
+- Major error scenarios: Covered
 
 ### What NOT to Test
 
-[To be filled: Third-party libraries, trivial code, external APIs directly]
+- Third-party libraries (Anthropic SDK, React internals)
+- Trivial getters/setters
+- External APIs directly (use mocks)
+- Build configuration files
+- Type definitions alone (TypeScript compiler checks these)
 
 ---
 
@@ -167,23 +415,34 @@ src/
 ### Running Tests
 
 ```bash
-npm test              # Unit and integration tests (Vitest)
-npm run test:e2e      # End-to-end tests (Playwright)
-npm run build         # Production build verification
-npx tsc --noEmit      # TypeScript type checking
+npm test                    # Unit + integration (Vitest)
+npm run test:ui             # Vitest UI mode (visual)
+npm run test:coverage       # Coverage report
+npm run test:e2e            # E2E (Playwright)
+npm run test:e2e:headed     # E2E with browser visible
+npm run build               # Build verification
+npx tsc --noEmit            # Type checking
 ```
 
 ### Test Speed Expectations
 
-**Unit Tests**: [To be filled: Fast (<100ms per test)]
+**Unit Tests**: <100ms per test (aim for <10ms)
+**Integration Tests**: <500ms per test
+**E2E Tests**: Seconds per test (run less frequently)
 
-**Integration Tests**: [To be filled: Moderate (<500ms per test)]
-
-**E2E Tests**: [To be filled: Slow (seconds per test, run less frequently)]
+**Full test suite**: Should complete in <30 seconds (unit + integration)
 
 ### Continuous Integration
 
-[To be filled: GitHub Actions, when tests run, blocking conditions]
+**GitHub Actions**:
+- Unit tests: Run on every commit
+- Integration tests: Run on every PR
+- E2E tests: Run before deployment
+- Type check: Run on every commit
+
+**Blocking conditions**:
+- Any failing test blocks PR merge
+- Coverage drop blocks PR merge (enforce minimum coverage)
 
 ---
 
@@ -191,108 +450,42 @@ npx tsc --noEmit      # TypeScript type checking
 
 ### Arrange-Act-Assert (AAA)
 
-[To be filled: Test structure pattern, examples]
+Standard test structure:
 
-### Given-When-Then
+```typescript
+it('increases difficulty on fast solve', () => {
+  // Arrange: Set up test data
+  const currentLevel = 5;
+  const metrics = { solveTime: 120, hintsUsed: 0, errors: 0 };
 
-[To be filled: BDD-style test structure for complex scenarios]
+  // Act: Execute the function
+  const newLevel = calculateNextDifficulty(currentLevel, metrics);
+
+  // Assert: Verify the result
+  expect(newLevel).toBe(6);
+});
+```
 
 ### Test Data Builders
 
-[To be filled: Creating test puzzles, mock data generation]
+Helper functions to create test data:
 
----
-
-## Testing Business Logic
-
-### Clue Calculation Tests
-
-[To be filled: Edge cases - empty rows, full rows, various patterns]
-
-### Validation Tests
-
-[To be filled: Correct/incorrect grids, partial completion, edge cases]
-
-### Difficulty Calculation Tests
-
-[To be filled: Various puzzle complexities, difficulty bounds]
-
----
-
-## Testing State Management
-
-### Hook Testing Strategy
-
-[To be filled: Initial state, state transitions, side effects]
-
-**`useGameState` Tests**:
-- [To be filled: Cell state changes, grid updates, immutability]
-
-**`useHints` Tests**:
-- [To be filled: Hint requests, cooldown logic, error handling]
-
-**`usePuzzleGenerator` Tests**:
-- [To be filled: Generation flow, validation, retry logic]
-
----
-
-## Testing UI Components
-
-### Component Testing Strategy
-
-[To be filled: Props-based testing, user events, accessibility]
-
-### Visual Regression Testing
-
-[To be filled: Future consideration, snapshot tests]
-
-### Accessibility Testing
-
-[To be filled: ARIA labels, keyboard navigation, screen reader support]
-
----
-
-## Testing API Integration
-
-### Mocking Anthropic API
-
-[To be filled: Success responses, error responses, rate limits]
-
-### Testing Error Handling
-
-[To be filled: 401, 429, 500 errors, network failures]
-
-### Testing Response Parsing
-
-[To be filled: Valid JSON, malformed JSON, missing fields]
-
----
-
-## Testing Error Scenarios
-
-### User Error Scenarios
-
-- [To be filled: Missing API key, invalid prompt, network issues]
-
-### System Error Scenarios
-
-- [To be filled: API failures, validation errors, unexpected states]
-
-### Recovery Testing
-
-[To be filled: Retry logic, fallback behavior, user messaging]
-
----
-
-## Performance Testing
-
-### Rendering Performance
-
-[To be filled: Re-render counts, memoization verification]
-
-### API Response Time
-
-[To be filled: Expected response times, timeout handling]
+```typescript
+function createMockPuzzle(overrides?: Partial<Puzzle>): Puzzle {
+  return {
+    id: '123',
+    prompt: 'test',
+    solution: Array(10).fill(Array(10).fill(false)),
+    rowClues: [],
+    columnClues: [],
+    currentGrid: Array(10).fill(Array(10).fill('empty')),
+    startTime: Date.now(),
+    hintsUsed: 0,
+    errors: 0,
+    ...overrides
+  };
+}
+```
 
 ---
 
@@ -300,34 +493,38 @@ npx tsc --noEmit      # TypeScript type checking
 
 ### Pre-Commit Checklist
 
-- [ ] All unit tests pass (`npm test`)
-- [ ] Production build succeeds (`npm run build`)
-- [ ] No TypeScript errors (`npx tsc --noEmit`)
-- [ ] E2E tests pass (`npm run test:e2e`) - optional for minor changes
-- [ ] No console.log statements in source
-- [ ] No TODO comments (implement or create issue)
-- [ ] No `any` types (use specific types)
+Must pass before committing:
+
+- ✅ All unit tests pass (`npm test`)
+- ✅ Production build succeeds (`npm run build`)
+- ✅ No TypeScript errors (`npx tsc --noEmit`)
+- ✅ No console.log statements in `src/` (except explicit logging)
+- ✅ No TODO comments (implement or create issue)
+- ✅ No `any` types (use specific types or `unknown`)
+
+Optional for minor changes:
+- ⚪ E2E tests pass (`npm run test:e2e`)
 
 ### Pre-Release Checklist
 
-- [ ] Full test suite passes
-- [ ] E2E tests pass across browsers
-- [ ] Manual smoke testing on mobile
-- [ ] API error scenarios tested
-- [ ] Performance acceptable
-- [ ] Accessibility checked
+Before deploying to production:
 
----
+- ✅ Full test suite passes (unit + integration + E2E)
+- ✅ E2E tests pass in multiple browsers (Chrome, Firefox, Safari)
+- ✅ Manual smoke test on mobile device
+- ✅ Test all API error scenarios (401, 429, 500, timeout)
+- ✅ Performance acceptable (generation <10s, hints <5s)
+- ✅ Accessibility checked (keyboard nav, screen reader, contrast)
+- ✅ Coverage meets targets (100% for lib/, 90% for hooks, 80% for components)
 
-## Debugging Failed Tests
+### Verification Command
 
-### Common Issues
+```bash
+# Run all verifications at once
+npm test && npm run build && npx tsc --noEmit && npm run test:e2e
+```
 
-[To be filled: Async timing, mock configuration, stale state]
-
-### Debugging Strategies
-
-[To be filled: Isolate failing test, add logging, check test data]
+If this passes, code is ready to commit/deploy.
 
 ---
 
@@ -335,31 +532,23 @@ npx tsc --noEmit      # TypeScript type checking
 
 ### When to Update Tests
 
-- [To be filled: Feature changes, bug fixes, refactoring]
+- Feature changes: Update tests to match new behavior
+- Bug fixes: Add test reproducing bug, then fix
+- Refactoring: Tests should pass without changes (testing behavior, not implementation)
 
 ### When to Remove Tests
 
-- [To be filled: Obsolete features, replaced functionality]
+- Obsolete features removed
+- Replaced functionality (ensure new tests cover it)
+- Duplicate tests (keep the clearest one)
 
 ### Keeping Tests Green
 
-[To be filled: Fix broken tests immediately, don't commit failing tests]
-
----
-
-## Future Testing Considerations
-
-### Visual Regression Testing
-
-[To be filled: Screenshot comparison, when to implement]
-
-### Performance Benchmarking
-
-[To be filled: Automated performance tests]
-
-### Load Testing
-
-[To be filled: API rate limit testing, concurrent users]
+**Rules**:
+- Never commit failing tests
+- Fix broken tests immediately (within same session)
+- If test is flaky, fix it or delete it (no "sometimes fails" allowed)
+- Update tests alongside code changes
 
 ---
 
