@@ -40,7 +40,7 @@ function App() {
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null)
 
   // Custom hooks
-  const { profile, recordCompletion, currentLevel, currentGridSize } = useDifficulty()
+  const { profile, recordCompletion, restoreProfile, currentLevel, currentGridSize } = useDifficulty()
   const { savedState, saveState, clearState } = useGamePersistence()
 
   // Validation hook
@@ -49,6 +49,11 @@ function App() {
   // Initialize from saved state on mount
   useEffect(() => {
     if (savedState) {
+      // Restore difficulty profile
+      if (savedState.difficultyProfile) {
+        restoreProfile(savedState.difficultyProfile)
+      }
+
       // Restore API key
       if (savedState.apiKey) {
         try {
@@ -67,7 +72,7 @@ function App() {
         setCurrentPrompt(savedState.currentPuzzle.prompt)
       }
     }
-  }, []) // Run once on mount
+  }, [restoreProfile]) // Run once on mount
 
   // Save state whenever puzzle changes
   useEffect(() => {
