@@ -428,6 +428,36 @@ After completion, show message:
 - Size: 1rem
 - Font: System font stack
 
+### Favicon
+
+**Design**: Simple 2×2 grid representing a nonogram puzzle
+
+**Structure**:
+- 2×2 grid of cells (4 cells total)
+- Shows both filled (green) and empty (white) cells
+- Demonstrates the core game mechanic at smallest scale
+- Pattern: diagonal filled cells (top-left and bottom-right green, others white)
+
+**Colors**:
+- **Filled cells**: `#4CAF50` (success green)
+- **Empty cells**: `#ffffff` (white)
+- **Cell borders**: `#e0e0e0` (light gray)
+- **External border**: Thicker than internal borders for definition
+
+**Sizes**:
+- Cell borders: 1px
+- External border: 2-3px (thicker for clear boundary)
+- Background: Transparent or white
+- Viewbox: 32×32 or 64×64 (scalable SVG)
+
+**Format**: SVG for crisp scaling at all sizes
+
+**Rationale**:
+- Previous 5×5 heart design too complex/unclear at favicon size
+- 2×2 grid instantly recognizable as puzzle grid
+- Simple enough to understand at 16×16px
+- Uses game colors for brand consistency
+
 ### Layout Principles
 
 **Mobile-First**:
