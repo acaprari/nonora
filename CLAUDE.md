@@ -9,6 +9,47 @@ Pixlogic is an AI-powered nonogram puzzle game built with React, TypeScript, and
 - This document defines all features, architecture, and implementation details
 - All changes MUST align with this specification
 
+## Spec-Oriented Development
+**CRITICAL RULE**: This project follows spec-oriented development. All architectural changes must be documented BEFORE implementation.
+
+### Workflow for Architectural Changes
+1. **Identify change needed** (bug fix, new feature, security improvement)
+2. **Check existing specs** in `docs/superpowers/specs/` and `docs/`
+3. **Document the proposed approach** in appropriate spec/architecture doc
+4. **Present specification to user for review**
+5. **Wait for approval** before implementing
+6. **Implement according to approved spec**
+7. **Verify implementation matches spec**
+
+### When Specs Must Be Updated
+- API structure changes
+- Security considerations
+- New architectural patterns
+- Integration changes
+- Prompt engineering modifications
+- Data flow changes
+- Any change that affects system architecture
+
+### Documentation Structure
+- `docs/superpowers/specs/` - Design specifications (requirements, high-level architecture)
+- `docs/api-architecture.md` - API implementation details
+- `docs/` - Other technical documentation
+
+### Anti-Patterns to Avoid
+❌ **DON'T:** Implement fixes reactively then document afterward
+✅ **DO:** Document architectural approach, get approval, then implement
+
+❌ **DON'T:** Make "small changes" to prompts/API without updating docs
+✅ **DO:** Treat all architectural changes as requiring spec updates
+
+### Reference Example (What NOT to Do)
+See commit history from 2026-06-01 for security improvements:
+- Added prompt injection prevention (sanitization + structural separation)
+- Updated all API calls to use system/user pattern
+- Created comprehensive API architecture documentation
+
+This was done BACKWARDS (implementation first, docs after). **Don't repeat this pattern.**
+
 ## Mandatory Development Practices
 
 ### 1. Test-Driven Development (TDD)

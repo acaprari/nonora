@@ -8,6 +8,35 @@ AI-powered nonogram puzzle game built with React + TypeScript + Vite + Tailwind 
 2. This document is the source of truth for all features and architecture
 3. All changes must align with the specification
 
+## Spec-Oriented Development
+**CRITICAL**: Architectural changes must be documented BEFORE implementation.
+
+### Workflow
+1. Identify change needed
+2. Document proposed approach in specs (`docs/superpowers/specs/` or `docs/`)
+3. Present spec to user for review
+4. Wait for approval
+5. Implement according to spec
+6. Verify implementation matches spec
+
+### When to Update Specs
+- API changes
+- Security considerations
+- Architectural patterns
+- Prompt engineering
+- Data flow changes
+
+### Documentation Structure
+- `docs/superpowers/specs/` - Design specs
+- `docs/api-architecture.md` - API details
+- `docs/` - Technical docs
+
+### Anti-Pattern
+❌ Implement first, document later
+✅ Document first, get approval, then implement
+
+See 2026-06-01 commits for example of what NOT to do (security improvements were implemented before updating specs).
+
 ## Mandatory Practices
 
 ### Test-Driven Development (TDD)
