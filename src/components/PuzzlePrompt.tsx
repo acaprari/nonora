@@ -17,7 +17,7 @@ export const PuzzlePrompt: React.FC<PuzzlePromptProps> = ({
 }) => {
   const [prompt, setPrompt] = useState('')
 
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPrompt(e.target.value)
   }
 
@@ -29,8 +29,8 @@ export const PuzzlePrompt: React.FC<PuzzlePromptProps> = ({
     }
   }
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
       e.preventDefault()
       handleSubmit()
     }
@@ -39,23 +39,45 @@ export const PuzzlePrompt: React.FC<PuzzlePromptProps> = ({
   const isDisabled = !prompt.trim() || !hasApiKey || isGenerating
 
   return (
-    <div className="glass-card rounded-2xl p-6 shadow-2xl max-w-2xl mx-auto space-y-4">
-      {/* Header with difficulty and grid size */}
-      <div className="flex justify-between items-center text-sm font-medium text-white">
-        <span className="glass px-3 py-1 rounded-full">Level {difficultyLevel}/10</span>
-        <span className="glass px-3 py-1 rounded-full">Grid: {gridSize}x{gridSize}</span>
+    <div className="glass-card rounded-2xl p-8 shadow-2xl max-w-2xl mx-auto space-y-6">
+      {/* Title and tagline */}
+      <div className="text-center space-y-2">
+        <h1 className="text-4xl font-bold text-white">Pixlogic</h1>
+        <p className="text-white/80 text-lg">AI-powered nonogram puzzles from your imagination</p>
       </div>
 
-      {/* Textarea for prompt input */}
-      <div>
-        <textarea
+      {/* How to play section */}
+      <div className="glass rounded-xl p-4 space-y-3">
+        <h2 className="text-white font-semibold text-lg">How to Play</h2>
+        <div className="text-white/90 text-sm space-y-2">
+          <p><span className="font-medium">1. Enter a prompt</span> — Describe any simple image (cat, heart, tree, etc.)</p>
+          <p><span className="font-medium">2. Solve the puzzle</span> — Click cells to fill them based on number clues</p>
+          <p><span className="font-medium">3. Use logic</span> — Numbers show consecutive filled cells in each row/column</p>
+          <p><span className="font-medium">4. Get hints</span> — Stuck? AI-powered hints guide you without spoiling the fun</p>
+        </div>
+      </div>
+
+      {/* Difficulty indicator */}
+      <div className="flex justify-center items-center gap-4 text-sm font-medium text-white">
+        <span className="glass px-4 py-2 rounded-full">Level {difficultyLevel}/10</span>
+        <span className="glass px-4 py-2 rounded-full">{gridSize}×{gridSize} grid</span>
+      </div>
+
+      {/* Input field for prompt */}
+      <div className="space-y-2">
+        <label htmlFor="prompt-input" className="block text-white font-medium text-sm">
+          What should the AI draw?
+        </label>
+        <input
+          id="prompt-input"
+          type="text"
           value={prompt}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          rows={5}
-          placeholder="Describe what you'd like to draw... (e.g., a cat, a rocket ship, a smiley face, a house)"
-          className="glass-input w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50 resize-none text-base text-gray-900 placeholder-gray-500 transition-all"
+          placeholder="e.g., cat, rocket, smiley face, tree..."
+          className="glass-input w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50 text-base text-gray-900 placeholder-gray-500 transition-all"
           disabled={isGenerating}
+          maxLength={100}
         />
       </div>
 
@@ -64,16 +86,16 @@ export const PuzzlePrompt: React.FC<PuzzlePromptProps> = ({
         <button
           onClick={handleSubmit}
           disabled={isDisabled}
-          className="glass w-full text-white font-semibold py-3 px-6 rounded-lg hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
+          className="glass w-full text-white font-semibold py-3 px-6 rounded-lg hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg text-lg"
         >
-          {isGenerating ? 'Generating...' : 'Generate Puzzle'}
+          {isGenerating ? 'Generating Puzzle...' : 'Generate Puzzle'}
         </button>
       </div>
 
       {/* Helper text */}
-      <div className="text-xs text-white/80 text-center">
+      <div className="text-xs text-white/70 text-center">
         {!hasApiKey && 'Please set your API key to generate puzzles'}
-        {hasApiKey && !isGenerating && 'Tip: Press Ctrl+Enter (Cmd+Enter on Mac) to generate'}
+        {hasApiKey && !isGenerating && 'Press Enter to generate'}
       </div>
     </div>
   )
