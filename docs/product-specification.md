@@ -192,10 +192,10 @@ The prompt screen is the first interaction point and includes onboarding content
 ### 3. AI Loading Indicators
 
 **Sparkle Icon Design** (✨-style):
-- Main 4-point star (classic sparkle shape) with 3 small accent sparkles around it
-- Matches ✨ emoji - universally recognized AI/magic symbol
+- Main 4-point star (classic sparkle shape) with 2 small accent sparkles
+- Matches ✨ emoji layout - universally recognized AI/magic symbol
 - Filled design (not stroke-based like other icons)
-- Positioned: top-left, top-right, bottom-right accent sparkles
+- Accent sparkle positions: top-left and bottom-left (slightly toward center)
 
 **Animation Pattern**:
 - 3 sparkle icons in a row with staggered pulse animation
@@ -668,9 +668,9 @@ Note: Message and color calculated independently - combinations vary based on ex
 
 **Sparkle Icon** (AI Indicators):
 - Main 4-point star (classic sparkle shape)
-- 3 small accent sparkles (top-left, top-right, bottom-right)
+- 2 small accent sparkles (top-left, bottom-left slightly toward center)
 - Filled design (not stroke-based)
-- Matches ✨ emoji aesthetic
+- Matches ✨ emoji layout exactly
 - Used for AI processing/thinking states
 
 ### Favicon
