@@ -65,12 +65,17 @@
           d="M12 17v2m-4 0h8"/>
   </symbol>
 
-  <!-- Sparkle Icon - AI Thinking/Magic -->
+  <!-- Sparkle Icon - AI Thinking/Magic (matches ✨ emoji style) -->
   <symbol id="sparkle" viewBox="0 0 24 24">
-    <!-- 4-point star/sparkle -->
-    <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-          d="M12 2v20M2 12h20"/>
-    <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-          d="M6 6l12 12M18 6L6 18"/>
+    <!-- Main 4-point star (classic sparkle shape) -->
+    <path fill="currentColor" stroke="none"
+          d="M12 2 L13.5 10 L13.5 10.5 L22 12 L13.5 13.5 L13.5 13.5 L12 22 L10.5 13.5 L10.5 13.5 L2 12 L10.5 10.5 L10.5 10.5 Z"/>
+    <!-- Small accent sparkles (tiny 4-point stars) -->
+    <path fill="currentColor" stroke="none"
+          d="M5 5 L5.5 6.5 L7 7 L5.5 7.5 L5 9 L4.5 7.5 L3 7 L4.5 6.5 Z"/>
+    <path fill="currentColor" stroke="none"
+          d="M19 4 L19.5 5 L20.5 5.5 L19.5 6 L19 7 L18.5 6 L17.5 5.5 L18.5 5 Z"/>
+    <path fill="currentColor" stroke="none"
+          d="M19 18 L19.3 18.7 L20 19 L19.3 19.3 L19 20 L18.7 19.3 L18 19 L18.7 18.7 Z"/>
   </symbol>
 </svg>

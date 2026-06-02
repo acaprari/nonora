@@ -42,23 +42,16 @@ export function validateRow(
   // Check if row is complete (no empty cells) but doesn't match
   const isComplete = !currentRow.includes('empty');
   if (isComplete) {
-    // Complete but doesn't match clues = error
+    // Complete but doesn't match clues = definite error
     return 'error';
   }
 
-  // If not complete, check if current state could lead to target
-  // If current clues already exceed target, it's an error
-  if (currentClues.length > targetClue.length) {
-    return 'error';
-  }
-
-  // Check if any current clue exceeds corresponding target clue
-  for (let i = 0; i < currentClues.length; i++) {
-    if (currentClues[i] > (targetClue[i] || 0)) {
-      return 'error';
-    }
-  }
-
+  // If not complete, stay in-progress
+  // We don't show errors for partial progress because:
+  // - Players can still add/mark cells to fix issues
+  // - Empty spaces allow for correct placements
+  // - False positive errors are frustrating
+  // - Errors only matter when row/column is complete
   return 'in-progress';
 }
 

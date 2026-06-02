@@ -66,17 +66,24 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
     return `${seconds}s`
   }
 
-  // Timer - update every second
+  // Timer - update every second (stops on completion)
   const [elapsedTime, setElapsedTime] = useState(0)
 
   useEffect(() => {
+    // Stop timer if puzzle is complete
+    if (validationResult.isComplete) {
+      const finalElapsed = Math.floor((Date.now() - puzzle.startTime) / 1000)
+      setElapsedTime(finalElapsed)
+      return
+    }
+
     const interval = setInterval(() => {
       const elapsed = Math.floor((Date.now() - puzzle.startTime) / 1000)
       setElapsedTime(elapsed)
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [puzzle.startTime])
+  }, [puzzle.startTime, validationResult.isComplete])
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60)

@@ -9,10 +9,11 @@ describe('validateRow', () => {
     expect(validateRow(currentRow, targetClue)).toBe('valid');
   });
 
-  it('returns error for overfilled row', () => {
+  it('returns in-progress for incomplete row with large group', () => {
     const currentRow: CellState[] = ['filled', 'filled', 'filled', 'empty', 'empty'];
     const targetClue = [2];
-    expect(validateRow(currentRow, targetClue)).toBe('error');
+    // Has empty cells - player can still mark filled cells to fix
+    expect(validateRow(currentRow, targetClue)).toBe('in-progress');
   });
 
   it('returns in-progress for partial row', () => {
@@ -39,16 +40,18 @@ describe('validateRow', () => {
     expect(validateRow(currentRow, targetClue)).toBe('valid');
   });
 
-  it('detects error when a group is too large', () => {
+  it('returns in-progress when a group is too large but row incomplete', () => {
     const currentRow: CellState[] = ['filled', 'filled', 'filled', 'empty', 'filled'];
     const targetClue = [2, 1];
-    expect(validateRow(currentRow, targetClue)).toBe('error');
+    // Has empty cell - player can still fix by marking filled cells
+    expect(validateRow(currentRow, targetClue)).toBe('in-progress');
   });
 
-  it('detects error when there are too many groups', () => {
+  it('returns in-progress when there are too many groups but row incomplete', () => {
     const currentRow: CellState[] = ['filled', 'empty', 'filled', 'empty', 'filled'];
     const targetClue = [2];
-    expect(validateRow(currentRow, targetClue)).toBe('error');
+    // Has empty cells - player can still mark filled cells to fix
+    expect(validateRow(currentRow, targetClue)).toBe('in-progress');
   });
 
   it('returns valid for completed row with all marked cells', () => {
@@ -197,7 +200,7 @@ describe('validateGrid', () => {
     expect(result.columns[2]).toBe('valid'); // empty column, no clues
   });
 
-  it('detects when current groups cannot possibly match', () => {
+  it('returns in-progress when groups seem wrong but row incomplete', () => {
     const grid: CellState[][] = [
       ['filled', 'empty', 'filled', 'filled', 'filled', 'filled']
     ];
@@ -205,8 +208,8 @@ describe('validateGrid', () => {
     const colClues = [[1], [], [1], [1], [1], [1]];
 
     const result = validateGrid(grid, rowClues, colClues);
-    // Current: [1, 4], Target: [1, 2] - error (second group too large)
-    expect(result.rows[0]).toBe('error');
+    // Current: [1, 4], Target: [1, 2] - has empty cell, player can still fix
+    expect(result.rows[0]).toBe('in-progress');
   });
 
   it('correctly validates when groups are still buildable', () => {
