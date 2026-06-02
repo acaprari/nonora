@@ -21,20 +21,27 @@ export interface GameBoardProps {
 export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, onHintUsed, currentLevel, currentGridSize }: GameBoardProps) {
   const gridSize = puzzle.solution.length
 
-  // Debounced validation: hide validation errors briefly when grid changes
-  const [showValidation, setShowValidation] = useState(true)
+  // Debounced validation: only debounce errors, show valid states immediately
+  const [showErrors, setShowErrors] = useState(true)
 
   useEffect(() => {
-    // Hide validation immediately when grid changes
-    setShowValidation(false)
+    // Hide errors immediately when grid changes
+    setShowErrors(false)
 
-    // Show validation after 1.5 second delay
+    // Show errors after 1.5 second delay
     const timer = setTimeout(() => {
-      setShowValidation(true)
+      setShowErrors(true)
     }, 1500)
 
     return () => clearTimeout(timer)
   }, [puzzle.currentGrid])
+
+  // Helper to debounce only error states, show valid immediately
+  const getValidationState = (state: 'valid' | 'error' | 'in-progress'): 'valid' | 'error' | 'in-progress' => {
+    if (state === 'valid') return 'valid' // Show green immediately
+    if (state === 'error') return showErrors ? 'error' : 'in-progress' // Debounce red
+    return 'in-progress' // Keep in-progress as is
+  }
 
   // Hints hook
   const {
@@ -120,7 +127,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
                     <Clues
                       clues={clues}
                       orientation="column"
-                      validationState={showValidation ? validationResult.columns[colIdx] : 'in-progress'}
+                      validationState={getValidationState(validationResult.columns[colIdx])}
                     />
                   </div>
                 ))}
@@ -134,7 +141,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
                   <Clues
                     clues={puzzle.rowClues[rowIdx]}
                     orientation="row"
-                    validationState={showValidation ? validationResult.rows[rowIdx] : 'in-progress'}
+                    validationState={getValidationState(validationResult.rows[rowIdx])}
                   />
                 </div>
                 <div className="grid gap-1 flex-1" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
@@ -142,7 +149,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
                     <Cell
                       key={`${rowIdx}-${colIdx}`}
                       state={cellState}
-                      validationState={showValidation ? validationResult.rows[rowIdx] : 'in-progress'}
+                      validationState={getValidationState(validationResult.rows[rowIdx])}
                       onClick={() => onCellClick(rowIdx, colIdx)}
                       row={rowIdx}
                       col={colIdx}

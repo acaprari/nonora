@@ -1,5 +1,5 @@
 export interface IconProps {
-  name: 'settings' | 'refresh' | 'key' | 'close' | 'lightbulb' | 'target' | 'celebration'
+  name: 'settings' | 'refresh' | 'key' | 'close' | 'lightbulb' | 'target' | 'celebration' | 'sparkle'
   className?: string
   size?: number
   'aria-label'?: string
