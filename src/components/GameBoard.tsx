@@ -94,7 +94,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
         </div>
 
         {/* Grid container with mobile scroll support */}
-        <div className="overflow-auto max-h-[70vh] sm:overflow-visible">
+        <div className="overflow-auto max-h-[70vh] sm:overflow-visible sm:max-h-none">
           <div className="flex flex-col gap-1">
             {/* Column clues */}
             <div className="flex gap-1">
