@@ -225,25 +225,39 @@ After completion, show message:
 - Levels 7-10: "Complex shapes (detailed portrait, intricate object)"
 
 **Display During Gameplay**:
-- Current level shown in game header (top-left)
+- Current level shown in game header (top-left) as glass badge
 - Badge format: "Level X" with grid size (e.g., "Level 5  9×9")
+- Elapsed timer shown next to level badge (e.g., "3:27")
 - Glass morphism styling (semi-transparent background, white text)
 - Always visible during active gameplay and celebration phases
 - Helps users track progression and understand current challenge level
-- Grid size shown provides immediate visual feedback of puzzle complexity
+- Grid size + timer provide immediate feedback on complexity and performance
 
 ### 5. Timer
 
-**Description**: Tracks time spent on puzzle, displayed in MM:SS format.
+**Description**: Tracks elapsed time during puzzle solving, displayed in MM:SS format.
 
 **Behavior**:
-- Starts when puzzle loads
-- Updates every second
-- Pauses when tab goes to background (Page Visibility API)
-- Stops on completion
-- Persists across page refreshes (saved to localStorage)
+- Starts when puzzle loads (puzzle.startTime)
+- Updates every second via setInterval
+- Continues running during gameplay
+- Final time captured at exact moment of completion
+- Used for difficulty adjustment (key metric)
 
-**Display**: Header of game board, always visible
+**Display**:
+- Shown in GameBoard header as a glass badge next to Level badge
+- Format: M:SS (e.g., "0:45", "3:27", "12:03")
+- Always visible during active gameplay
+- Updates in real-time every second
+- Helps players track performance against difficulty thresholds:
+  - Fast solve: <3 minutes (may increase difficulty)
+  - Slow solve: >10 minutes (may decrease difficulty)
+
+**Implementation**:
+- Real-time countdown updated via React useEffect hook
+- Calculates elapsed seconds from puzzle.startTime
+- No pause on tab background (intentional - time continues)
+- Completion time frozen at moment of victory for stats display
 
 ### 6. Persistence
 

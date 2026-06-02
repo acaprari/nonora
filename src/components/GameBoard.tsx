@@ -66,6 +66,24 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
     return `${seconds}s`
   }
 
+  // Timer - update every second
+  const [elapsedTime, setElapsedTime] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - puzzle.startTime) / 1000)
+      setElapsedTime(elapsed)
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [puzzle.startTime])
+
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
   return (
     <>
       <div className="glass-card rounded-2xl p-3 shadow-2xl max-w-2xl mx-auto">
@@ -78,6 +96,11 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
               </span>
               <span className="text-white/60 text-xs ml-2">
                 {currentGridSize}×{currentGridSize}
+              </span>
+            </div>
+            <div className="glass px-3 py-1 rounded-lg">
+              <span className="text-white font-semibold text-sm" data-testid="elapsed-timer">
+                {formatTime(elapsedTime)}
               </span>
             </div>
             <div className="text-white font-medium text-sm max-w-[120px] sm:max-w-[250px] truncate" title={puzzle.prompt}>
