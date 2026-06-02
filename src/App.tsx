@@ -247,7 +247,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#5a85be] via-[#6b95c9] to-[#7ca5d4] py-2 px-4">
       <header className="text-white mb-3">
-        <div className="flex justify-between items-center max-w-4xl mx-auto mb-2">
+        <div className="flex justify-between items-center max-w-2xl mx-auto mb-2">
           <div className="flex-1" />
           <div className="flex-1 text-center">
             <h1 className="text-4xl font-bold mb-1 drop-shadow-lg">Pixlogic</h1>
@@ -265,7 +265,7 @@ function App() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto">
+      <main className="max-w-2xl mx-auto">
         {/* Phase 1: API Key Setup */}
         {!apiKey && (
           <ApiKeyInput onKeySubmit={handleApiKeySubmit} />
@@ -284,7 +284,7 @@ function App() {
 
         {/* Loading Indicator */}
         {isGenerating && (
-          <div className="glass-card rounded-2xl p-8 text-center shadow-2xl">
+          <div className="glass-card rounded-2xl p-8 text-center shadow-2xl max-w-2xl mx-auto">
             <AiLoadingIndicator size="large" className="mb-4" />
             <p className="text-white text-xl font-semibold">Generating your puzzle...</p>
             {currentPrompt && (

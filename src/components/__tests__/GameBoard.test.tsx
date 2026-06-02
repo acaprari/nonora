@@ -333,8 +333,9 @@ describe('GameBoard', () => {
       // During loading: button is disabled and shows indicator
       await waitFor(() => {
         expect(hintButton).toBeDisabled()
-        // AiLoadingIndicator renders stars
-        expect(hintButton.textContent).toContain('✨')
+        // AiLoadingIndicator renders sparkle SVG icons
+        const sparkleIcons = hintButton.querySelectorAll('svg')
+        expect(sparkleIcons.length).toBeGreaterThan(0)
       })
     })
   })
