@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Puzzle, ValidationResult } from '../types'
 import type { ApiClient } from '@/lib/api'
 import { Cell } from './Cell'
@@ -19,6 +20,21 @@ export interface GameBoardProps {
 
 export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, onHintUsed, currentLevel, currentGridSize }: GameBoardProps) {
   const gridSize = puzzle.solution.length
+
+  // Debounced validation: hide validation errors briefly when grid changes
+  const [showValidation, setShowValidation] = useState(true)
+
+  useEffect(() => {
+    // Hide validation immediately when grid changes
+    setShowValidation(false)
+
+    // Show validation after 1.5 second delay
+    const timer = setTimeout(() => {
+      setShowValidation(true)
+    }, 1500)
+
+    return () => clearTimeout(timer)
+  }, [puzzle.currentGrid])
 
   // Hints hook
   const {
@@ -104,7 +120,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
                     <Clues
                       clues={clues}
                       orientation="column"
-                      validationState={validationResult.columns[colIdx]}
+                      validationState={showValidation ? validationResult.columns[colIdx] : 'in-progress'}
                     />
                   </div>
                 ))}
@@ -118,7 +134,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
                   <Clues
                     clues={puzzle.rowClues[rowIdx]}
                     orientation="row"
-                    validationState={validationResult.rows[rowIdx]}
+                    validationState={showValidation ? validationResult.rows[rowIdx] : 'in-progress'}
                   />
                 </div>
                 <div className="grid gap-1 flex-1" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
@@ -126,7 +142,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
                     <Cell
                       key={`${rowIdx}-${colIdx}`}
                       state={cellState}
-                      validationState={validationResult.rows[rowIdx]}
+                      validationState={showValidation ? validationResult.rows[rowIdx] : 'in-progress'}
                       onClick={() => onCellClick(rowIdx, colIdx)}
                       row={rowIdx}
                       col={colIdx}

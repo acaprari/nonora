@@ -3,7 +3,6 @@ import { Icon } from './Icon'
 export interface CompletionScreenProps {
   solveTime: number // in seconds
   hintsUsed: number
-  errors: number
   currentLevel: number
   previousLevel: number
   gridSize: number
@@ -19,15 +18,14 @@ function formatTime(seconds: number): string {
 
 function getPerformanceFeedback(
   solveTime: number,
-  hintsUsed: number,
-  errors: number
+  hintsUsed: number
 ): string {
-  // Excellent: Fast, no hints, very few errors
-  if (solveTime < 180 && hintsUsed === 0 && errors <= 2) {
+  // Excellent: Fast, no hints
+  if (solveTime < 180 && hintsUsed === 0) {
     return "Excellent work! You're a nonogram master!"
   }
-  // Good: Medium time, few hints, some errors
-  else if (solveTime < 420 && hintsUsed <= 2 && errors <= 5) {
+  // Good: Medium time, few hints
+  else if (solveTime < 420 && hintsUsed <= 2) {
     return "Good job! You're getting better!"
   }
   // Nice work: Everyone else
@@ -38,15 +36,14 @@ function getPerformanceFeedback(
 
 function getPerformanceColor(
   solveTime: number,
-  hintsUsed: number,
-  errors: number
+  hintsUsed: number
 ): string {
   // Green: Excellent performance
-  if (solveTime < 180 && hintsUsed <= 1 && errors <= 2) {
+  if (solveTime < 180 && hintsUsed <= 1) {
     return 'text-green-300'
   }
   // Red: Struggled
-  else if (solveTime > 600 || hintsUsed > 3 || errors > 8) {
+  else if (solveTime > 600 || hintsUsed > 3) {
     return 'text-red-300'
   }
   // Yellow: Okay
@@ -82,15 +79,14 @@ function getDifficultyChangeMessage(
 export function CompletionScreen({
   solveTime,
   hintsUsed,
-  errors,
   currentLevel,
   previousLevel,
   gridSize,
   onNewPuzzle,
   onNewPrompt,
 }: CompletionScreenProps) {
-  const feedback = getPerformanceFeedback(solveTime, hintsUsed, errors)
-  const performanceColor = getPerformanceColor(solveTime, hintsUsed, errors)
+  const feedback = getPerformanceFeedback(solveTime, hintsUsed)
+  const performanceColor = getPerformanceColor(solveTime, hintsUsed)
   const difficultyChange = getDifficultyChangeMessage(currentLevel, previousLevel, gridSize)
 
   return (
@@ -110,7 +106,7 @@ export function CompletionScreen({
         <div className="text-sm text-white/80">{difficultyChange.detail}</div>
       </div>
 
-      <div className="glass rounded-xl p-4 grid grid-cols-3 gap-4 text-center">
+      <div className="glass rounded-xl p-4 grid grid-cols-2 gap-4 text-center">
         <div>
           <div className="text-2xl font-bold text-white">{formatTime(solveTime)}</div>
           <div className="text-sm text-white/80">Solve Time</div>
@@ -118,10 +114,6 @@ export function CompletionScreen({
         <div>
           <div className="text-2xl font-bold text-white">{hintsUsed}</div>
           <div className="text-sm text-white/80">Hints Used</div>
-        </div>
-        <div>
-          <div className="text-2xl font-bold text-white">{errors}</div>
-          <div className="text-sm text-white/80">Errors</div>
         </div>
       </div>
 

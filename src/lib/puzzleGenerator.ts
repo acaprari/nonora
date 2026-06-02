@@ -89,8 +89,7 @@ export async function generatePuzzle(
         columnClues,
         currentGrid,
         startTime: Date.now(),
-        hintsUsed: 0,
-        errors: 0
+        hintsUsed: 0
       }
     } catch (error) {
       lastError = error as Error

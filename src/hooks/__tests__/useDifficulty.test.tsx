@@ -17,14 +17,13 @@ describe('useDifficulty', () => {
     const { result } = renderHook(() => useDifficulty())
 
     act(() => {
-      result.current.recordCompletion(120, 1, 2)
+      result.current.recordCompletion(120, 1)
     })
 
     expect(result.current.profile.recentPerformance.length).toBe(1)
     expect(result.current.profile.recentPerformance[0]).toEqual({
       solveTime: 120,
       hintsUsed: 1,
-      errors: 2,
       struggled: false
     })
   })
@@ -32,9 +31,9 @@ describe('useDifficulty', () => {
   it('increases level on good performance', () => {
     const { result } = renderHook(() => useDifficulty())
 
-    // Clean solve: fast time, minimal hints, few errors
+    // Clean solve: fast time, minimal hints
     act(() => {
-      result.current.recordCompletion(120, 1, 2)
+      result.current.recordCompletion(120, 1)
     })
 
     expect(result.current.profile.level).toBe(2)
@@ -46,12 +45,12 @@ describe('useDifficulty', () => {
 
     // First increase to level 2
     act(() => {
-      result.current.recordCompletion(120, 1, 2)
+      result.current.recordCompletion(120, 1)
     })
 
-    // Then struggle: slow time, many hints, many errors
+    // Then struggle: slow time, many hints
     act(() => {
-      result.current.recordCompletion(700, 5, 10)
+      result.current.recordCompletion(700, 5)
     })
 
     expect(result.current.profile.level).toBe(1)
@@ -67,9 +66,9 @@ describe('useDifficulty', () => {
 
     // Clean solve 3 times to reach level 4
     act(() => {
-      result.current.recordCompletion(120, 1, 2)
-      result.current.recordCompletion(120, 1, 2)
-      result.current.recordCompletion(120, 1, 2)
+      result.current.recordCompletion(120, 1)
+      result.current.recordCompletion(120, 1)
+      result.current.recordCompletion(120, 1)
     })
 
     // Level 4: gridSize 8 (linear progression: 4 + 4 = 8)
@@ -83,13 +82,13 @@ describe('useDifficulty', () => {
 
     // Add 7 performance records
     act(() => {
-      result.current.recordCompletion(100, 0, 0)
-      result.current.recordCompletion(200, 1, 1)
-      result.current.recordCompletion(300, 2, 2)
-      result.current.recordCompletion(400, 3, 3)
-      result.current.recordCompletion(500, 4, 4)
-      result.current.recordCompletion(600, 5, 5)
-      result.current.recordCompletion(700, 6, 6)
+      result.current.recordCompletion(100, 0)
+      result.current.recordCompletion(200, 1)
+      result.current.recordCompletion(300, 2)
+      result.current.recordCompletion(400, 3)
+      result.current.recordCompletion(500, 4)
+      result.current.recordCompletion(600, 5)
+      result.current.recordCompletion(700, 6)
     })
 
     // Should keep only last 5
@@ -103,27 +102,21 @@ describe('useDifficulty', () => {
 
     // Not struggled: good performance
     act(() => {
-      result.current.recordCompletion(120, 1, 2)
+      result.current.recordCompletion(120, 1)
     })
     expect(result.current.profile.recentPerformance[0].struggled).toBe(false)
 
     // Struggled: slow time
     act(() => {
-      result.current.recordCompletion(700, 1, 2)
+      result.current.recordCompletion(700, 1)
     })
     expect(result.current.profile.recentPerformance[1].struggled).toBe(true)
 
     // Struggled: many hints
     act(() => {
-      result.current.recordCompletion(120, 5, 2)
+      result.current.recordCompletion(120, 5)
     })
     expect(result.current.profile.recentPerformance[2].struggled).toBe(true)
-
-    // Struggled: many errors
-    act(() => {
-      result.current.recordCompletion(120, 1, 10)
-    })
-    expect(result.current.profile.recentPerformance[3].struggled).toBe(true)
   })
 
   it('maintains same level on average performance', () => {
@@ -133,7 +126,7 @@ describe('useDifficulty', () => {
 
     // Average performance: not fast enough, not slow enough
     act(() => {
-      result.current.recordCompletion(300, 2, 5)
+      result.current.recordCompletion(300, 2)
     })
 
     expect(result.current.profile.level).toBe(initialLevel)
@@ -144,7 +137,7 @@ describe('useDifficulty', () => {
 
     // Try to decrease below level 1
     act(() => {
-      result.current.recordCompletion(700, 5, 10)
+      result.current.recordCompletion(700, 5)
     })
 
     expect(result.current.profile.level).toBe(1)

@@ -11,7 +11,6 @@ export interface Puzzle {
   currentGrid: CellState[][];
   startTime: number;
   hintsUsed: number;
-  errors: number;
 }
 
 // Difficulty tracking
@@ -25,7 +24,6 @@ export interface DifficultyProfile {
 export interface PerformanceMetrics {
   solveTime: number;
   hintsUsed: number;
-  errors: number;
   struggled: boolean;
 }
 

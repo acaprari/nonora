@@ -130,9 +130,9 @@ Three states per cell (cycle through by tapping):
 - Allowed formatting: bold, italic, lists, paragraphs, code blocks
 - No arbitrary HTML or JavaScript execution allowed
 
-### 3. Real-Time Validation
+### 3. Debounced Validation
 
-**Description**: Continuous checking of player's grid against target clues with instant visual feedback.
+**Description**: Continuous checking of player's grid against target clues with deliberate, non-intrusive visual feedback.
 
 **Validation States**:
 
@@ -145,19 +145,28 @@ Three states per cell (cycle through by tapping):
 - Filled cells make target clues unreachable
 - Example: Clue is [2], but 3 cells filled → error
 - Visual: Red text on clue, red border on row/column
-- Increments error counter
+- No error counter - mistakes make puzzle naturally harder
 
 **Valid** (complete and correct):
 - Row/column matches target clues exactly
-- Visual: Green text, subtle checkmark
+- Visual: Enhanced green background (green-700) with white text for improved contrast
 - No further action needed
 
-**Validation Timing**: Checked on every cell state change
+**Validation Timing**: Debounced by 1.5 seconds after last cell change
 
 **Visual Feedback**:
-- Errors highlighted immediately
-- Red borders on affected rows/columns
+- Validation hidden immediately when filling cells
+- Errors appear 1.5 seconds after player stops clicking
+- Allows experimentation without constant red flashing
 - Green checkmarks on completed rows/columns
+- Relaxing, zen-like solving experience
+
+**Design Philosophy - No Error Tracking**:
+- No error counter displayed or tracked
+- Competition is against time and puzzle complexity
+- Mistakes naturally make puzzle harder (self-correcting)
+- Focus on relaxing, methodical logical deduction
+- Only time + hints tracked as performance metrics
 
 ### 4. Adaptive Difficulty
 
@@ -166,11 +175,10 @@ Three states per cell (cycle through by tapping):
 **Metrics Tracked**:
 - Solve time
 - Hints used
-- Errors made
 
 **Adjustment Rules**:
-- **Increase difficulty**: Fast solve (<3 min) + minimal hints (≤1) + few errors (≤2)
-- **Decrease difficulty**: Slow solve (>10 min) OR many hints (>3) OR many errors (>8)
+- **Increase difficulty**: Fast solve (<3 min) + minimal hints (≤1)
+- **Decrease difficulty**: Slow solve (>10 min) OR many hints (>3)
 - **Keep same**: Moderate performance between these ranges
 
 **User Feedback**:

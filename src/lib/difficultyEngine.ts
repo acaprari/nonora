@@ -13,20 +13,18 @@ export function calculateNextDifficulty(
 ): number {
   let newLevel = currentLevel
 
-  // Clean solve: fast + minimal hints + few errors
+  // Clean solve: fast + minimal hints
   if (
     metrics.solveTime < 180 &&  // < 3 minutes
-    metrics.hintsUsed <= 1 &&
-    metrics.errors <= 2
+    metrics.hintsUsed <= 1
   ) {
     newLevel += 1
   }
 
-  // Struggled: slow OR many hints OR many errors
+  // Struggled: slow OR many hints
   else if (
     metrics.solveTime > 600 ||  // > 10 minutes
-    metrics.hintsUsed > 3 ||
-    metrics.errors > 8
+    metrics.hintsUsed > 3
   ) {
     newLevel -= 1
   }

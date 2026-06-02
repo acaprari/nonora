@@ -47,7 +47,6 @@ describe('generatePuzzle', () => {
     // Verify metadata
     expect(result.startTime).toBeGreaterThan(0)
     expect(result.hintsUsed).toBe(0)
-    expect(result.errors).toBe(0)
   })
 
   it('generates puzzle with default size when not specified', async () => {
@@ -139,7 +138,6 @@ describe('generatePuzzle', () => {
     const result = await generatePuzzle(mockApiClient, 'test', 5, 2)
 
     expect(result.hintsUsed).toBe(0)
-    expect(result.errors).toBe(0)
   })
 
   it('propagates API errors', async () => {

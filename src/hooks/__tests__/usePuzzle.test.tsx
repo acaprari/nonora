@@ -11,8 +11,7 @@ const createMockPuzzle = (): Puzzle => ({
   columnClues: Array(10).fill([]),
   currentGrid: Array(10).fill(null).map(() => Array(10).fill('empty')),
   startTime: Date.now(),
-  hintsUsed: 0,
-  errors: 0
+  hintsUsed: 0
 })
 
 describe('usePuzzle', () => {
@@ -68,16 +67,5 @@ describe('usePuzzle', () => {
     })
 
     expect(result.current.puzzle!.hintsUsed).toBe(1)
-  })
-
-  it('increments errors count', () => {
-    const mockPuzzle = createMockPuzzle()
-    const { result } = renderHook(() => usePuzzle(mockPuzzle))
-
-    act(() => {
-      result.current.incrementErrors()
-    })
-
-    expect(result.current.puzzle!.errors).toBe(1)
   })
 })

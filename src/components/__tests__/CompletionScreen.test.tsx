@@ -6,7 +6,6 @@ describe('CompletionScreen', () => {
   const defaultProps = {
     solveTime: 125,
     hintsUsed: 1,
-    errors: 3,
     currentLevel: 5,
     previousLevel: 5,
     gridSize: 7,
@@ -51,18 +50,6 @@ describe('CompletionScreen', () => {
     expect(screen.getAllByText('0').length).toBeGreaterThan(0)
   })
 
-  it('displays errors made', () => {
-    render(<CompletionScreen {...defaultProps} errors={5} />)
-    expect(screen.getByText(/errors/i)).toBeInTheDocument()
-    expect(screen.getAllByText('5').length).toBeGreaterThan(0)
-  })
-
-  it('displays zero errors correctly', () => {
-    render(<CompletionScreen {...defaultProps} errors={0} />)
-    expect(screen.getByText(/errors/i)).toBeInTheDocument()
-    expect(screen.getAllByText('0').length).toBeGreaterThan(0)
-  })
-
   it('displays current level', () => {
     render(<CompletionScreen {...defaultProps} currentLevel={5} />)
     expect(screen.getByText(/level 5/i)).toBeInTheDocument()
@@ -93,13 +80,12 @@ describe('CompletionScreen', () => {
     expect(screen.queryByText(/level up/i)).not.toBeInTheDocument()
   })
 
-  it('shows excellent feedback for fast solve with no hints and few errors', () => {
+  it('shows excellent feedback for fast solve with no hints', () => {
     render(
       <CompletionScreen
         {...defaultProps}
         solveTime={120}
         hintsUsed={0}
-        errors={1}
       />
     )
     expect(screen.getByText(/excellent work/i)).toBeInTheDocument()
@@ -112,7 +98,6 @@ describe('CompletionScreen', () => {
         {...defaultProps}
         solveTime={179}
         hintsUsed={0}
-        errors={2}
       />
     )
     expect(screen.getByText(/excellent work/i)).toBeInTheDocument()
@@ -124,7 +109,6 @@ describe('CompletionScreen', () => {
         {...defaultProps}
         solveTime={180}
         hintsUsed={0}
-        errors={2}
       />
     )
     expect(screen.queryByText(/excellent work/i)).not.toBeInTheDocument()
@@ -136,31 +120,17 @@ describe('CompletionScreen', () => {
         {...defaultProps}
         solveTime={120}
         hintsUsed={1}
-        errors={1}
       />
     )
     expect(screen.queryByText(/excellent work/i)).not.toBeInTheDocument()
   })
 
-  it('does not show excellent feedback with more than 2 errors', () => {
-    render(
-      <CompletionScreen
-        {...defaultProps}
-        solveTime={120}
-        hintsUsed={0}
-        errors={3}
-      />
-    )
-    expect(screen.queryByText(/excellent work/i)).not.toBeInTheDocument()
-  })
-
-  it('shows good feedback for medium time with few hints and some errors', () => {
+  it('shows good feedback for medium time with few hints', () => {
     render(
       <CompletionScreen
         {...defaultProps}
         solveTime={300}
         hintsUsed={2}
-        errors={4}
       />
     )
     expect(screen.getByText(/good job/i)).toBeInTheDocument()
@@ -173,7 +143,6 @@ describe('CompletionScreen', () => {
         {...defaultProps}
         solveTime={419}
         hintsUsed={2}
-        errors={5}
       />
     )
     expect(screen.getByText(/good job/i)).toBeInTheDocument()
@@ -185,7 +154,6 @@ describe('CompletionScreen', () => {
         {...defaultProps}
         solveTime={420}
         hintsUsed={2}
-        errors={5}
       />
     )
     expect(screen.queryByText(/good job/i)).not.toBeInTheDocument()
@@ -197,19 +165,6 @@ describe('CompletionScreen', () => {
         {...defaultProps}
         solveTime={300}
         hintsUsed={3}
-        errors={4}
-      />
-    )
-    expect(screen.queryByText(/good job/i)).not.toBeInTheDocument()
-  })
-
-  it('does not show good feedback with more than 5 errors', () => {
-    render(
-      <CompletionScreen
-        {...defaultProps}
-        solveTime={300}
-        hintsUsed={2}
-        errors={6}
       />
     )
     expect(screen.queryByText(/good job/i)).not.toBeInTheDocument()
@@ -221,7 +176,6 @@ describe('CompletionScreen', () => {
         {...defaultProps}
         solveTime={500}
         hintsUsed={1}
-        errors={3}
       />
     )
     expect(screen.getByText(/nice work/i)).toBeInTheDocument()
@@ -234,19 +188,6 @@ describe('CompletionScreen', () => {
         {...defaultProps}
         solveTime={180}
         hintsUsed={5}
-        errors={2}
-      />
-    )
-    expect(screen.getByText(/nice work/i)).toBeInTheDocument()
-  })
-
-  it('shows nice work feedback for many errors', () => {
-    render(
-      <CompletionScreen
-        {...defaultProps}
-        solveTime={180}
-        hintsUsed={0}
-        errors={10}
       />
     )
     expect(screen.getByText(/nice work/i)).toBeInTheDocument()

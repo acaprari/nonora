@@ -17,8 +17,7 @@ const createMockPuzzle = (size: number): Puzzle => {
     columnClues,
     currentGrid,
     startTime: Date.now(),
-    hintsUsed: 0,
-    errors: 0
+    hintsUsed: 0
   }
 }
 
@@ -171,7 +170,7 @@ describe('GameBoard', () => {
   })
 
   describe('Validation States', () => {
-    it('applies validation state to cells', () => {
+    it('applies validation state to cells after debounce delay', async () => {
       const puzzle = createMockPuzzle(2)
       const validation = createMockValidation(2)
       validation.rows[0] = 'valid'
@@ -179,11 +178,15 @@ describe('GameBoard', () => {
       render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
-      expect(cells[0]).toHaveClass('border-success')
-      expect(cells[1]).toHaveClass('border-success')
+
+      // Wait for debounced validation to appear (1.5s delay)
+      await waitFor(() => {
+        expect(cells[0]).toHaveClass('border-success')
+        expect(cells[1]).toHaveClass('border-success')
+      }, { timeout: 2000 })
     })
 
-    it('applies error validation state to cells', () => {
+    it('applies error validation state to cells after debounce delay', async () => {
       const puzzle = createMockPuzzle(2)
       const validation = createMockValidation(2)
       validation.rows[1] = 'error'
@@ -191,11 +194,15 @@ describe('GameBoard', () => {
       render(<GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />)
 
       const cells = screen.getAllByRole('button', { name: /Cell/ })
-      expect(cells[2]).toHaveClass('border-error')
-      expect(cells[3]).toHaveClass('border-error')
+
+      // Wait for debounced validation to appear (1.5s delay)
+      await waitFor(() => {
+        expect(cells[2]).toHaveClass('border-error')
+        expect(cells[3]).toHaveClass('border-error')
+      }, { timeout: 2000 })
     })
 
-    it('applies validation state to row clues', () => {
+    it('applies validation state to row clues after debounce delay', async () => {
       const puzzle = createMockPuzzle(2)
       puzzle.rowClues = [[1], [2]]
       const validation = createMockValidation(2)
@@ -205,12 +212,15 @@ describe('GameBoard', () => {
         <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />
       )
 
-      // Check for success background color class (enhanced contrast)
-      const clueElements = container.querySelectorAll('.bg-green-700')
-      expect(clueElements.length).toBeGreaterThan(0)
+      // Wait for debounced validation to appear (1.5s delay)
+      await waitFor(() => {
+        // Check for success background color class (enhanced contrast)
+        const clueElements = container.querySelectorAll('.bg-green-700')
+        expect(clueElements.length).toBeGreaterThan(0)
+      }, { timeout: 2000 })
     })
 
-    it('applies validation state to column clues', () => {
+    it('applies validation state to column clues after debounce delay', async () => {
       const puzzle = createMockPuzzle(2)
       puzzle.columnClues = [[1], [2]]
       const validation = createMockValidation(2)
@@ -220,9 +230,12 @@ describe('GameBoard', () => {
         <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />
       )
 
-      // Check for error text color class
-      const clueElements = container.querySelectorAll('.text-error')
-      expect(clueElements.length).toBeGreaterThan(0)
+      // Wait for debounced validation to appear (1.5s delay)
+      await waitFor(() => {
+        // Check for error text color class
+        const clueElements = container.querySelectorAll('.text-error')
+        expect(clueElements.length).toBeGreaterThan(0)
+      }, { timeout: 2000 })
     })
   })
 

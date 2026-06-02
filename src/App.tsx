@@ -99,7 +99,7 @@ function App() {
       setPreviousLevel(currentLevel)
 
       // Record completion in difficulty engine (only once)
-      recordCompletion(solveTime, puzzle.hintsUsed, puzzle.errors)
+      recordCompletion(solveTime, puzzle.hintsUsed)
 
       // Mark as recorded so this doesn't run again
       setHasRecordedCompletion(true)
@@ -332,7 +332,6 @@ function App() {
           <CompletionScreen
             solveTime={completionTime || 0}
             hintsUsed={puzzle.hintsUsed}
-            errors={puzzle.errors}
             currentLevel={currentLevel}
             previousLevel={previousLevel}
             gridSize={currentGridSize}

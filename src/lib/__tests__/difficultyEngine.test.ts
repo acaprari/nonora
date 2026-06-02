@@ -7,7 +7,6 @@ describe('calculateNextDifficulty', () => {
     const metrics: PerformanceMetrics = {
       solveTime: 120,
       hintsUsed: 0,
-      errors: 0,
       struggled: false
     }
     expect(calculateNextDifficulty(5, metrics)).toBe(6)
@@ -17,7 +16,6 @@ describe('calculateNextDifficulty', () => {
     const metrics: PerformanceMetrics = {
       solveTime: 700,
       hintsUsed: 5,
-      errors: 10,
       struggled: true
     }
     expect(calculateNextDifficulty(5, metrics)).toBe(4)
@@ -27,7 +25,6 @@ describe('calculateNextDifficulty', () => {
     const metrics: PerformanceMetrics = {
       solveTime: 300,
       hintsUsed: 2,
-      errors: 4,
       struggled: false
     }
     expect(calculateNextDifficulty(5, metrics)).toBe(5)
@@ -37,7 +34,6 @@ describe('calculateNextDifficulty', () => {
     const metrics: PerformanceMetrics = {
       solveTime: 800,
       hintsUsed: 10,
-      errors: 20,
       struggled: true
     }
     expect(calculateNextDifficulty(1, metrics)).toBe(1)
@@ -47,7 +43,6 @@ describe('calculateNextDifficulty', () => {
     const metrics: PerformanceMetrics = {
       solveTime: 60,
       hintsUsed: 0,
-      errors: 0,
       struggled: false
     }
     expect(calculateNextDifficulty(10, metrics)).toBe(10)
@@ -57,17 +52,6 @@ describe('calculateNextDifficulty', () => {
     const metrics: PerformanceMetrics = {
       solveTime: 200,
       hintsUsed: 5,
-      errors: 2,
-      struggled: true
-    }
-    expect(calculateNextDifficulty(5, metrics)).toBe(4)
-  })
-
-  it('decreases difficulty on many errors', () => {
-    const metrics: PerformanceMetrics = {
-      solveTime: 200,
-      hintsUsed: 1,
-      errors: 10,
       struggled: true
     }
     expect(calculateNextDifficulty(5, metrics)).toBe(4)
@@ -94,7 +78,6 @@ describe('updateProfile', () => {
     const metrics: PerformanceMetrics = {
       solveTime: 120,
       hintsUsed: 0,
-      errors: 0,
       struggled: false
     }
 
@@ -109,18 +92,17 @@ describe('updateProfile', () => {
       level: 5,
       gridSize: 10,
       recentPerformance: [
-        { solveTime: 100, hintsUsed: 0, errors: 0, struggled: false },
-        { solveTime: 120, hintsUsed: 1, errors: 1, struggled: false },
-        { solveTime: 150, hintsUsed: 0, errors: 2, struggled: false },
-        { solveTime: 180, hintsUsed: 1, errors: 0, struggled: false },
-        { solveTime: 200, hintsUsed: 0, errors: 1, struggled: false }
+        { solveTime: 100, hintsUsed: 0, struggled: false },
+        { solveTime: 120, hintsUsed: 1, struggled: false },
+        { solveTime: 150, hintsUsed: 0, struggled: false },
+        { solveTime: 180, hintsUsed: 1, struggled: false },
+        { solveTime: 200, hintsUsed: 0, struggled: false }
       ]
     }
 
     const metrics: PerformanceMetrics = {
       solveTime: 130,
       hintsUsed: 0,
-      errors: 0,
       struggled: false
     }
 
@@ -141,7 +123,6 @@ describe('updateProfile', () => {
     const metrics: PerformanceMetrics = {
       solveTime: 120,
       hintsUsed: 0,
-      errors: 0,
       struggled: false
     }
 
@@ -167,7 +148,6 @@ describe('updateProfile', () => {
     const metrics: PerformanceMetrics = {
       solveTime: 120,  // 2 minutes - fast
       hintsUsed: 0,
-      errors: 0,
       struggled: false
     }
 
@@ -187,7 +167,6 @@ describe('updateProfile', () => {
     const metrics: PerformanceMetrics = {
       solveTime: 120,
       hintsUsed: 1,
-      errors: 1,
       struggled: false
     }
 

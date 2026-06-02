@@ -19,12 +19,11 @@ export function useDifficulty() {
   )
 
   const recordCompletion = useCallback(
-    (solveTime: number, hintsUsed: number, errors: number) => {
+    (solveTime: number, hintsUsed: number) => {
       const metrics: PerformanceMetrics = {
         solveTime,
         hintsUsed,
-        errors,
-        struggled: solveTime > 600 || hintsUsed > 3 || errors > 8
+        struggled: solveTime > 600 || hintsUsed > 3
       }
 
       setProfile((prev) => updateProfile(prev, metrics))
