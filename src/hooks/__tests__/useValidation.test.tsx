@@ -41,8 +41,7 @@ describe('useValidation', () => {
         ['marked', 'filled']
       ],
       startTime: Date.now(),
-      hintsUsed: 0,
-      errors: 0
+      hintsUsed: 0
     }
 
     vi.mocked(clueCalculator.calculateRowClues).mockReturnValue([[2], [1]])
@@ -89,8 +88,7 @@ describe('useValidation', () => {
         ['empty', 'filled']
       ],
       startTime: Date.now(),
-      hintsUsed: 0,
-      errors: 0
+      hintsUsed: 0
     }
 
     vi.mocked(clueCalculator.calculateRowClues).mockReturnValue([[2], [1]])
@@ -129,8 +127,7 @@ describe('useValidation', () => {
         ['filled', 'filled']
       ],
       startTime: Date.now(),
-      hintsUsed: 0,
-      errors: 0
+      hintsUsed: 0
     }
 
     vi.mocked(clueCalculator.calculateRowClues).mockReturnValue([[2], [1]])
@@ -167,8 +164,7 @@ describe('useValidation', () => {
         ['filled', 'filled', 'filled']
       ],
       startTime: Date.now(),
-      hintsUsed: 0,
-      errors: 0
+      hintsUsed: 0
     }
 
     vi.mocked(clueCalculator.calculateRowClues).mockReturnValue([[1, 1], [1], [3]])
@@ -202,8 +198,7 @@ describe('useValidation', () => {
         ['empty', 'filled']
       ],
       startTime: Date.now(),
-      hintsUsed: 0,
-      errors: 0
+      hintsUsed: 0
     }
 
     const mockPuzzle2: Puzzle = {
@@ -260,8 +255,7 @@ describe('useValidation', () => {
         ['marked', 'filled']
       ],
       startTime: Date.now(),
-      hintsUsed: 0,
-      errors: 0
+      hintsUsed: 0
     }
 
     vi.mocked(clueCalculator.calculateRowClues).mockReturnValue([[2], [1]])
