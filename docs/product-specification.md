@@ -732,14 +732,27 @@ Note: Message and color calculated independently - combinations vary based on ex
 - Box-shadow: `0 4px 12px rgba(0,0,0,0.3)`
 
 **Cells**:
+
+**CRITICAL REQUIREMENT - Fixed Size:**
+- Cells MUST maintain consistent dimensions regardless of state (empty, filled, or marked)
+- X symbol MUST NOT cause cells to expand or scramble the grid
+- Implementation: `min-width: 28px`, `min-height: 28px`, `overflow: hidden`
+- This is essential for playability - grid scrambling breaks the user experience
+
+**Visual Design:**
 - Border: 2px solid `#e0e0e0`
 - Border-radius: 4px
 - **Filled**: Background `#4CAF50` (green)
-- **Marked**: White background + gray × symbol (font-size: 1.2rem, fixed size to prevent cell expansion)
+- **Marked**: White background + gray × symbol
+  - X symbol: `text-lg` (1.125rem), `leading-none`, centered via flex
+  - Constrained within cell bounds (no overflow)
 - **Empty**: White background
 - **Active tap**: Scale 1.05, transition 200ms
-- **Desktop sizing**: Smaller cells (max 32px) to optimize screen usage
-- **Mobile sizing**: Touch-optimized cells (26-28px) with scroll support for large grids
+
+**Responsive Sizing:**
+- **Mobile**: Minimum 28px × 28px (ensures X symbol fits comfortably at 7×7 grid)
+- **Desktop**: Smaller cells optimized for screen real estate
+- **Scroll support**: Large grids (12×12+) on mobile maintain minimum size with scroll
 
 **Buttons**:
 - **Primary** (New Puzzle): Green background, white text, rounded 8px, shadow

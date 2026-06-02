@@ -23,17 +23,19 @@ export function Cell({ state, validationState = 'in-progress', onClick }: CellPr
       className={`
         ${bgColor} ${borderColor}
         w-full aspect-square
+        min-w-[28px] min-h-[28px]
         border rounded
         flex items-center justify-center
         cursor-pointer
         transition-colors duration-200
         hover:opacity-80
         touch-manipulation
+        overflow-hidden
       `}
       aria-label={`Cell ${state}`}
     >
       {state === 'marked' && (
-        <span className="font-bold text-gray-600" style={{ fontSize: '1.25rem', lineHeight: '1' }}>×</span>
+        <span className="font-bold text-gray-600 text-lg leading-none select-none">×</span>
       )}
     </button>
   )
