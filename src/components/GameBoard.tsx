@@ -114,7 +114,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
 
             {/* Grid rows with row clues */}
             {puzzle.currentGrid.map((row, rowIdx) => (
-              <div key={rowIdx} className="flex gap-1">
+              <div key={rowIdx} className="flex gap-1 items-center">
                 <div className="w-16 flex-shrink-0">
                   <Clues
                     clues={puzzle.rowClues[rowIdx]}
