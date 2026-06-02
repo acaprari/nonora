@@ -95,13 +95,13 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
 
         {/* Grid container with mobile scroll support */}
         <div className="overflow-auto max-h-[70vh] sm:overflow-visible">
-          <div className="flex flex-col gap-1 min-w-min">
+          <div className="flex flex-col gap-1">
             {/* Column clues */}
-            <div className="flex">
-              <div className="w-16" /> {/* Spacer for row clues */}
-              <div className="flex flex-1">
+            <div className="flex gap-1">
+              <div className="w-16 flex-shrink-0" /> {/* Spacer for row clues */}
+              <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
                 {puzzle.columnClues.map((clues, colIdx) => (
-                  <div key={colIdx} className="flex-1">
+                  <div key={colIdx}>
                     <Clues
                       clues={clues}
                       orientation="column"
@@ -115,14 +115,14 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
             {/* Grid rows with row clues */}
             {puzzle.currentGrid.map((row, rowIdx) => (
               <div key={rowIdx} className="flex gap-1">
-                <div className="w-16">
+                <div className="w-16 flex-shrink-0">
                   <Clues
                     clues={puzzle.rowClues[rowIdx]}
                     orientation="row"
                     validationState={validationResult.rows[rowIdx]}
                   />
                 </div>
-                <div className={`grid gap-1 flex-1`} style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
+                <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
                   {row.map((cellState, colIdx) => (
                     <Cell
                       key={`${rowIdx}-${colIdx}`}
