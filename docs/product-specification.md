@@ -73,14 +73,71 @@ Three states per cell (cycle through by tapping):
 
 ### 1. AI-Powered Puzzle Generation
 
-**Description**: Generate custom 10×10 nonogram puzzles from any text prompt using Claude AI.
+**Description**: Generate custom nonogram puzzles from any text prompt using Claude AI.
+
+**Puzzle Prompt Screen** (Entry Point):
+
+The prompt screen is the first interaction point and includes onboarding content to help new users understand the game.
+
+**Layout Structure** (top to bottom):
+1. **Title and Tagline**
+   - Title: "Pixlogic" (text, 4xl font, bold, white, centered)
+   - Tagline: "AI-powered nonogram puzzles from your imagination" (lg font, white/80 opacity)
+
+2. **"How to Play" Section** (glass panel)
+   - Glass background with rounded corners
+   - 4 numbered steps with bold headings:
+     - "1. Enter a prompt — Describe any simple image (cat, heart, tree, etc.)"
+     - "2. Solve the puzzle — Click cells to fill them based on number clues"
+     - "3. Use logic — Numbers show consecutive filled cells in each row/column"
+     - "4. Get hints — Stuck? AI-powered hints guide you without spoiling the fun"
+   - Small font (text-sm), white/90 opacity
+
+3. **Difficulty Indicators** (glass badges)
+   - Shows current level: "Level X/10"
+   - Shows grid size: "NxN grid"
+   - Displayed as pills with glass styling, centered
+
+4. **Prompt Input Field**
+   - Label: "What should the AI draw?" (small font, white, medium weight)
+   - Input type: Single-line text input (NOT textarea)
+   - Placeholder: "e.g., cat, rocket, smiley face, tree..."
+   - Max length: 100 characters (enforced)
+   - Enter key submits (preventDefault to avoid form submission)
+   - Glass input styling with focus ring
+   - Disabled during generation
+
+5. **Generate Button**
+   - Full width button
+   - Text: "Generate Puzzle" (default) or "Generating Puzzle..." (loading state)
+   - Glass styling with white text
+   - Disabled when: empty input, no API key, or currently generating
+   - Hover effect: bg-white/20
+
+6. **Helper Text** (footer)
+   - Shows context-aware message:
+     - If no API key: "Please set your API key to generate puzzles"
+     - If ready: "Press Enter to generate"
+   - Small font (text-xs), white/70 opacity, centered
+
+**Visual Design**:
+- All content within single glass-card container
+- Max width: 2xl (max-w-2xl mx-auto)
+- Padding: 2rem (p-8)
+- Spacing between sections: space-y-6
+
+**Keyboard Interaction**:
+- Enter key in input field → Submit prompt (critical UX)
+- Tab navigation through elements
+- Focus states visible with ring
 
 **User Flow**:
-1. User enters prompt (e.g., "a cat", "mountain landscape", "coffee cup")
-2. Click "Generate Puzzle"
-3. AI generates pixel art matrix
-4. Clues calculated from solution
-5. Puzzle appears, timer starts
+1. User sees prompt screen with onboarding instructions
+2. User enters prompt (e.g., "a cat", "mountain landscape", "coffee cup")
+3. User clicks "Generate Puzzle" or presses Enter
+4. AI generates pixel art matrix
+5. Clues calculated from solution
+6. Puzzle appears, timer starts
 
 **Requirements**:
 - User provides own Anthropic API key (stored in localStorage)
@@ -132,7 +189,28 @@ Three states per cell (cycle through by tapping):
 - Allowed formatting: bold, italic, lists, paragraphs, code blocks
 - No arbitrary HTML or JavaScript execution allowed
 
-### 3. Debounced Validation
+### 3. AI Loading Indicators
+
+**Sparkle Icon Design** (✨-style):
+- Main 4-point star (classic sparkle shape) with 3 small accent sparkles around it
+- Matches ✨ emoji - universally recognized AI/magic symbol
+- Filled design (not stroke-based like other icons)
+- Positioned: top-left, top-right, bottom-right accent sparkles
+
+**Animation Pattern**:
+- 3 sparkle icons in a row with staggered pulse animation
+- Delays: 0ms, 200ms, 400ms for wave effect
+- Continuous loop while loading
+
+**Size Variants**:
+- Small (16px): Hint button loading state
+- Large (32px): Puzzle generation screen
+
+**Where Used**:
+- Puzzle generation: Large sparkles with "Generating Puzzle..." text
+- Hint button: Small sparkles replace button text during AI processing
+
+### 4. Debounced Validation
 
 **Description**: Continuous checking of player's grid against target clues with deliberate, non-intrusive visual feedback.
 
@@ -204,7 +282,47 @@ This is the mathematically correct and fairest approach for nonogram puzzles.
 - Focus on relaxing, methodical logical deduction
 - Only time + hints tracked as performance metrics
 
-### 4. Adaptive Difficulty
+### 4. Puzzle Completion Flow (Two-Stage)
+
+**Critical Design Decision**: Completion uses a two-stage flow to let users appreciate their completed artwork before seeing stats.
+
+**Stage 1 - Celebration Overlay** (CelebrationOverlay component):
+
+Triggers immediately when `validationResult.isComplete` becomes true.
+
+**Visual Elements**:
+- Full-screen overlay (fixed positioning, z-index 100) with semi-transparent black backdrop (bg-black/30)
+- Trophy icon (64px, white) centered
+- "Puzzle Complete!" heading (4xl, bold, white with drop shadow)
+- Subheading: "Great job! Enjoy your completed pixel art" (xl, white/90)
+- Large "Continue to Stats →" button (glass-card styling)
+- 50 confetti pieces with 5 random colors: #FFD700 (gold), #FF6B6B (coral), #4ECDC4 (turquoise), #45B7D1 (blue), #96CEB4 (green)
+
+**Confetti Animation**:
+- Each piece: 10px square, positioned randomly across top (left: 0-100%)
+- Animation: Fall from top while rotating 360deg over 3 seconds
+- Staggered start: Random delay 0-3 seconds per piece
+- Infinite loop (continuous confetti while overlay visible)
+
+**Critical Behavior**:
+- Grid remains visible behind semi-transparent overlay (users see their completed artwork)
+- No auto-advance - user MUST click "Continue" button
+- Modal blocks all other interactions until dismissed
+- Allows users to enjoy completed puzzle at their own pace
+
+**Stage 2 - Completion Screen** (CompletionScreen component):
+
+Shown after user clicks "Continue" button from overlay.
+
+**Performance Feedback Algorithm** (see section 5 below for details)
+
+**Why Two Stages?**:
+- Stage 1: Immediate gratification + appreciation moment
+- Stage 2: Performance metrics + difficulty adjustment
+- Separating celebration from analysis creates more satisfying completion experience
+- Users control when they're ready to see stats
+
+### 5. Adaptive Difficulty
 
 **Description**: Difficulty automatically adjusts (1-10 scale) based on performance metrics.
 
@@ -223,6 +341,22 @@ After completion, show message:
 - "Next puzzle: Easier ↓ — Let's dial it back to keep it fun."
 - "Next puzzle: Same difficulty — You're doing well! Keep practicing."
 
+**CompletionScreen Performance Feedback**:
+
+Two independent systems determine message and color:
+
+**Encouragement Message**:
+- **Excellent**: <3 minutes with 0 hints → "Excellent work! You're a nonogram master!"
+- **Good**: <7 minutes with ≤2 hints → "Good job! You're getting better!"
+- **Default**: All other cases → "Nice work! Keep practicing!"
+
+**Color Coding**:
+- **Green**: <3 minutes with ≤1 hint (excellent performance)
+- **Red**: >10 minutes or >3 hints (struggled)
+- **Yellow**: All other cases (moderate performance)
+
+Note: Message and color calculated independently - combinations vary based on exact time/hint values.
+
 **Difficulty Levels** (communicated to AI):
 - Levels 1-3: "Very simple shapes (heart, smiley)"
 - Levels 4-6: "Moderate detail (cat, house)"
@@ -232,10 +366,15 @@ After completion, show message:
 - Current level shown in game header (top-left) as glass badge
 - Badge format: "Level X" with grid size (e.g., "Level 5  9×9")
 - Elapsed timer shown next to level badge (e.g., "3:27")
+- Prompt text displayed after timer to remind users what they're solving
+  - Truncated with ellipsis for long prompts
+  - Max width: 120px on mobile, 250px on desktop (sm: breakpoint)
+  - Title attribute shows full text on hover
+  - Medium font weight for visibility
 - Glass morphism styling (semi-transparent background, white text)
 - Always visible during active gameplay and celebration phases
 - Helps users track progression and understand current challenge level
-- Grid size + timer provide immediate feedback on complexity and performance
+- Grid size + timer + prompt provide immediate feedback on complexity and performance
 
 ### 5. Timer
 
@@ -308,17 +447,18 @@ After completion, show message:
    - Cancel → Close dialog, stay on current screen
 
 **UX Behavior**:
-- **Glass morphism styling** - Enhanced opacity (less transparent, more prominent background) with blur effect
+- **Glass morphism styling** - Enhanced opacity with specific backdrop styling
 - **Click outside to close** - Backdrop dismisses dropdown when clicking outside menu
 - **Keyboard accessible** - Escape key closes dropdown
 - **Mobile-friendly** - Touch-optimized targets (44px minimum)
 - **Clean design** - No footer labels, minimal UI
 
 **Visual Design**:
-- Dropdown appears below gear icon
-- Rounded corners (8px border-radius)
-- Shadow for depth
-- Enhanced glass effect with reduced transparency for better readability
+- Dropdown appears below gear icon (top-right corner)
+- Rounded corners (rounded-xl, approximately 12px)
+- Shadow for depth (shadow-2xl)
+- Enhanced glass effect: `backgroundColor: rgba(255, 255, 255, 0.15)` with `backdropFilter: blur(12px)`
+- More opaque than standard glass cards for better readability of menu options
 - Options appear as list items with hover/tap states
 - Confirmation dialogs use modal overlay pattern
 
@@ -497,25 +637,41 @@ After completion, show message:
 **Icons**:
 - **settings**: Gear icon for settings menu
 - **refresh**: Circular arrow for "New Prompt" action
-- **key**: Key icon for API key management
+- **key**: Traditional key icon for API key management
 - **close**: X icon for dismissing modals
 - **lightbulb**: Hint icon (guidance hints)
 - **target**: Bullseye icon (specific hints)
-- **trophy**: Achievement icon for puzzle completion (replaces celebration emoji)
+- **celebration**: Trophy icon for puzzle completion
+- **sparkle**: ✨-style sparkle for AI/magic indicators
 
 **Design Principles**:
 - Flat design with 1.5px stroke width
 - Rounded linecaps for smooth appearance
 - 24×24 viewBox, scalable via size prop
 - Uses `currentColor` for automatic color inheritance
-- Consistent stroke-based style across all icons
-- No fill, outline-only for clean appearance
+- Most icons: Stroke-based, outline-only for clean appearance
+- Exception: sparkle icon uses filled paths for visual impact
+
+**Key Icon** (API Key):
+- Traditional key shape with circular head and shaft
+- Circular head (4px radius) with center hole (1.5px radius)
+- Diagonal shaft extending from head toward top-right
+- Two teeth at end of shaft (vertical lines)
+- Stroke-based like other icons
+- Clearly represents security/authentication
 
 **Trophy Icon** (Completion):
 - Simple trophy silhouette with cup and base
+- Handles on both sides, stem and base at bottom
 - Clearly recognizable at all sizes (16px-64px)
 - Conveys achievement and success
-- More universally understood than ta-da gesture emoji
+
+**Sparkle Icon** (AI Indicators):
+- Main 4-point star (classic sparkle shape)
+- 3 small accent sparkles (top-left, top-right, bottom-right)
+- Filled design (not stroke-based)
+- Matches ✨ emoji aesthetic
+- Used for AI processing/thinking states
 
 ### Favicon
 
@@ -708,9 +864,9 @@ After completion, show message:
 
 ### Design Constraints
 
-- **Grid size**: Fixed 10×10 (mobile screen size limit)
+- **Grid size**: Progressive 5×5 to 14×14 (tied to difficulty level 1-10 via formula: gridSize = level + 4)
 - **Puzzle complexity**: Limited by AI generation capabilities and prompt clarity
-- **Prompt length**: Max 200 characters
+- **Prompt length**: Max 100 characters (enforced in UI)
 - **Performance**: Complex animations may lag on older mobile devices
 - **Offline**: Requires internet for puzzle generation and hints (no offline mode)
 
