@@ -143,9 +143,11 @@ Three states per cell (cycle through by tapping):
 - Example: Clue is [2 3], currently 2 filled → valid so far
 - Visual: Normal display, no special indicators
 
-**Error** (overfilled or impossible):
-- Filled cells make target clues unreachable
-- Example: Clue is [2], but 3 cells filled → error
+**Error** (complete but incorrect):
+- Row/column is fully filled (no empty cells) but doesn't match target clues
+- Example: Clue is [2], but complete row has 3 filled cells → error
+- Only triggered when row/column complete - partial progress never shows errors
+- Rationale: Players can still fix "impossible" states by marking filled cells as empty
 - Visual: Red text on clue, red border on row/column
 - No error counter - mistakes make puzzle naturally harder
 
@@ -184,14 +186,16 @@ This is the mathematically correct and fairest approach for nonogram puzzles.
 
 **Validation Timing**:
 - **Valid states (green)**: Shown immediately for instant positive feedback
-- **Error states (red)**: Debounced by 1.5 seconds to prevent annoying flashing
-- **In-progress**: No delay, shown as normal
+- **Error states (red)**: Only when row/column complete + debounced by 1.5 seconds
+- **In-progress**: No delay, shown as normal (even if groups seem "wrong")
 
 **Visual Feedback**:
 - Green (valid) states appear immediately for instant satisfaction
-- Errors appear 1.5 seconds after player stops clicking
-- Allows experimentation without constant red flashing
-- Relaxing, zen-like solving experience
+- Errors only trigger when row/column has no empty cells remaining
+- Errors debounced 1.5 seconds after player stops clicking
+- Partial progress never shows errors - empty cells mean it's still fixable
+- Allows experimentation and strategic marking without aggressive feedback
+- Relaxing, zen-like solving experience with minimal frustration
 
 **Design Philosophy - No Error Tracking**:
 - No error counter displayed or tracked
@@ -241,7 +245,8 @@ After completion, show message:
 - Starts when puzzle loads (puzzle.startTime)
 - Updates every second via setInterval
 - Continues running during gameplay
-- Final time captured at exact moment of completion
+- Stops immediately when puzzle is solved (validationResult.isComplete)
+- Final time captured and frozen at exact moment of completion
 - Used for difficulty adjustment (key metric)
 
 **Display**:
