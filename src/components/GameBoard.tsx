@@ -99,7 +99,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
             {/* Column clues */}
             <div className="flex gap-1">
               <div className="w-16 flex-shrink-0" /> {/* Spacer for row clues */}
-              <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
+              <div className="grid gap-1 flex-1" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
                 {puzzle.columnClues.map((clues, colIdx) => (
                   <div key={colIdx}>
                     <Clues
@@ -122,7 +122,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
                     validationState={validationResult.rows[rowIdx]}
                   />
                 </div>
-                <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
+                <div className="grid gap-1 flex-1" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
                   {row.map((cellState, colIdx) => (
                     <Cell
                       key={`${rowIdx}-${colIdx}`}
