@@ -33,7 +33,7 @@ export function Cell({ state, validationState = 'in-progress', onClick }: CellPr
       aria-label={`Cell ${state}`}
     >
       {state === 'marked' && (
-        <span className="text-xl font-bold text-gray-600">×</span>
+        <span className="font-bold text-gray-600" style={{ fontSize: '1.25rem', lineHeight: '1' }}>×</span>
       )}
     </button>
   )

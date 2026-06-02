@@ -10,9 +10,10 @@ export function Clues({ clues, orientation, validationState = 'in-progress' }: C
   const isEmpty = clues.length === 0
   const displayClues = isEmpty ? ['0'] : clues.map(String)
 
-  const stateColor = validationState === 'error' ? 'text-error' :
-                     validationState === 'valid' ? 'text-success' :
-                     'text-gray-700'
+  // Enhanced contrast for valid state: darker green background with white text
+  const stateStyles = validationState === 'error' ? 'text-error' :
+                      validationState === 'valid' ? 'bg-green-700 text-white px-1 rounded' :
+                      'text-gray-700'
 
   const flexDirection = orientation === 'column' ? 'flex-col' : 'flex-row'
 
@@ -21,7 +22,7 @@ export function Clues({ clues, orientation, validationState = 'in-progress' }: C
       {displayClues.map((clue, idx) => (
         <span
           key={idx}
-          className={`${stateColor} font-semibold text-xs`}
+          className={`${stateStyles} font-semibold text-xs`}
         >
           {clue}
         </span>

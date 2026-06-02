@@ -43,11 +43,18 @@
             cx="12" cy="12" r="2"/>
   </symbol>
 
-  <!-- Party Popper Icon - Celebration -->
+  <!-- Trophy Icon - Achievement/Completion -->
   <symbol id="celebration" viewBox="0 0 24 24">
+    <!-- Cup handles -->
     <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-          d="M5.8 11.3 2 22l10.7-3.79M4 3h.01M22 8h.01M15 2h.01M22 20h.01M20 2v.01M18 2h.01"/>
+          d="M8 7H6a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h2"/>
     <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-          d="M22 16h.01m-6.87 1.87c-.53.53-1.4.53-1.93 0l-6.8-6.8a1.36 1.36 0 0 1 0-1.93l5.8-5.8c.53-.53 1.4-.53 1.93 0l6.8 6.8c.53.53.53 1.4 0 1.93l-5.8 5.8Z"/>
+          d="M16 7h2a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-2"/>
+    <!-- Cup body -->
+    <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+          d="M8 7v6a4 4 0 0 0 8 0V7H8Z"/>
+    <!-- Trophy stem and base -->
+    <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+          d="M12 17v2m-4 0h8"/>
   </symbol>
 </svg>

@@ -45,7 +45,7 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
 
   return (
     <>
-      <div className="glass-card rounded-2xl p-3 shadow-2xl max-w-4xl mx-auto">
+      <div className="glass-card rounded-2xl p-3 shadow-2xl max-w-2xl mx-auto">
         {/* Header with difficulty info and hint button */}
         <div className="flex justify-between items-center mb-2">
           <div className="flex items-center gap-2">
@@ -93,48 +93,51 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
           </button>
         </div>
 
-        <div className="flex flex-col gap-1">
-      {/* Column clues */}
-      <div className="flex">
-        <div className="w-16" /> {/* Spacer for row clues */}
-        <div className="flex flex-1">
-          {puzzle.columnClues.map((clues, colIdx) => (
-            <div key={colIdx} className="flex-1">
-              <Clues
-                clues={clues}
-                orientation="column"
-                validationState={validationResult.columns[colIdx]}
-              />
+        {/* Grid container with mobile scroll support */}
+        <div className="overflow-auto max-h-[70vh] sm:overflow-visible">
+          <div className="flex flex-col gap-1 min-w-min">
+            {/* Column clues */}
+            <div className="flex">
+              <div className="w-16" /> {/* Spacer for row clues */}
+              <div className="flex flex-1">
+                {puzzle.columnClues.map((clues, colIdx) => (
+                  <div key={colIdx} className="flex-1">
+                    <Clues
+                      clues={clues}
+                      orientation="column"
+                      validationState={validationResult.columns[colIdx]}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Grid rows with row clues */}
-      {puzzle.currentGrid.map((row, rowIdx) => (
-        <div key={rowIdx} className="flex gap-1">
-          <div className="w-16">
-            <Clues
-              clues={puzzle.rowClues[rowIdx]}
-              orientation="row"
-              validationState={validationResult.rows[rowIdx]}
-            />
-          </div>
-          <div className={`grid gap-1 flex-1`} style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
-            {row.map((cellState, colIdx) => (
-              <Cell
-                key={`${rowIdx}-${colIdx}`}
-                state={cellState}
-                validationState={validationResult.rows[rowIdx]}
-                onClick={() => onCellClick(rowIdx, colIdx)}
-                row={rowIdx}
-                col={colIdx}
-              />
+            {/* Grid rows with row clues */}
+            {puzzle.currentGrid.map((row, rowIdx) => (
+              <div key={rowIdx} className="flex gap-1">
+                <div className="w-16">
+                  <Clues
+                    clues={puzzle.rowClues[rowIdx]}
+                    orientation="row"
+                    validationState={validationResult.rows[rowIdx]}
+                  />
+                </div>
+                <div className={`grid gap-1 flex-1`} style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
+                  {row.map((cellState, colIdx) => (
+                    <Cell
+                      key={`${rowIdx}-${colIdx}`}
+                      state={cellState}
+                      validationState={validationResult.rows[rowIdx]}
+                      onClick={() => onCellClick(rowIdx, colIdx)}
+                      row={rowIdx}
+                      col={colIdx}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
-      ))}
-      </div>
       </div>
 
       {/* Hint Display Modal */}

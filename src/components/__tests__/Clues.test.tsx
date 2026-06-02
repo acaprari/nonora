@@ -42,7 +42,8 @@ describe('Clues', () => {
   it('applies success color for valid state', () => {
     render(<Clues clues={[2, 1]} orientation="row" validationState="valid" />)
     const clueElement = screen.getByText('2')
-    expect(clueElement).toHaveClass('text-success')
+    expect(clueElement).toHaveClass('bg-green-700')
+    expect(clueElement).toHaveClass('text-white')
   })
 
   it('defaults to in-progress state', () => {

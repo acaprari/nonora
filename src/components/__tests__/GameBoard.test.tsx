@@ -205,8 +205,8 @@ describe('GameBoard', () => {
         <GameBoard puzzle={puzzle} validationResult={validation} onCellClick={() => {}} {...defaultGameBoardProps} />
       )
 
-      // Check for success text color class
-      const clueElements = container.querySelectorAll('.text-success')
+      // Check for success background color class (enhanced contrast)
+      const clueElements = container.querySelectorAll('.bg-green-700')
       expect(clueElements.length).toBeGreaterThan(0)
     })
 

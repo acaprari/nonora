@@ -233,7 +233,7 @@ After completion, show message:
 **Description**: Configuration menu accessible during gameplay to modify app settings.
 
 **Access**:
-- ⚙️ Gear icon button in top-right corner of screen
+- Gear icon button (SVG icon) in top-right corner of screen
 - Always visible during gameplay
 - Click/tap to open dropdown menu
 
@@ -249,15 +249,17 @@ After completion, show message:
    - Cancel → Close dialog, stay on current screen
 
 **UX Behavior**:
-- **Glass morphism styling** - Consistent with other UI components (translucent background, blur effect)
+- **Glass morphism styling** - Enhanced opacity (less transparent, more prominent background) with blur effect
 - **Click outside to close** - Backdrop dismisses dropdown when clicking outside menu
 - **Keyboard accessible** - Escape key closes dropdown
 - **Mobile-friendly** - Touch-optimized targets (44px minimum)
+- **Clean design** - No footer labels, minimal UI
 
 **Visual Design**:
 - Dropdown appears below gear icon
 - Rounded corners (8px border-radius)
 - Shadow for depth
+- Enhanced glass effect with reduced transparency for better readability
 - Options appear as list items with hover/tap states
 - Confirmation dialogs use modal overlay pattern
 
@@ -419,6 +421,7 @@ After completion, show message:
 - Font: Monospace (for alignment)
 - Color: White with 60% opacity (dimmed)
 - Highlighted: 100% opacity + green background
+- Valid state: Enhanced contrast with darker green background (`#2e7d32`) for improved visibility
 
 **Buttons**:
 - Size: 0.95rem
@@ -427,6 +430,33 @@ After completion, show message:
 **Body Text**:
 - Size: 1rem
 - Font: System font stack
+
+### Icon System
+
+**Format**: Flat monochrome SVG sprite system
+
+**Icons**:
+- **settings**: Gear icon for settings menu
+- **refresh**: Circular arrow for "New Prompt" action
+- **key**: Key icon for API key management
+- **close**: X icon for dismissing modals
+- **lightbulb**: Hint icon (guidance hints)
+- **target**: Bullseye icon (specific hints)
+- **trophy**: Achievement icon for puzzle completion (replaces celebration emoji)
+
+**Design Principles**:
+- Flat design with 1.5px stroke width
+- Rounded linecaps for smooth appearance
+- 24×24 viewBox, scalable via size prop
+- Uses `currentColor` for automatic color inheritance
+- Consistent stroke-based style across all icons
+- No fill, outline-only for clean appearance
+
+**Trophy Icon** (Completion):
+- Simple trophy silhouette with cup and base
+- Clearly recognizable at all sizes (16px-64px)
+- Conveys achievement and success
+- More universally understood than ta-da gesture emoji
 
 ### Favicon
 
@@ -468,9 +498,10 @@ After completion, show message:
 
 **Touch-Friendly**:
 - Minimum touch targets: 44×44px (Apple/Google guidelines)
-- Grid cells: 26-28px on mobile, scale up on desktop
+- Grid cells: 26-28px on mobile, smaller on desktop (optimized for screen real estate)
 - Buttons: Minimum 44px height
 - Grid gap: 2-3px for visual separation
+- Mobile scrolling: Horizontal/vertical scroll enabled for large grids (12×12+) to maintain playable cell sizes
 
 **Responsive Breakpoints**:
 - **Mobile**: 320px - 640px (default, smallest cells)
@@ -489,9 +520,11 @@ After completion, show message:
 - Border: 2px solid `#e0e0e0`
 - Border-radius: 4px
 - **Filled**: Background `#4CAF50` (green)
-- **Marked**: White background + gray × symbol (font-size: 1.2rem)
+- **Marked**: White background + gray × symbol (font-size: 1.2rem, fixed size to prevent cell expansion)
 - **Empty**: White background
 - **Active tap**: Scale 1.05, transition 200ms
+- **Desktop sizing**: Smaller cells (max 32px) to optimize screen usage
+- **Mobile sizing**: Touch-optimized cells (26-28px) with scroll support for large grids
 
 **Buttons**:
 - **Primary** (New Puzzle): Green background, white text, rounded 8px, shadow
@@ -502,7 +535,7 @@ After completion, show message:
 - **Default**: Dimmed (60% opacity)
 - **Highlighted** (after cell tap): Green background, 100% opacity, bold, fades after 2 seconds
 - **Error**: Red text + red border on row/column
-- **Valid**: Green text + checkmark icon
+- **Valid**: Enhanced green background (`#2e7d32`) with white text for improved contrast and visibility
 
 **Animations**:
 - Cell tap: Pulse animation (scale 1.05, 200ms)

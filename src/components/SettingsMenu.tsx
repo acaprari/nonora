@@ -61,6 +61,7 @@ export function SettingsMenu({ onNewPrompt, onChangeApiKey, hasActivePuzzle }: S
           {/* Menu */}
           <div
             className="absolute right-0 mt-2 w-56 glass-card rounded-xl shadow-2xl z-50"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(12px)' }}
             data-testid="settings-menu"
           >
             <div className="py-2">
@@ -81,12 +82,6 @@ export function SettingsMenu({ onNewPrompt, onChangeApiKey, hasActivePuzzle }: S
                 <Icon name="key" size={20} />
                 <span>Change API Key</span>
               </button>
-
-              <div className="border-t border-white/10 my-2" />
-
-              <div className="px-4 py-2 text-white/60 text-xs">
-                Settings
-              </div>
             </div>
           </div>
         </>
