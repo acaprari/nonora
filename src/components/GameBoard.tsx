@@ -57,9 +57,8 @@ export function GameBoard({ puzzle, validationResult, onCellClick, apiClient, on
                 {currentGridSize}×{currentGridSize}
               </span>
             </div>
-            <div className="text-white/80 text-sm">
-              {puzzle.prompt ? puzzle.prompt.substring(0, 25) : 'Puzzle'}
-              {puzzle.prompt && puzzle.prompt.length > 25 && '...'}
+            <div className="text-white font-medium text-sm max-w-[120px] sm:max-w-[250px] truncate" title={puzzle.prompt}>
+              {puzzle.prompt || 'Puzzle'}
             </div>
           </div>
           <button
