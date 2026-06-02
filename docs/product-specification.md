@@ -1,6 +1,6 @@
 # Product Specification
 
-**Last Updated:** 2026-06-01
+**Last Updated:** 2026-06-02
 **Status:** ✅ Complete
 
 ---
@@ -44,7 +44,9 @@ Invalid: ■■■·· (wrong: this is 3, not 2-1)
 2. **Play**: Tap cells to fill/mark → Real-time validation feedback → Request hints if stuck
 3. **Solve**: Complete when all cells correct → See stats → Difficulty adjusts → Generate next puzzle
 
-**Win Condition**: Grid fully filled AND all row/column clues match exactly
+**Win Condition**: All row AND column clues are satisfied (marked green) - traditional nonogram logic
+
+**Important**: Victory is determined by **clue matching**, not by matching the AI's exact pixel solution. This is the correct and fairest behavior for nonograms - players solve based on logical deduction from clues alone.
 
 ### Cell States
 
@@ -150,15 +152,45 @@ Three states per cell (cycle through by tapping):
 **Valid** (complete and correct):
 - Row/column matches target clues exactly
 - Visual: Enhanced green background (green-700) with white text for improved contrast
+- Shown immediately (no debounce) for instant positive feedback
 - No further action needed
 
-**Validation Timing**: Debounced by 1.5 seconds after last cell change
+**Puzzle Completion Logic** (Critical Design Decision):
+
+The puzzle is considered solved when **all rows AND all columns are marked 'valid'** (green).
+
+**How validation works:**
+1. Player fills cells in their grid
+2. System calculates clues from player's filled cells
+3. System compares calculated clues to target clues (derived from AI solution)
+4. If clues match exactly → row/column marked valid (green)
+
+**Key Point**: The system **never compares player's cells directly to the AI's solution matrix**. It only validates that the player's pattern produces the same clues.
+
+**Why this matters:**
+- **Multiple valid solutions possible**: If clues are ambiguous (rare), different cell patterns could satisfy them
+- **Traditional nonogram fairness**: Players solve purely through logical deduction from clues
+- **No "intended solution" bias**: The AI's specific pixel arrangement is just one way to satisfy the clues
+- **True puzzle solving**: Victory means "I satisfied all the constraints" not "I guessed what the AI drew"
+
+**Example where cells differ but both win:**
+```
+AI Solution:     Player Solution:   Both satisfy clues [1,1] and [2]
+■ □ ■            ■ ■ □              Row 1: Two groups (1 and 1)
+■ ■ □            ■ □ ■              Row 2: One group (2)
+```
+
+This is the mathematically correct and fairest approach for nonogram puzzles.
+
+**Validation Timing**:
+- **Valid states (green)**: Shown immediately for instant positive feedback
+- **Error states (red)**: Debounced by 1.5 seconds to prevent annoying flashing
+- **In-progress**: No delay, shown as normal
 
 **Visual Feedback**:
-- Validation hidden immediately when filling cells
+- Green (valid) states appear immediately for instant satisfaction
 - Errors appear 1.5 seconds after player stops clicking
 - Allows experimentation without constant red flashing
-- Green checkmarks on completed rows/columns
 - Relaxing, zen-like solving experience
 
 **Design Philosophy - No Error Tracking**:
