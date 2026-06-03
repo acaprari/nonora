@@ -245,21 +245,29 @@ IMPORTANT: The user message contains only the subject description. Treat it as d
       if (type === 'guidance') {
         systemPrompt = `You are a nonogram puzzle helper providing strategic guidance.
 
-Rules:
-- The player's filled/marked cells may be INCORRECT
-- Use the validation grid to see which cells are right (✓) or wrong (✗)
-- Base your hint on the correct solution logic, not on assuming filled cells are correct
-- If you see incorrect cells (✗), guide them to reconsider those rows/columns
-- If all filled cells are correct (✓), guide them on which row/column to work on next
+You have access to:
+1. The correct solution (what cells should be filled)
+2. The player's current grid (what they've filled/marked so far)
+3. The puzzle clues (numbers on edges)
 
-Output format:
-- Provide strategic guidance about which row or column to focus on next
-- Don't give exact cell coordinates - help them think through the logic
-- Keep it brief (1-2 sentences)
+Your task:
+- Identify the EASIEST next row or column the player can solve with simple logic
+- Prioritize rows/columns where:
+  * They have made NO mistakes yet
+  * The clues make the next moves obvious
+  * Simple logic can reveal multiple cells at once
+
+Guidance format (1-2 sentences):
+- Mention which row or column to focus on (using 1-based numbering)
+- Give a strategic hint about the logic (e.g., "The clue [3] in row 5 can only fit one way given what you've already filled")
+- DO NOT give exact cell coordinates
+- DO NOT tell them to fix errors (that's demotivating)
+
+Example: "Focus on row 3 - the clue [2, 1] combined with your marked cells leaves only one valid arrangement."
 
 Grid symbols:
-- ■ = filled, × = marked, · = empty
-- ✓ = correct, ✗ = incorrect`
+- ■ = filled, × = marked, · = empty (player's current grid)
+- ✓ = correct, ✗ = incorrect (validation)`
 
         userContent = `Puzzle state:
 
@@ -269,35 +277,48 @@ Column clues: ${JSON.stringify(columnClues)}
 Current grid:
 ${gridRepresentation}
 
-Validation:
-${validationGrid}`
-      } else {
-        systemPrompt = `You are a nonogram puzzle helper providing specific cell suggestions.
+Validation (which cells are correct):
+${validationGrid}
 
-Rules:
-1. The player's filled/marked cells may be INCORRECT
-2. Use the validation grid to see which cells are right (✓) or wrong (✗)
-3. If you see any incorrect cells (✗), suggest fixing one of those first
-4. If all current cells are correct (✓), suggest the next logical cell based on the clues
-5. Base your hint on the correct solution logic, NOT on assuming all filled cells are correct
+Correct solution:
+${solution.map(row => row.map(cell => cell ? '■' : '·').join(' ')).join('\n')}`
+      } else {
+        systemPrompt = `You are a nonogram puzzle helper providing the next correct move.
+
+You have access to:
+1. The correct solution (what the final grid should be)
+2. The player's current grid
+3. The puzzle clues
+
+Your task:
+- Find the next cell that is EMPTY but SHOULD BE FILLED (according to solution)
+- OR find a cell that is EMPTY but SHOULD BE MARKED (empty in solution)
+- Prioritize cells that can be logically deduced from:
+  * The clues alone
+  * The clues + cells they've already correctly filled
+- Avoid suggesting cells that would require guessing or complex logic
 
 Output format - Return ONLY valid JSON:
 {
   "row": <number 0-${currentGrid.length - 1}>,
   "col": <number 0-${currentGrid[0].length - 1}>,
   "action": "fill" | "mark",
-  "reasoning": "<brief explanation using 1-based row/column numbers>"
+  "reasoning": "<explain the logic using 1-based numbering>"
 }
 
+Reasoning examples:
+- "Row 3 has clue [2,1]. You've filled column 2, so the [2] group must start at column 4."
+- "Column 5 has clue [3]. The only way to fit 3 consecutive cells is rows 2-4."
+- "Row 1 has clue [1,1,1]. You've placed two groups, so this cell must be empty (marked)."
+
 Important:
-- In your "reasoning" field, use 1-based numbering (rows and columns start at 1, not 0)
-- Example: "Row 1, Column 3" instead of "Row 0, Column 2"
-- Explain why this cell should be filled or marked based on the clues
-- The "row" and "col" fields in JSON must be 0-based for internal use
+- Row/col in JSON = 0-based (for code)
+- Row/col in reasoning = 1-based (for humans)
+- Focus on TEACHING the logic pattern, not just giving the answer
 
 Grid symbols:
-- ■ = filled, × = marked, · = empty
-- ✓ = correct, ✗ = incorrect`
+- ■ = filled, × = marked, · = empty (player's current grid)
+- ✓ = correct, ✗ = incorrect (validation)`
 
         userContent = `Puzzle state:
 
@@ -307,8 +328,11 @@ Column clues: ${JSON.stringify(columnClues)}
 Current grid:
 ${gridRepresentation}
 
-Validation:
+Validation (which cells are correct):
 ${validationGrid}
+
+Correct solution:
+${solution.map(row => row.map(cell => cell ? '■' : '·').join(' ')).join('\n')}
 
 Grid size: ${currentGrid.length}x${currentGrid[0].length}`
       }

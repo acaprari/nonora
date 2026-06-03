@@ -154,25 +154,48 @@ The prompt screen is the first interaction point and includes onboarding content
 
 ### 2. Adaptive Hint System
 
-**Description**: Two-tier AI hint system that escalates based on player need. Cooldown prevents hint spam.
+**Description**: Two-tier AI hint system that provides educational, accurate guidance using the actual puzzle solution. Cooldown prevents hint spam.
+
+**Key Innovation**: Hints are generated using the **actual solution** rather than trying to solve from clues alone. This ensures:
+- 100% accurate suggestions (always correct)
+- Educational value (teaches nonogram logic patterns)
+- Faster, more helpful responses
 
 **Types**:
 
 **Guidance Hints** (gentle, strategic):
-- Suggests which row/column to focus on
-- No exact cell coordinates
-- Helps player think through logic
-- Example: "Look at row 5 - with a clue of '8', you can deduce several cells must be filled."
+- Identifies the EASIEST next row/column to solve with simple logic
+- Provides strategic reasoning about why that row/column is a good choice
+- No exact cell coordinates - encourages player to think through the logic
+- Focuses on positive progress (doesn't point out errors)
+- Example: "Focus on row 3 - the clue [2, 1] combined with your marked cells leaves only one valid arrangement."
 
 **Specific Hints** (precise, when struggling):
-- Suggests exact cell to fill/mark with reasoning
+- Provides exact cell coordinates and action (fill or mark)
+- Explains the logic pattern that makes this move deducible
+- Educational reasoning that teaches how to think through clues
+- Prioritizes moves that follow from simple logic (not guessing)
 - Triggered if player requests second hint within 2 minutes
-- Example: "Fill row 3, column 4. The clue [2 3] means this section must be filled."
+- Example: "Fill row 3, column 5. Row 3 has clue [2,1]. You've filled column 2, so the [2] group must start at column 4."
+
+**AI Prompt Strategy**:
+
+For Guidance hints, the AI receives:
+- Current player grid with validation (correct/incorrect cells marked)
+- Correct solution
+- Puzzle clues
+- Instructions to find easiest next row/column where simple logic reveals cells
+
+For Specific hints, the AI receives:
+- Same data as Guidance
+- Instructions to find next empty cell that should be filled/marked
+- Must explain using deducible logic patterns (clues + already-filled cells)
+- Avoids suggesting moves that require complex reasoning
 
 **User Flow**:
 1. Player taps "Get Hint" button
 2. If on cooldown → Show countdown timer
-3. If available → Call AI with current grid state
+3. If available → Call AI with current grid state + solution + clues
 4. Display hint in modal
 5. Start 30-second cooldown
 6. Increment hint counter (affects difficulty)
