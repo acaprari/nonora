@@ -4,6 +4,7 @@ import { Icon } from './Icon'
 export interface SettingsMenuProps {
   onNewPrompt: () => void
   onChangeApiKey: () => void
+  onResetToLevelOne: () => void
   hasActivePuzzle: boolean
 }
 
@@ -15,7 +16,7 @@ export interface SettingsMenuProps {
  * - Change API key
  * - Reset game state
  */
-export function SettingsMenu({ onNewPrompt, onChangeApiKey, hasActivePuzzle }: SettingsMenuProps) {
+export function SettingsMenu({ onNewPrompt, onChangeApiKey, onResetToLevelOne, hasActivePuzzle }: SettingsMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const handleNewPrompt = () => {
@@ -33,6 +34,13 @@ export function SettingsMenu({ onNewPrompt, onChangeApiKey, hasActivePuzzle }: S
   const handleChangeApiKey = () => {
     if (confirm('Are you sure? This will reset your game.')) {
       onChangeApiKey()
+      setIsOpen(false)
+    }
+  }
+
+  const handleResetToLevelOne = () => {
+    if (confirm('Reset to Level 1? Your current puzzle progress will be lost and you will start over with a 5×5 grid.')) {
+      onResetToLevelOne()
       setIsOpen(false)
     }
   }
@@ -72,6 +80,15 @@ export function SettingsMenu({ onNewPrompt, onChangeApiKey, hasActivePuzzle }: S
               >
                 <Icon name="refresh" size={20} />
                 <span>New Prompt</span>
+              </button>
+
+              <button
+                onClick={handleResetToLevelOne}
+                className="w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors flex items-center gap-3"
+                data-testid="reset-to-level-one-option"
+              >
+                <Icon name="target" size={20} />
+                <span>Reset to Level 1</span>
               </button>
 
               <button

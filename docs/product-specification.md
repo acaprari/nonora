@@ -464,7 +464,13 @@ Note: Message and color calculated independently - combinations vary based on ex
    - Confirm → Clear current puzzle, navigate to prompt screen
    - Cancel → Close dialog, stay on current screen
 
-2. **"Change API Key"** - Return to API key setup screen
+2. **"Reset to Level 1"** - Reset difficulty to level 1 and generate a new puzzle with the same prompt
+   - Shows confirmation dialog: "Reset to Level 1? Your current puzzle progress will be lost and you will start over with a 5×5 grid."
+   - Confirm → Reset difficulty profile to level 1, clear current puzzle, generate new 5×5 puzzle using the same prompt
+   - Cancel → Close dialog, stay on current screen
+   - Icon: Target icon (represents starting from the beginning)
+
+3. **"Change API Key"** - Return to API key setup screen
    - Shows confirmation dialog: "This will restart the app. Continue?"
    - Confirm → Clear session, navigate to API key input
    - Cancel → Close dialog, stay on current screen
@@ -660,10 +666,10 @@ Note: Message and color calculated independently - combinations vary based on ex
 **Icons**:
 - **settings**: Gear icon for settings menu
 - **refresh**: Circular arrow for "New Prompt" action
+- **target**: Bullseye/target icon for "Reset to Level 1" action and specific hints
 - **key**: Traditional key icon for API key management
 - **close**: X icon for dismissing modals
 - **lightbulb**: Hint icon (guidance hints)
-- **target**: Bullseye icon (specific hints)
 - **celebration**: Trophy icon for puzzle completion
 - **sparkle**: ✨-style sparkle for AI/magic indicators
 

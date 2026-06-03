@@ -35,10 +35,15 @@ export function useDifficulty() {
     setProfile(savedProfile)
   }, [])
 
+  const resetToLevelOne = useCallback(() => {
+    setProfile(createInitialProfile())
+  }, [])
+
   return {
     profile,
     recordCompletion,
     restoreProfile,
+    resetToLevelOne,
     currentLevel: profile.level,
     currentGridSize: profile.gridSize
   }

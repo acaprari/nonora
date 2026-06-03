@@ -333,9 +333,10 @@ const newGrid = currentGrid.map((r, rIdx) =>
 
 **`useDifficulty`**:
 - Purpose: Manages adaptive difficulty levels based on player performance
-- Provides: `currentLevel`, `currentGridSize`, `recordCompletion()`, `resetDifficulty()`
+- Provides: `currentLevel`, `currentGridSize`, `recordCompletion()`, `restoreProfile()`, `resetToLevelOne()`
 - Side effects: None (pure state management)
 - Used by: `App`
+- Notes: `resetToLevelOne()` resets the difficulty profile to level 1 (5×5 grid) while preserving the current prompt
 
 **Note on puzzle generation**: Puzzle generation is handled by `lib/puzzleGenerator.ts` (direct function call), not a hook. App.tsx calls `generatePuzzle()` directly with loading/error state managed locally.
 

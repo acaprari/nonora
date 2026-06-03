@@ -41,7 +41,7 @@ function App() {
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null)
 
   // Custom hooks
-  const { profile, recordCompletion, restoreProfile, currentLevel, currentGridSize } = useDifficulty()
+  const { profile, recordCompletion, restoreProfile, resetToLevelOne, currentLevel, currentGridSize } = useDifficulty()
   const { savedState, saveState, clearState } = useGamePersistence()
 
   // Validation hook
@@ -247,6 +247,26 @@ function App() {
   }
 
   /**
+   * Handle reset to level 1 - keep prompt, generate new level 1 puzzle
+   */
+  const handleResetToLevelOne = () => {
+    // Reset difficulty profile to level 1
+    resetToLevelOne()
+
+    // Clear current puzzle state
+    setPuzzle(null)
+    setStartTime(null)
+    setCompletionTime(null)
+    setShowCelebration(false)
+    setHasRecordedCompletion(false)
+
+    // Generate a new puzzle at level 1 with the same prompt
+    if (currentPrompt) {
+      handleGeneratePuzzle(currentPrompt)
+    }
+  }
+
+  /**
    * Handle Continue button click from celebration overlay
    */
   const handleContinueToStats = () => {
@@ -269,6 +289,7 @@ function App() {
               <SettingsMenu
                 onNewPrompt={handleNewPrompt}
                 onChangeApiKey={handleChangeApiKey}
+                onResetToLevelOne={handleResetToLevelOne}
                 hasActivePuzzle={puzzle !== null}
               />
             )}

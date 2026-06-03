@@ -142,4 +142,30 @@ describe('useDifficulty', () => {
 
     expect(result.current.profile.level).toBe(1)
   })
+
+  it('resets to level 1 when resetToLevelOne is called', () => {
+    const { result } = renderHook(() => useDifficulty())
+
+    // Progress to level 4
+    act(() => {
+      result.current.recordCompletion(120, 1)
+      result.current.recordCompletion(120, 1)
+      result.current.recordCompletion(120, 1)
+    })
+
+    expect(result.current.profile.level).toBe(4)
+    expect(result.current.profile.gridSize).toBe(8)
+    expect(result.current.profile.recentPerformance.length).toBe(3)
+
+    // Reset to level 1
+    act(() => {
+      result.current.resetToLevelOne()
+    })
+
+    expect(result.current.profile.level).toBe(1)
+    expect(result.current.profile.gridSize).toBe(5)
+    expect(result.current.profile.recentPerformance).toEqual([])
+    expect(result.current.currentLevel).toBe(1)
+    expect(result.current.currentGridSize).toBe(5)
+  })
 })
