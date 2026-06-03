@@ -7,7 +7,7 @@
 
 ## Overview
 
-Pixlogic is a browser-based nonogram puzzle game where users enter text prompts (e.g., "a cat") and Claude AI generates pixel art puzzles to solve.
+nonora is a browser-based nonogram puzzle game where users enter text prompts (e.g., "a cat") and Claude AI generates pixel art puzzles to solve.
 
 **Key Innovation**: AI-generated puzzles from natural language + adaptive hints that understand current player state.
 
@@ -81,8 +81,8 @@ The prompt screen is the first interaction point and includes onboarding content
 
 **Layout Structure** (top to bottom):
 1. **Title and Tagline**
-   - Title: "Pixlogic" (text, 4xl font, bold, white, centered)
-   - Tagline: "AI-powered nonogram puzzles from your imagination" (lg font, white/80 opacity)
+   - Title: "nonora" (text, 4xl font, bold, white, centered, all lowercase)
+   - Tagline: "ai-powered nonogram puzzles from your imagination" (lg font, white/80 opacity, all lowercase)
 
 2. **"How to Play" Section** (glass panel)
    - Glass background with rounded corners
@@ -613,7 +613,7 @@ Note: Message and color calculated independently - combinations vary based on ex
 - Size: 1.8rem (desktop), 1.5rem (mobile)
 - Weight: 500 (medium)
 - Letter-spacing: 2px
-- Text: "PIXLOGIC ✨"
+- Text: "nonora ✨"
 
 **Clues**:
 - Size: 9-10px
