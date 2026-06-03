@@ -1,7 +1,7 @@
-# Pixlogic - Project Summary
+# nonora - Project Summary
 
 ## Overview
-Pixlogic is an AI-powered nonogram puzzle game built with React, TypeScript, and Anthropic's Claude API. The game generates unique puzzles based on user prompts and features adaptive difficulty, a sophisticated hint system, and comprehensive game state persistence.
+nonora is an AI-powered nonogram puzzle game built with React, TypeScript, and Anthropic's Claude API. The game generates unique puzzles based on user prompts and features adaptive difficulty, a sophisticated hint system, and comprehensive game state persistence.
 
 **Status:** Production Ready (v1.0.0)
 
@@ -279,7 +279,7 @@ Comprehensive end-to-end testing:
 ## Deployment
 
 ### GitHub Pages
-- **URL**: `https://<username>.github.io/pixlogic/`
+- **URL**: `https://<username>.github.io/nonora/`
 - **Automatic Deployment**: On push to `main` branch
 - **Manual Deployment**: `npm run deploy`
 
@@ -290,7 +290,7 @@ Comprehensive end-to-end testing:
 4. Deploy: `gh-pages` publishes to GitHub Pages
 
 ### Environment Configuration
-- Base path: `/pixlogic/` (configured in `vite.config.ts`)
+- Base path: `/nonora/` (configured in `vite.config.ts`)
 - No environment variables required (user provides API key)
 
 ---
@@ -305,7 +305,7 @@ Comprehensive end-to-end testing:
 ### Setup
 ```bash
 git clone <repository-url>
-cd pixlogic
+cd nonora
 npm install
 ```
 
@@ -335,7 +335,7 @@ npx tsc --noEmit     # TypeScript check
 | `E2E_TEST_README.md` | E2E testing documentation |
 | `CLAUDE.md` | Development guidelines for Claude Code |
 | `AGENTS.md` | Development guidelines for other AI agents |
-| `docs/superpowers/plans/2026-05-24-pixlogic-implementation.md` | Complete design specification (source of truth) |
+| `docs/README.md` | Documentation index and navigation (source of truth) |
 
 ---
 
@@ -387,7 +387,7 @@ npx tsc --noEmit     # TypeScript check
 ### For Future AI Assistants
 - **Claude Code**: See `CLAUDE.md` for comprehensive development guidelines
 - **Other AI Agents**: See `AGENTS.md` for streamlined guidelines
-- **Design Spec**: `docs/superpowers/plans/2026-05-24-pixlogic-implementation.md` is the source of truth
+- **Design Specs**: `docs/README.md` is the index; specs are the source of truth
 
 ### Code Quality Standards
 - Zero TODO comments

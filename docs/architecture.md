@@ -365,7 +365,7 @@ const newGrid = currentGrid.map((r, rIdx) =>
 ### Directory Layout
 
 ```
-pixlogic/
+nonora/
 ├── src/
 │   ├── components/        # React UI components (presentational)
 │   │   ├── Cell.tsx
@@ -496,7 +496,7 @@ interface ValidationResult {
 ```typescript
 export default defineConfig({
   plugins: [react()],
-  base: '/pixlogic/',           // Base path for GitHub Pages deployment
+  base: '/nonora/',           // Base path for GitHub Pages deployment
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),   // Import alias: @/components
@@ -520,10 +520,10 @@ import { Puzzle } from '@/types'
 import { validateGrid } from '@/lib/validator'
 ```
 
-**Why `/pixlogic/` base path**:
+**Why `/nonora/` base path**:
 - GitHub Pages serves projects at `username.github.io/repo-name/`
 - Without this, asset paths would break in production
-- Local dev uses root `/`, production uses `/pixlogic/`
+- Local dev uses root `/`, production uses `/nonora/`
 
 ### Tailwind Configuration
 
@@ -634,7 +634,7 @@ Defined in `src/index.css`:
 1. Push to `main` branch
 2. GitHub Actions runs build: `npm run build`
 3. Build output (dist/) deployed to `gh-pages` branch
-4. Available at: `https://username.github.io/pixlogic/`
+4. Available at: `https://username.github.io/nonora/`
 
 **Manual Deployment**: `npm run deploy` (uses `gh-pages` package)
 
@@ -784,7 +784,7 @@ Start 30s cooldown
 
 ## Build & Deployment
 
-**Vite**: Configured with base path `/pixlogic/` for GitHub Pages
+**Vite**: Configured with base path `/nonora/` for GitHub Pages
 
 **TypeScript**: Strict mode, path aliases (`@/components`)
 
