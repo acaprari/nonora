@@ -36,7 +36,7 @@ describe('useGamePersistence', () => {
     const { result } = renderHook(() => useGamePersistence())
 
     expect(result.current.savedState).toBeNull()
-    expect(localStorage.getItem).toHaveBeenCalledWith('pixlogic-game-state')
+    expect(localStorage.getItem).toHaveBeenCalledWith('nonora-game-state')
   })
 
   it('loads saved state from localStorage on mount', () => {
@@ -46,7 +46,7 @@ describe('useGamePersistence', () => {
     const { result } = renderHook(() => useGamePersistence())
 
     expect(result.current.savedState).toEqual(mockState)
-    expect(localStorage.getItem).toHaveBeenCalledWith('pixlogic-game-state')
+    expect(localStorage.getItem).toHaveBeenCalledWith('nonora-game-state')
   })
 
   it('saves state to localStorage', () => {
@@ -59,7 +59,7 @@ describe('useGamePersistence', () => {
     })
 
     expect(localStorage.setItem).toHaveBeenCalledWith(
-      'pixlogic-game-state',
+      'nonora-game-state',
       JSON.stringify(mockState)
     )
   })
@@ -89,7 +89,7 @@ describe('useGamePersistence', () => {
 
     expect(loadedState).toEqual(mockState)
     expect(result.current.savedState).toEqual(mockState)
-    expect(localStorage.getItem).toHaveBeenCalledWith('pixlogic-game-state')
+    expect(localStorage.getItem).toHaveBeenCalledWith('nonora-game-state')
   })
 
   it('clears state from localStorage', () => {
@@ -102,7 +102,7 @@ describe('useGamePersistence', () => {
       result.current.clearState()
     })
 
-    expect(localStorage.removeItem).toHaveBeenCalledWith('pixlogic-game-state')
+    expect(localStorage.removeItem).toHaveBeenCalledWith('nonora-game-state')
   })
 
   it('clears savedState when clearState is called', () => {

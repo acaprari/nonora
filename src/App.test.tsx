@@ -13,8 +13,8 @@ describe('App Integration Tests', () => {
   describe('Initial Render', () => {
     it('renders without crashing', () => {
       render(<App />)
-      expect(screen.getByText('Pixlogic')).toBeInTheDocument()
-      expect(screen.getByText('AI-Powered Nonogram Puzzles')).toBeInTheDocument()
+      expect(screen.getByText('nonora')).toBeInTheDocument()
+      expect(screen.getByText('ai-powered nonogram puzzles')).toBeInTheDocument()
     })
 
     it('shows ApiKeyInput when no API key is set', () => {
@@ -27,7 +27,7 @@ describe('App Integration Tests', () => {
 
     it('has proper heading and branding', () => {
       render(<App />)
-      const heading = screen.getByRole('heading', { name: /pixlogic/i })
+      const heading = screen.getByRole('heading', { name: /nonora/i })
       expect(heading).toBeInTheDocument()
       expect(heading.tagName).toBe('H1')
     })
@@ -42,8 +42,8 @@ describe('App Integration Tests', () => {
   describe('Component Structure', () => {
     it('has header with title and description', () => {
       render(<App />)
-      expect(screen.getByText('Pixlogic')).toBeInTheDocument()
-      expect(screen.getByText('AI-Powered Nonogram Puzzles')).toBeInTheDocument()
+      expect(screen.getByText('nonora')).toBeInTheDocument()
+      expect(screen.getByText('ai-powered nonogram puzzles')).toBeInTheDocument()
     })
 
     it('applies correct styling classes', () => {

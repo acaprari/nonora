@@ -17,7 +17,7 @@ import {
  * Tests the complete user journey from start to finish
  */
 
-test.describe('Pixlogic Game - Full Flow', () => {
+test.describe('nonora Game - Full Flow', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate first, then clear storage
     await page.goto('/')
@@ -27,10 +27,10 @@ test.describe('Pixlogic Game - Full Flow', () => {
 
   test('should load the app with correct header', async ({ page }) => {
     // Check main header
-    await expect(page.getByRole('heading', { name: 'Pixlogic' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'nonora' })).toBeVisible()
 
     // Check subtitle
-    await expect(page.locator('text=AI-Powered Nonogram Puzzles')).toBeVisible()
+    await expect(page.locator('text=ai-powered nonogram puzzles')).toBeVisible()
 
     // Check body is visible
     await expect(page.locator('body')).toBeVisible()
@@ -315,7 +315,7 @@ test.describe('Pixlogic Game - Full Flow', () => {
   })
 })
 
-test.describe('Pixlogic Game - Error Handling', () => {
+test.describe('nonora Game - Error Handling', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
     await clearStorage(page)

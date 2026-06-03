@@ -175,7 +175,7 @@ test.describe('Game State Persistence', () => {
   test('should handle corrupted localStorage data', async ({ page }) => {
     // Inject corrupted data into localStorage
     await page.evaluate(() => {
-      localStorage.setItem('pixlogic-game-state', 'invalid-json-data')
+      localStorage.setItem('nonora-game-state', 'invalid-json-data')
     })
 
     // Navigate to the app
@@ -203,11 +203,11 @@ test.describe('Game State Persistence', () => {
     // This would be triggered by a button on completion screen
     // For this test, we clear storage manually to simulate the effect
     await page.evaluate(() => {
-      const state = localStorage.getItem('pixlogic-game-state')
+      const state = localStorage.getItem('nonora-game-state')
       if (state) {
         const parsed = JSON.parse(state)
         delete parsed.currentPuzzle
-        localStorage.setItem('pixlogic-game-state', JSON.stringify(parsed))
+        localStorage.setItem('nonora-game-state', JSON.stringify(parsed))
       }
     })
 
@@ -244,7 +244,7 @@ test.describe('Game State Persistence', () => {
     // Note: The prompt is stored internally but not displayed during gameplay
     // We can verify it's preserved by checking localStorage directly
     const storedPrompt = await page.evaluate(() => {
-      const state = localStorage.getItem('pixlogic-game-state')
+      const state = localStorage.getItem('nonora-game-state')
       if (state) {
         const parsed = JSON.parse(state)
         return parsed.currentPuzzle?.prompt

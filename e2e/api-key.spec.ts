@@ -17,7 +17,7 @@ test.describe('API Key Validation', () => {
 
   test('should display API key input on first load', async ({ page }) => {
     // Check header is visible
-    await expect(page.getByRole('heading', { name: 'Pixlogic' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'nonora' })).toBeVisible()
 
     // Check API key input is visible
     const apiKeyInput = page.locator('#api-key-input')
