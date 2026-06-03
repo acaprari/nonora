@@ -42,7 +42,7 @@ export const PuzzlePrompt: React.FC<PuzzlePromptProps> = ({
     <div className="glass-card rounded-2xl p-8 shadow-2xl max-w-2xl mx-auto space-y-6">
       {/* Title and tagline */}
       <div className="text-center space-y-2">
-        <h1 className="text-4xl font-bold text-white">NonoGen</h1>
+        <h1 className="text-4xl font-bold text-white">Pixlogic</h1>
         <p className="text-white/80 text-lg">AI-powered nonogram puzzles from your imagination</p>
       </div>
 

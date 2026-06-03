@@ -1,10 +1,10 @@
-# NonoGen
+# Pixlogic
 
 An AI-powered nonogram puzzle game built with React, TypeScript, and Claude AI. Generate unique picture puzzles from text prompts and solve them using logic!
 
 ## Live Demo
 
-[Play NonoGen](https://acaprari.github.io/nonogen/)
+[Play Pixlogic](https://acaprari.github.io/pixlogic/)
 
 ## What is a Nonogram?
 
@@ -45,8 +45,8 @@ Nonograms (also known as Picross or Griddlers) are logic puzzles where you fill 
 
 ```bash
 # Clone the repository
-git clone https://github.com/acaprari/nonogen.git
-cd nonogen
+git clone https://github.com/acaprari/pixlogic.git
+cd pixlogic
 
 # Install dependencies
 npm install
@@ -114,7 +114,7 @@ Your API key is never sent to any server except Anthropic's official API endpoin
 ### Project Structure
 
 ```
-nonogen/
+pixlogic/
 ├── src/
 │   ├── components/          # React components
 │   │   ├── ApiKeyInput.tsx      # API key entry screen
@@ -214,7 +214,7 @@ The project is configured for automatic deployment to GitHub Pages.
 **Automatic Deployment:**
 1. Push to the `main` branch
 2. GitHub Actions automatically builds and deploys
-3. Site is live at `https://acaprari.github.io/nonogen/`
+3. Site is live at `https://acaprari.github.io/pixlogic/`
 
 **Manual Deployment:**
 ```bash
@@ -332,4 +332,4 @@ Built with care by [Alessio Caprari](https://github.com/acaprari)
 
 ---
 
-**Enjoy solving puzzles!** If you encounter any issues or have suggestions, please [open an issue](https://github.com/acaprari/nonogen/issues).
+**Enjoy solving puzzles!** If you encounter any issues or have suggestions, please [open an issue](https://github.com/acaprari/pixlogic/issues).
