@@ -7,7 +7,7 @@
 
 ## Overview
 
-Pixlogic is a browser-based nonogram puzzle game where users enter text prompts (e.g., "a cat") and Claude AI generates pixel art puzzles to solve.
+NonoGen is a browser-based nonogram puzzle game where users enter text prompts (e.g., "a cat") and Claude AI generates pixel art puzzles to solve.
 
 **Key Innovation**: AI-generated puzzles from natural language + adaptive hints that understand current player state.
 
@@ -81,7 +81,7 @@ The prompt screen is the first interaction point and includes onboarding content
 
 **Layout Structure** (top to bottom):
 1. **Title and Tagline**
-   - Title: "Pixlogic" (text, 4xl font, bold, white, centered)
+   - Title: "NonoGen" (text, 4xl font, bold, white, centered)
    - Tagline: "AI-powered nonogram puzzles from your imagination" (lg font, white/80 opacity)
 
 2. **"How to Play" Section** (glass panel)

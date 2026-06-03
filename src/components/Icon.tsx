@@ -33,7 +33,7 @@ export function Icon({ name, className = '', size = 24, 'aria-label': ariaLabel 
       role={ariaLabel ? 'img' : 'presentation'}
       aria-hidden={!ariaLabel}
     >
-      <use href={`/pixlogic/icons.svg#${name}`} />
+      <use href={`/nonogen/icons.svg#${name}`} />
     </svg>
   )
 }
