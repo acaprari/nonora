@@ -89,8 +89,10 @@ function App() {
   // Handle puzzle completion
   useEffect(() => {
     if (puzzle && isComplete && isValid && !hasRecordedCompletion) {
+      const now = Date.now()
+
       // Calculate solve time at exact moment of completion
-      const solveTime = startTime ? Math.floor((Date.now() - startTime) / 1000) : 0
+      const solveTime = startTime ? Math.floor((now - startTime) / 1000) : 0
 
       // Store completion time for display (prevents inflation from celebration viewing time)
       setCompletionTime(solveTime)
@@ -103,6 +105,15 @@ function App() {
 
       // Mark as recorded so this doesn't run again
       setHasRecordedCompletion(true)
+
+      // Update puzzle with endTime to freeze timer on refresh
+      setPuzzle(prev => {
+        if (!prev) return null
+        return {
+          ...prev,
+          endTime: now
+        }
+      })
 
       // Show celebration overlay
       setShowCelebration(true)

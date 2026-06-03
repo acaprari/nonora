@@ -10,6 +10,7 @@ export interface Puzzle {
   columnClues: number[][];
   currentGrid: CellState[][];
   startTime: number;
+  endTime?: number; // Set when puzzle is completed, prevents timer inflation on refresh
   hintsUsed: number;
 }
 
