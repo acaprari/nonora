@@ -1,14 +1,14 @@
-# Pixlogic Development Guidelines for Claude Code
+# nonora Development Guidelines for Claude Code
 
 ## Project Overview
-Pixlogic is an AI-powered nonogram puzzle game built with React, TypeScript, and Anthropic's Claude API.
+nonora is an AI-powered nonogram puzzle game built with React, TypeScript, and Anthropic's Claude API.
 
 ## Design Specification Location
 **CRITICAL**: Before making ANY changes, read the specifications:
 - **Start here**: `docs/README.md` - Navigation guide and quick lookup
 - **Product**: `docs/product-specification.md` - Features and requirements
 - **Architecture**: `docs/architecture.md` - Technical design and patterns
-- **API**: `docs/api-integration.md` - AI integration details
+- **API**: `docs/api-architecture.md` - AI integration details
 - **Testing**: `docs/testing-strategy.md` - Test approach and verification
 
 All changes MUST align with these specifications.
@@ -38,7 +38,7 @@ All changes MUST align with these specifications.
 - `docs/README.md` - Navigation guide and quick lookup
 - `docs/product-specification.md` - Features, requirements, UX
 - `docs/architecture.md` - Technical patterns and design
-- `docs/api-integration.md` - AI integration details
+- `docs/api-architecture.md` - AI integration details
 - `docs/testing-strategy.md` - Testing approach
 
 ### Anti-Patterns to Avoid
@@ -55,6 +55,118 @@ See commit history from 2026-06-01 for security improvements:
 - Created comprehensive API architecture documentation
 
 This was done BACKWARDS (implementation first, docs after). **Don't repeat this pattern.**
+
+## Documentation Sync Protocol (MANDATORY)
+
+**Principle**: This codebase follows the **"Rebuild from Scratch"** test (see `docs/README.md`). All code changes MUST be reflected in specifications.
+
+### Rule: Code Changes Are NOT Complete Until Specs Are Updated
+
+Every implementation task has these phases:
+1. ✅ Write/modify code
+2. ✅ Write/update tests
+3. ✅ **Update relevant specs** (this step is NOT optional)
+4. ✅ Commit (code + specs together)
+
+### Before Every Commit: Spec Impact Check
+
+Ask yourself these questions. If you answer "yes" to ANY, update specs FIRST:
+
+**Data & Types:**
+- Did I add/modify/remove TypeScript interfaces or types?
+- Did I change data structures or state shape?
+→ Update the **Architecture** spec (see `docs/README.md` § Architecture)
+
+**Files & Organization:**
+- Did I add/remove/rename any files (components, hooks, lib functions)?
+- Did I change the directory structure?
+→ Update the **Architecture** spec § File Structure
+
+**Components & Hooks:**
+- Did I change component names, props, or behavior?
+- Did I add/remove hooks or change their APIs?
+→ Update the **Architecture** spec § Component Organization / Custom Hooks
+
+**AI Integration:**
+- Did I modify API calls, prompts, or response handling?
+- Did I change how Claude API is used?
+→ Update the **API Architecture** spec (see `docs/README.md` § AI Features)
+
+**User-Facing Features:**
+- Did I change game mechanics, UI flows, or user interactions?
+- Did I add/remove features?
+→ Update the **Product Specification** (see `docs/README.md` § Product & Features)
+
+**Testing:**
+- Did I change testing strategy, patterns, or requirements?
+→ Update the **Testing Strategy** spec (see `docs/README.md` § Testing & Quality)
+
+**Bug Fixes:**
+- Did this bug reveal a gap or inaccuracy in the specs?
+→ Update the spec that should have prevented this bug
+
+### Update the Index When Needed
+
+If you:
+- Add a new spec file
+- Split an existing spec into multiple files
+- Significantly reorganize documentation
+
+Then update `docs/README.md`:
+- Add navigation links
+- Update Quick Lookup section
+- Update file status table
+
+### Verification Commands
+
+Before committing, run these spot checks:
+
+```bash
+# Check for stale component/hook names in docs
+grep -r "ComponentName\|hookName" docs/
+
+# Check for old branding/terminology
+grep -r "old-term" docs/
+
+# Verify docs reference actual files
+# (compare docs/architecture.md file list vs actual src/ structure)
+```
+
+### Commit Message Convention
+
+Every commit MUST include spec status:
+
+```
+feat: add new feature X
+
+Implementation details...
+
+Specs: ✅ Updated product-specification.md § Features
+Specs: ✅ Updated architecture.md § Component Organization
+```
+
+Or if genuinely no spec impact:
+
+```
+chore: update dependency versions
+
+Specs: ⚠️ N/A - internal dependency update only
+```
+
+### When In Doubt
+
+**Ask yourself**: "If I deleted all code but kept docs/, could someone rebuild this change from the specs alone?"
+
+If the answer is NO, the specs are incomplete.
+
+### Finding the Right Spec
+
+Don't guess which file to update. Check `docs/README.md`:
+- **§ Navigation Guide** - Links to each major spec
+- **§ Quick Lookup** - Maps topics to specific sections
+- **§ Current Documentation Status** - Lists all spec files
+
+The index is the source of truth for documentation organization.
 
 ## Mandatory Development Practices
 
@@ -154,7 +266,7 @@ src/
 ## Deployment
 - GitHub Pages: Automatic via GitHub Actions on push to `main`
 - Manual: `npm run deploy`
-- Base path configured in `vite.config.ts` as `/pixlogic/`
+- Base path configured in `vite.config.ts` as `/nonora/`
 
 ## Before Committing
 - [ ] All 231+ unit tests passing (`npm test`)
