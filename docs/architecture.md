@@ -95,7 +95,7 @@ Components (updated)
 - React hooks coordinating state and effects
 - Side effects: API calls, localStorage, timers
 - Orchestrate pure functions with external world
-- Examples: `useGameState.ts` (puzzle state), `useHints.ts` (AI hints + cooldown), `usePuzzleGenerator.ts` (generation + retry)
+- Examples: `usePuzzle.ts` (puzzle state), `useHints.ts` (AI hints + cooldown), `useDifficulty.ts` (adaptive difficulty)
 
 **Layer 3: Presentation (`src/components/`)**
 - Visual components, props-based
@@ -151,7 +151,7 @@ Key components and their responsibilities:
 
 **`App.tsx`** (Container):
 - Routes between screens based on game state
-- Shows `ApiKeySetup` if no API key
+- Shows `ApiKeyInput` if no API key
 - Shows `PuzzlePrompt` for puzzle generation
 - Shows `GameBoard` during play
 - Shows `CompletionScreen` on puzzle completion
@@ -165,7 +165,7 @@ Key components and their responsibilities:
 
 **`GameBoard.tsx`** (Container):
 - Coordinates grid, clues, hints, timer
-- Uses `useGameState`, `useValidation`, `useHints` hooks
+- Uses `usePuzzle`, `useValidation`, `useHints` hooks
 - Handles cell click events
 - Displays hint button with cooldown
 - Shows timer
@@ -194,7 +194,7 @@ Key components and their responsibilities:
 - Props: `onGenerate`, `isLoading`
 - Note: Does not include title/subtitle (rendered at App.tsx level)
 
-**`ApiKeySetup.tsx`** (Presentational):
+**`ApiKeyInput.tsx`** (Presentational):
 - API key input and validation
 - Props: `onSave`, `error`
 
@@ -208,7 +208,7 @@ Components compose hierarchically:
 
 ```
 App
-├── ApiKeySetup (if no key)
+├── ApiKeyInput (if no key)
 ├── PuzzlePrompt (if no puzzle)
 │   └── AiLoadingIndicator (during generation)
 ├── GameBoard (during play)
@@ -319,11 +319,11 @@ const newGrid = currentGrid.map((r, rIdx) =>
 
 ### Custom Hooks
 
-**`useGameState`**:
+**`usePuzzle`**:
 - Purpose: Manages current puzzle state and cell interactions
-- Provides: `puzzle`, `toggleCell(row, col)`, `resetPuzzle()`
+- Provides: `puzzle`, `setPuzzle`, `toggleCell(row, col)`, `incrementHints()`
 - Side effects: None (pure state management)
-- Used by: `GameBoard`
+- Used by: `App`, `GameBoard`
 
 **`useHints`**:
 - Purpose: Manages hint requests, cooldown, and API calls
@@ -331,11 +331,13 @@ const newGrid = currentGrid.map((r, rIdx) =>
 - Side effects: API calls to Anthropic, 30s cooldown timer
 - Used by: `GameBoard`
 
-**`usePuzzleGenerator`**:
-- Purpose: Manages puzzle generation with validation and retries
-- Provides: `generatePuzzle(prompt, difficulty)`, `isGenerating`, `error`
-- Side effects: API calls, retry logic (up to 3 attempts)
-- Used by: `PuzzlePrompt`
+**`useDifficulty`**:
+- Purpose: Manages adaptive difficulty levels based on player performance
+- Provides: `currentLevel`, `currentGridSize`, `recordCompletion()`, `resetDifficulty()`
+- Side effects: None (pure state management)
+- Used by: `App`
+
+**Note on puzzle generation**: Puzzle generation is handled by `lib/puzzleGenerator.ts` (direct function call), not a hook. App.tsx calls `generatePuzzle()` directly with loading/error state managed locally.
 
 **`useValidation`**:
 - Purpose: Real-time validation of grid against clues
@@ -372,14 +374,14 @@ pixlogic/
 │   │   ├── HintDisplay.tsx
 │   │   ├── CompletionScreen.tsx
 │   │   ├── PuzzlePrompt.tsx
-│   │   ├── ApiKeySetup.tsx
+│   │   ├── ApiKeyInput.tsx
 │   │   └── AiLoadingIndicator.tsx
 │   │
 │   ├── hooks/             # Custom React hooks (state management)
-│   │   ├── useGameState.ts
+│   │   ├── usePuzzle.ts
 │   │   ├── useHints.ts
 │   │   ├── useValidation.ts
-│   │   ├── usePuzzleGenerator.ts
+│   │   ├── useDifficulty.ts
 │   │   └── useGamePersistence.ts
 │   │
 │   ├── lib/               # Pure functions (business logic)
@@ -649,7 +651,9 @@ Defined in `src/index.css`:
 ```
 User enters prompt
     ↓
-PuzzlePrompt → usePuzzleGenerator hook
+PuzzlePrompt → App.tsx handleGenerate()
+    ↓
+lib/puzzleGenerator.ts generatePuzzle()
     ↓
 API call (lib/api.ts)
     ↓
@@ -657,7 +661,7 @@ Validation (lib/puzzleGenerator.ts)
     ↓
 Calculate clues (lib/clueCalculator.ts)
     ↓
-Create Puzzle object → useGameState
+Create Puzzle object → usePuzzle.setPuzzle()
     ↓
 GameBoard renders
 ```
@@ -668,7 +672,7 @@ User taps cell
     ↓
 Cell component → onClick callback
     ↓
-GameBoard → useGameState.toggleCell()
+GameBoard → usePuzzle.toggleCell()
     ↓
 Update currentGrid (immutable)
     ↓
