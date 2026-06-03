@@ -1,8 +1,8 @@
-# E2E Testing with Playwright - Pixlogic
+# E2E Testing with Playwright - nonora
 
 ## Overview
 
-This document describes the End-to-End (E2E) testing setup for the Pixlogic nonogram game using Playwright.
+This document describes the End-to-End (E2E) testing setup for the nonora nonogram game using Playwright.
 
 ## Installation
 

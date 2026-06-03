@@ -1,10 +1,10 @@
-# Quick Start: Deploying Pixlogic to GitHub Pages
+# Quick Start: Deploying nonora to GitHub Pages
 
 This guide gets you from setup to deployed in under 5 minutes.
 
 ## 1. Enable GitHub Pages (One-Time Setup)
 
-1. Go to your repository: https://github.com/acaprari/pixlogic
+1. Go to your repository: https://github.com/acaprari/nonora
 2. Click **Settings** (top menu)
 3. Click **Pages** (left sidebar)
 4. Under "Build and deployment":
@@ -13,7 +13,7 @@ This guide gets you from setup to deployed in under 5 minutes.
    - **Folder**: Select `/ (root)`
 5. Click **Save**
 
-GitHub will show a message: "Your site is ready to be published at https://acaprari.github.io/pixlogic/"
+GitHub will show a message: "Your site is ready to be published at https://acaprari.github.io/nonora/"
 
 ## 2. Deploy Your Site
 
@@ -52,7 +52,7 @@ This builds and deploys directly to the gh-pages branch.
 ## 3. Verify Your Site
 
 1. Wait 1-2 minutes after deployment
-2. Visit: https://acaprari.github.io/pixlogic/
+2. Visit: https://acaprari.github.io/nonora/
 3. Test the game:
    - Enter your Anthropic API key
    - Generate a puzzle
@@ -91,7 +91,7 @@ No need to run any deploy commands - it's automatic!
 
 ```typescript
 // In vite.config.ts
-base: '/your-repo-name/',  // Change 'pixlogic' to your repo name
+base: '/your-repo-name/',  // Change to match your repo name
 ```
 
 Then rebuild and deploy:
@@ -124,7 +124,7 @@ npm run deploy
 
 ## That's It!
 
-Your site is now live at: **https://acaprari.github.io/pixlogic/**
+Your site is now live at: **https://acaprari.github.io/nonora/**
 
 Share it with the world! 🎉
 

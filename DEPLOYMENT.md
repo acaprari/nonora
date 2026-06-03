@@ -1,6 +1,6 @@
-# Deployment Guide for Pixlogic
+# Deployment Guide for nonora
 
-This guide explains how to deploy Pixlogic to GitHub Pages and other hosting platforms.
+This guide explains how to deploy nonora to GitHub Pages and other hosting platforms.
 
 ## GitHub Pages Deployment (Recommended)
 
@@ -21,7 +21,7 @@ Every push to the `main` branch automatically triggers deployment via GitHub Act
    - Install dependencies
    - Run the build process
    - Deploy to GitHub Pages
-   - Make the site live at: `https://acaprari.github.io/pixlogic/`
+   - Make the site live at: `https://acaprari.github.io/nonora/`
 
 3. **Monitor deployment:**
    - Go to your repository on GitHub
@@ -94,7 +94,7 @@ export default defineConfig({
 Update the live demo link in `README.md`:
 
 ```markdown
-[Play Pixlogic](https://your-username.github.io/your-repository-name/)
+[Play nonora](https://your-username.github.io/your-repository-name/)
 ```
 
 ### 3. Enable GitHub Pages
@@ -221,7 +221,7 @@ If you see 404 errors:
 If CSS/JS files don't load:
 1. Check the `base` path in `vite.config.ts`
 2. Verify asset paths in built `dist/index.html`
-3. Ensure all paths start with `/pixlogic/` (or your base path)
+3. Ensure all paths start with `/nonora/` (or your base path)
 
 ### Build Failures
 
