@@ -262,7 +262,7 @@ function App() {
           <div className="flex-1" />
           <div className="flex-1 text-center">
             <h1 className="text-4xl font-bold mb-1 drop-shadow-lg">nonora</h1>
-            <p className="text-lg drop-shadow-md">ai-powered nonogram puzzles</p>
+            <p className="text-lg drop-shadow-md whitespace-nowrap">ai-powered nonogram puzzles</p>
           </div>
           <div className="flex-1 flex justify-end">
             {apiKey && (
