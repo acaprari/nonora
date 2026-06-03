@@ -1,4 +1,4 @@
-# Pixlogic Documentation
+# nonora Documentation
 
 ## The Rebuild Test
 
@@ -8,7 +8,7 @@ If you delete all source code but keep:
 - `CLAUDE.md` (development guidelines)
 - `docs/` (these specifications)
 
-...you must be able to rebuild Pixlogic entirely with no gaps in understanding.
+...you must be able to rebuild nonora entirely with no gaps in understanding.
 
 ---
 

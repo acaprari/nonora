@@ -7,7 +7,7 @@
 
 ## Overview
 
-Pixlogic follows a comprehensive testing strategy with three layers:
+nonora follows a comprehensive testing strategy with three layers:
 1. **Unit Tests** - Pure functions and hooks (fast, isolated)
 2. **Integration Tests** - Component interactions (moderate speed)
 3. **End-to-End Tests** - Full user flows (slow, high confidence)
@@ -344,7 +344,7 @@ it('disables hint button during cooldown', () => {
 // e2e/game-flow.spec.ts
 import { test, expect } from '@playwright/test';
 
-test.describe('Pixlogic Game Flow', () => {
+test.describe('nonora Game Flow', () => {
   test('complete puzzle from start to finish', async ({ page }) => {
     await page.goto('/');
 

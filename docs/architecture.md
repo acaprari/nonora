@@ -7,7 +7,7 @@
 
 ## Overview
 
-Pixlogic follows a **functional-reactive architecture** with clear separation between business logic, state management, and presentation.
+nonora follows a **functional-reactive architecture** with clear separation between business logic, state management, and presentation.
 
 **Philosophy**: Components are thin presentational layers. Hooks own domain logic and state. Pure functions handle computation. Clear separation for testability.
 
@@ -152,9 +152,16 @@ Key components and their responsibilities:
 **`App.tsx`** (Container):
 - Routes between screens based on game state
 - Shows `ApiKeySetup` if no API key
-- Shows `StartScreen` for puzzle generation
+- Shows `PuzzlePrompt` for puzzle generation
 - Shows `GameBoard` during play
 - Shows `CompletionScreen` on puzzle completion
+
+**Layout pattern:**
+- Persistent header with title ("nonora") and subtitle ("ai-powered nonogram puzzles")
+- Subtitle uses `whitespace-nowrap` to prevent line wrapping
+- Header visible across all screens (consistent branding)
+- Screen components render below header without duplicating title/subtitle
+- Settings button in top-right corner
 
 **`GameBoard.tsx`** (Container):
 - Coordinates grid, clues, hints, timer
@@ -182,9 +189,10 @@ Key components and their responsibilities:
 - Shows completion stats and next difficulty message
 - Props: `stats` (time, hints, errors), `nextDifficulty`, `onNextPuzzle`
 
-**`StartScreen.tsx`** (Presentational):
+**`PuzzlePrompt.tsx`** (Presentational):
 - Puzzle prompt input and generation button
 - Props: `onGenerate`, `isLoading`
+- Note: Does not include title/subtitle (rendered at App.tsx level)
 
 **`ApiKeySetup.tsx`** (Presentational):
 - API key input and validation
@@ -201,7 +209,7 @@ Components compose hierarchically:
 ```
 App
 ├── ApiKeySetup (if no key)
-├── StartScreen (if no puzzle)
+├── PuzzlePrompt (if no puzzle)
 │   └── AiLoadingIndicator (during generation)
 ├── GameBoard (during play)
 │   ├── Clues (rows + columns)
@@ -246,17 +254,23 @@ Key state structures (examples, not exhaustive):
 interface Puzzle {
   id: string;                    // Unique identifier
   prompt: string;                // User's prompt ("a cat")
-  solution: boolean[][];         // 10×10 boolean matrix (true = filled)
+  solution: boolean[][];         // NxN boolean matrix (true = filled)
   rowClues: number[][];          // Clue arrays per row
   columnClues: number[][];       // Clue arrays per column
   currentGrid: CellState[][];    // Player's progress
-  startTime: number;             // Timestamp (ms)
+  startTime: number;             // Timestamp (ms) when puzzle started
+  endTime?: number;              // Timestamp (ms) when puzzle completed (freezes timer)
   hintsUsed: number;             // Counter
-  errors: number;                // Counter
 }
 
 type CellState = 'empty' | 'filled' | 'marked';
 ```
+
+**Note on Timer Implementation:**
+- `startTime`: Set when puzzle generation completes
+- `endTime`: Set when puzzle is first completed (all clues satisfied)
+- Timer calculation: Uses `endTime` if present (frozen), otherwise `Date.now() - startTime` (live)
+- This prevents timer inflation when refreshing page on completion/stats screens
 
 **Validation Result**:
 ```typescript
@@ -321,7 +335,7 @@ const newGrid = currentGrid.map((r, rIdx) =>
 - Purpose: Manages puzzle generation with validation and retries
 - Provides: `generatePuzzle(prompt, difficulty)`, `isGenerating`, `error`
 - Side effects: API calls, retry logic (up to 3 attempts)
-- Used by: `StartScreen`
+- Used by: `PuzzlePrompt`
 
 **`useValidation`**:
 - Purpose: Real-time validation of grid against clues
@@ -331,9 +345,16 @@ const newGrid = currentGrid.map((r, rIdx) =>
 
 **`useGamePersistence`**:
 - Purpose: localStorage read/write for puzzle + difficulty
+- Storage key: `nonora-game-state` (migrated from `pixlogic-game-state`)
 - Provides: `loadState()`, `saveState()`, `clearState()`
 - Side effects: localStorage reads/writes, debounced saves
 - Used by: `App`, hooks that modify persisted state
+
+**Migration Strategy:**
+- On first load, checks for new key (`nonora-game-state`)
+- If not found, attempts to load from old key (`pixlogic-game-state`)
+- If old key exists: copies data to new key, deletes old key
+- Migration is automatic and transparent to users (preserves all game data)
 
 ---
 
@@ -350,7 +371,7 @@ pixlogic/
 │   │   ├── GameBoard.tsx
 │   │   ├── HintDisplay.tsx
 │   │   ├── CompletionScreen.tsx
-│   │   ├── StartScreen.tsx
+│   │   ├── PuzzlePrompt.tsx
 │   │   ├── ApiKeySetup.tsx
 │   │   └── AiLoadingIndicator.tsx
 │   │
@@ -438,8 +459,8 @@ interface Puzzle {
   columnClues: number[][];
   currentGrid: CellState[][];
   startTime: number;
+  endTime?: number;              // Set when completed, freezes timer
   hintsUsed: number;
-  errors: number;
 }
 
 interface Hint {
@@ -628,7 +649,7 @@ Defined in `src/index.css`:
 ```
 User enters prompt
     ↓
-StartScreen → usePuzzleGenerator hook
+PuzzlePrompt → usePuzzleGenerator hook
     ↓
 API call (lib/api.ts)
     ↓
