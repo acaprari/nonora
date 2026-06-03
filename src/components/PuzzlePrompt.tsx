@@ -40,12 +40,6 @@ export const PuzzlePrompt: React.FC<PuzzlePromptProps> = ({
 
   return (
     <div className="glass-card rounded-2xl p-8 shadow-2xl max-w-2xl mx-auto space-y-6">
-      {/* Title and tagline */}
-      <div className="text-center space-y-2">
-        <h1 className="text-4xl font-bold text-white">nonora</h1>
-        <p className="text-white/80 text-lg">ai-powered nonogram puzzles from your imagination</p>
-      </div>
-
       {/* How to play section */}
       <div className="glass rounded-xl p-4 space-y-3">
         <h2 className="text-white font-semibold text-lg">How to Play</h2>
