@@ -341,7 +341,11 @@ function App() {
         {/* Phase 4: Completion Stats */}
         {puzzle && isComplete && isValid && !showCelebration && (
           <CompletionScreen
-            solveTime={completionTime || 0}
+            solveTime={
+              puzzle.endTime
+                ? Math.floor((puzzle.endTime - puzzle.startTime) / 1000)
+                : (completionTime || 0)
+            }
             hintsUsed={puzzle.hintsUsed}
             currentLevel={currentLevel}
             previousLevel={previousLevel}
